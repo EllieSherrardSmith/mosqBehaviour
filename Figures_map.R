@@ -11,9 +11,9 @@ library(adegenet)
 
 se <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(c(x))))
 
-par(mfrow=c(1,1))
+par(mfrow=c(1,3))
 newmap <- getMap(resolution = "low")
-plot(newmap, xlim = c(-10, 50), ylim = c(-35, 40), asp = 1,col="grey95", border="grey65")
+plot(newmap, xlim = c(-15, 50), ylim = c(-35, 40), asp = 1,col="grey95", border="grey65")
 points(36.88,-7.87,col="orange",cex=2,pch=17) ## Killeen et al 2006 ##**HUMAN BED BEHAVIOUR
 points(2.116,6.35,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
 points(2.09,6.26,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
@@ -47,7 +47,7 @@ points(0.06,5.69,col="purple",cex=2, pch=22) ## Tchouassi et al 2012
 points(9.1,4.02,col="purple",cex=2, pch=22) ## Tanga et al 2011 (in Tanga et al 2010 too)
 points(-1.3,6.57,col="purple",cex=2, pch=22) ## Tuno et al 2010
 
-legend(-22,-5,legend=c("Mosquito biting behaviour",
+legend(-15,-5,legend=c("Mosquito biting behaviour",
                     "Human indoor behaviour",
                     "Human bed behaviour"),
        col=c("purple","aquamarine3","orange"),
@@ -418,8 +418,8 @@ text(mean(PHII,na.rm=TRUE)-0.04,3800,"Mean: 0.85",cex=1.5,col="darkred",font=4)
 text(median(PHIB,na.rm=TRUE)-0.07,4600,"Median: 0.78",cex=1.5,col="blue4",font=4)
 text(median(PHII,na.rm=TRUE)-0.06,3600,"Median: 0.88",cex=1.5,col="darkred",font=4)
 
-median(PHII,na.rm=TRUE)
-median(PHIB,na.rm=TRUE)
+summary(PHII,na.rm=TRUE)
+summary(PHIB,na.rm=TRUE)
 
 ##########################
 ###
@@ -439,17 +439,19 @@ summary(dat_mosq2$Species.grouped)
 #MOD1 <- glmm(trans_phiI ~ Species.grouped + Year + (1|Country))
 
     #i.glm<-glm(Allmean_phiI~Species.grouped+Year+Country, data=dat_mosq2,family=quasibinomial(link= "logit" ))
-    i.glm<-glm(Allmean_phiI~Year+Country, data=dat_mosq2,family=quasibinomial(link= "logit" ))
-    summary(i.glm)
+    i.glm<-glm(Allmean_phiI~Year+Country, data=dat_mosq2) #,family=quasibinomial(link= "logit" )
+    summary.lm(i.glm)
     theta = i.glm$deviance / i.glm$df.residual ##not over-dispersed
     plot(resid(i.glm,type="deviance")~i.glm$fitted.values)
     plot(resid(i.glm,type="deviance")~dat_mosq2$Country)
     plot(resid(i.glm,type="deviance")~dat_mosq2$Year)
     plot(resid(i.glm,type="deviance")~dat_mosq2$Species.grouped) 
-
+exp(cbind(coef(i.glm), confint(i.glm)))  
 
 library(lme4)
     mod1<-lmer(Allmean_phiI~Year+(1|Country), data=dat_mosq2)
+    chmod1<-lmer(Allmean_phiI~1+(1|Country), data=dat_mosq2)
+    anova(mod1,chmod1)
     summary(mod1)
     confint(mod1)
 se2 <- sqrt(diag(vcov(mod1)))
@@ -522,22 +524,30 @@ for(i in 1:length(unique(dat_mosq2$Country))){
 }
 legend(1992,0.4,legend=c("West Africa","East Africa","Southern Africa","Central Africa"),
        col=c("red","blue","purple","aquamarine3"),pch=20,cex=1.4)
+legend(1992,0.2,legend=c("Kenya","Tanzania","Guinea","Benin","Ghana","Zambia"),
+       col=c("blue","blue","red","red","red","aquamarine3"),
+       pch=c(13,16,12,6,11,17),ncol=2,
+       lty=c(1,2,1,1,6,1),cex=1.4)
 
+#
 ##
 ##
 ## Now repeat for phiB
 #i.glm<-glm(Allmean_phiB~Species.grouped+Year+Country, data=dat_mosq2,family=quasibinomial(link= "logit" ))
-i.glmb<-glm(Allmean_phiB~Year+Country, data=dat_mosq2,family=quasibinomial(link= "logit" ))
-summary(i.glmb)
+i.glmb<-glm(Allmean_phiB~Year+Country, data=dat_mosq2)#,family=quasibinomial(link= "logit" ))
+summary.lm(i.glmb)
 theta = i.glmb$deviance / i.glmb$df.residual ##not over-dispersed
-plot(resid(i.glmb,type="deviance")~i.glmb$fitted.values)
-plot(resid(i.glmb,type="deviance")~dat_mosq2$Country)
-plot(resid(i.glmb,type="deviance")~dat_mosq2$Year)
-plot(resid(i.glmb,type="deviance")~dat_mosq2$Species.grouped) 
-
+#plot(resid(i.glmb,type="deviance")~i.glmb$fitted.values)
+#plot(resid(i.glmb,type="deviance")~dat_mosq2$Country)
+#plot(resid(i.glmb,type="deviance")~dat_mosq2$Year)
+#plot(resid(i.glmb,type="deviance")~dat_mosq2$Species.grouped) 
+exp(cbind(coef(i.glmb), confint(i.glmb)))
 
 library(lme4)
 mod2<-lmer(Allmean_phiB~Year+(1|Country), data=dat_mosq2)
+chmod2<-lmer(Allmean_phiB~1+(1|Country), data=dat_mosq2)
+anova(mod2,chmod2)
+
 summary(mod2)
 confint(mod2)
 se2 <- sqrt(diag(vcov(mod2)))
@@ -582,7 +592,7 @@ pv = predict(mod2, classify=list("Year"),
 #axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)     
 
 plot(Allmean_phiB~Year,data=dat_mosq2,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,
-     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))
+     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))
 axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
 
 ##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
@@ -608,8 +618,143 @@ for(i in 1:length(unique(dat_mosq2$Country))){
   points(dat_mosq2$Allmean_phiB[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
            dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
 }
+#legend(1992,0.4,legend=c("Kenya","Tanzania","Guinea","Benin","Ghana","Zambia"),
+#       col=c("blue","blue","red","red","red","aquamarine3"),
+#       pch=c(13,16,12,6,11,17),ncol=2,
+#       lty=c(1,2,1,1,6,1),cex=1.4)
+
+##########################
+###
+###
+### fIG 1 alternative
+par(mfrow=c(1,3))
+newmap <- getMap(resolution = "low")
+plot(newmap, xlim = c(-15, 50), ylim = c(-35, 40), asp = 1,col="grey95", border="grey65")
+points(36.88,-7.87,col="orange",cex=2,pch=17) ## Killeen et al 2006 ##**HUMAN BED BEHAVIOUR
+points(2.116,6.35,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
+points(2.09,6.26,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
+points(39.23,-6.81,col="orange",cex=2,pch=17) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
+
+points(36.6,-8.1,col="aquamarine3",cex=2, pch=20)##Russell et al. 2011 ## HUMAN INDOOR BEHAVIOUR
+points(39.23,-6.81,col="aquamarine3",cex=2,pch=20) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
+points(-1.33,12.6,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (1)  ##HUMAN INDOOR BEHAVIOUR
+points(-1.78,12.587,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (2)##HUMAN INDOOR BEHAVIOUR
+points(29.83,-15.43,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (3)##HUMAN INDOOR BEHAVIOUR
+points(36.6,-9.07,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (4)  ##HUMAN INDOOR BEHAVIOUR
+points(39.15,-7.9,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (5)  ##HUMAN INDOOR BEHAVIOUR
+points(34.78,-0.1,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (6)  ##HUMAN INDOOR BEHAVIOUR
+points(2.116,6.35,col="aquamarine3",cex=2, pch=20) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
+points(2.09,6.26,col="aquamarine3",cex=2, pch=20) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
+
+points(34.9,-0.175,col="purple",cex=2, pch=22) ## Githeko et al. 1996
+points(32.48,-25.9,col="purple",cex=2, pch=22) ## Mendis et al 2006
+points(9.47,0.399,col="purple",cex=2, pch=22) ## Mourou et al 2012
+points(30.40,1.57,col="purple",cex=2, pch=22) ## Ojuka et al. 2015 (1)
+points(30.48,2.98,col="purple",cex=2, pch=22) ## Ojuka et al. 2015 (2)
+points(8.7,3.5,col="purple",cex=2, pch=22) ## Overgaard et al. 2012
+points(0.44,6.35,col="purple",cex=2, pch=22) ## Owusu et al 2016
+points(-15.3,13.6,col="purple",cex=2, pch=22) ## Quinones et al 1997
+points(33.0,1.0,col="purple",cex=2, pch=22) ##Kabbale et al. 2013
+points(34.38,-0.18,col="purple",cex=2, pch=22) ##Bayoh et al. 2014
+points(8.7,3.5,col="purple",cex=2, pch=22) ##Bradley et al. 2015
+points(34.92,-0.43,col="purple",cex=2, pch=22) ##Cooke et al. 2015
+points(-16.4,13.72,col="purple",cex=2, pch=22) ## Fontenille et al. 1997
+points(0.06,5.69,col="purple",cex=2, pch=22) ## Tchouassi et al 2012
+points(9.1,4.02,col="purple",cex=2, pch=22) ## Tanga et al 2011 (in Tanga et al 2010 too)
+points(-1.3,6.57,col="purple",cex=2, pch=22) ## Tuno et al 2010
+
+legend(-15,-5,legend=c("Mosquito biting behaviour",
+                       "Human indoor behaviour",
+                       "Human bed behaviour"),
+       col=c("purple","aquamarine3","orange"),
+       pch=c(22,20,17))
+
+datAnArab <- data.frame(preds = predict(mod1, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA),
+                        exp1 = dat_mosq2$Year)
+pv = predict(mod1, classify=list("Year"),
+             levels=list("Year"=list("Year" = 1992:2015)))
+#plot(predict(mod1, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA) ~
+#       dat_mosq2$Year,frame=FALSE,bty="n",pch="",ylim=c(0,1),xaxt="n",
+#     ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])),xlab="Time (Years)",
+#     main="Trends in years",cex.main=1.8,
+#     cex.lab=1.6,yaxt="n")
+#axis(1, at=1992:2015,labels=1992:2015,cex.axis=1.8)
+#axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)     
+
+plot(Allmean_phiI~Year,data=dat_mosq2,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,
+     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
+
+##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
+lines(rev(sort(datAnArab$preds)) ~ sort(datAnArab$exp1),lty=1,lwd=1)
+polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
+        c(rev(sort(datAnArab$preds-6*se(datAnArab$preds))),
+          sort(datAnArab$preds+6*se(datAnArab$preds))),
+        col=transp("grey",0.2),border=NA)             
+
+##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
+cols=c("red","red","red","red","red","red","red","blue","purple","red","blue","aquamarine3","purple")
+pchs=c(6:18)
+ltys=c(1:7,1,1,8,2,1,2)
+for(i in 1:length(unique(dat_mosq2$Country))){
+  lines(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):
+          max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]), 
+        predict(i.glm, 
+                newdata=
+                  data.frame(Year = min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]),
+                             Country = rep(levels(unique(dat_mosq2$Country))[i],
+                                           length(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]])))),
+                type = "response"),lty=ltys[i],lwd=2,col=cols[i])
+  points(dat_mosq2$Allmean_phiI[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
+           dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
+}
 legend(1992,0.4,legend=c("West Africa","East Africa","Southern Africa","Central Africa"),
        col=c("red","blue","purple","aquamarine3"),pch=20,cex=1.4)
+legend(1992,0.2,legend=c("Kenya","Tanzania","Guinea","Benin","Ghana","Zambia"),
+       col=c("blue","blue","red","red","red","aquamarine3"),
+       pch=c(13,16,12,6,11,17),ncol=2,
+       lty=c(1,2,1,1,6,1),cex=1.4)
+
+
+datAnArab <- data.frame(preds = predict(mod2, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA),
+                        exp1 = dat_mosq2$Year)
+pv = predict(mod2, classify=list("Year"),
+             levels=list("Year"=list("Year" = 1992:2015)))
+#plot(predict(mod2, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA) ~
+#       dat_mosq2$Year,frame=FALSE,bty="n",pch="",ylim=c(0,1),xaxt="n",
+#     ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])),xlab="Time (Years)",
+#     main="Trends in years",cex.main=1.8,
+#     cex.lab=1.6,yaxt="n")
+#axis(1, at=1992:2015,labels=1992:2015,cex.axis=1.8)
+#axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)     
+
+plot(Allmean_phiB~Year,data=dat_mosq2,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,
+     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
+
+##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
+lines(rev(sort(datAnArab$preds)) ~ sort(datAnArab$exp1),lty=1,lwd=1)
+polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
+        c(rev(sort(datAnArab$preds-6*se(datAnArab$preds))),
+          sort(datAnArab$preds+6*se(datAnArab$preds))),
+        col=transp("grey",0.2),border=NA)             
+
+##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
+cols=c("red","red","red","red","red","red","red","blue","purple","red","blue","aquamarine3","purple")
+pchs=c(6:18)
+ltys=c(1:7,1,1,8,2,1,2)
+for(i in 1:length(unique(dat_mosq2$Country))){
+  lines(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):
+          max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]), 
+        predict(i.glmb, 
+                newdata=
+                  data.frame(Year = min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]),
+                             Country = rep(levels(unique(dat_mosq2$Country))[i],
+                                           length(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]])))),
+                type = "response"),lty=ltys[i],lwd=2,col=cols[i])
+  points(dat_mosq2$Allmean_phiB[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
+           dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
+}
 
 ##########################
 ###
