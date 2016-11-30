@@ -8,10 +8,12 @@ library(rworldxtra)
 library(GISTools)
 library(mapplots)
 library(adegenet)
+library(lme4)
+library(sjPlot)
 
 se <- function(x) sqrt(var(x,na.rm=TRUE)/length(na.omit(c(x))))
 
-par(mfrow=c(1,3))
+par(mfrow=c(1,1))
 newmap <- getMap(resolution = "low")
 plot(newmap, xlim = c(-15, 50), ylim = c(-35, 40), asp = 1,col="grey95", border="grey65")
 points(36.88,-7.87,col="orange",cex=2,pch=17) ## Killeen et al 2006 ##**HUMAN BED BEHAVIOUR
@@ -259,7 +261,7 @@ for(k in 1:11){
 }  
 
 ##Each row is the confidence intervals for the specific mosquito data
-dat_mosq2 = read.csv("C:\\Users\\Ellie\\Documents\\STUDENTS\\BITING TIMES_Janetta Skarp\\phiB+phiI.csv",header=TRUE)
+dat_mosq2 = read.csv("C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI.csv",header=TRUE)
 
 ##if using the mean data for each country 
 ##with mean for indoor and in bed proportion of people
@@ -269,12 +271,20 @@ dat_mosq2 = read.csv("C:\\Users\\Ellie\\Documents\\STUDENTS\\BITING TIMES_Janett
 ##if using the average for all possibilities
 ##use mean(phiI1ALL[i,],na.rm=TRUE)
 Allmean_phiI = Allmean_phiB = numeric(61)
+Allmedian_phiI = Allmedian_phiB = numeric(61)
 for(i in 1:61){
   Allmean_phiI[i] = mean(phiI1ALL[i,],na.rm=TRUE)
   Allmean_phiB[i] = mean(phiB1ALL[i,],na.rm=TRUE)
+  
+  Allmedian_phiI[i] = median(phiI1ALL[i,],na.rm=TRUE)
+  Allmedian_phiB[i] = median(phiB1ALL[i,],na.rm=TRUE)
+  
 }
 dat_mosq2$Allmean_phiI = Allmean_phiI
 dat_mosq2$Allmean_phiB = Allmean_phiB
+
+dat_mosq2$Allmedian_phiI = Allmedian_phiI
+dat_mosq2$Allmedian_phiB = Allmedian_phiB
 
 #plot(dat_mosq2[,3]~dat_mosq2$Allmean_phiI,ylim=c(0,1),xlim=c(0,1))
 #points(dat_mosq2[,2]~dat_mosq2$Allmean_phiB,ylim=c(0,1),xlim=c(0,1),pch=15,col="red")
@@ -282,7 +292,7 @@ dat_mosq2$Allmean_phiB = Allmean_phiB
 
 par(mfrow=c(1,3))
 par(mar=c(5,6,5,5))
-plot(dat_mosq2[,13] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
+plot(dat_mosq2[,14] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
      yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
      ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))##phiB
 phiI1ALL[phiI1ALL >= 1] <- NA
@@ -294,69 +304,6 @@ for(i in 1:61){
            lty=1,col="grey")
   
 }
-points(dat_mosq2[,13][dat_mosq2$Species.grouped == "1A_gambiae_sl"] ~ dat_mosq2[,4][dat_mosq2$Species.grouped == "1A_gambiae_sl"],pch=0)
-points(dat_mosq2[,13][dat_mosq2$Species.grouped == "A_funestus"] ~ dat_mosq2[,4][dat_mosq2$Species.grouped == "A_funestus"],pch=2)
-points(dat_mosq2[,13][dat_mosq2$Species.grouped != "1A_gambiae_sl" & dat_mosq2$Species.grouped != "A_funestus"] ~ 
-         dat_mosq2[,4][dat_mosq2$Species.grouped != "1A_gambiae_sl" & dat_mosq2$Species.grouped != "A_funestus"],pch=1)
-points(dat_mosq2[,13][dat_mosq2$Country == "Tanzania" & 
-                       dat_mosq2$Species.grouped == "1A_gambiae_sl" &
-                       dat_mosq2$Site == "Lupiro" |dat_mosq2$Site == "Njagi" ] ~ 
-         dat_mosq2[,4][dat_mosq2$Country == "Tanzania" & 
-                         dat_mosq2$Species.grouped == "1A_gambiae_sl"&
-                         dat_mosq2$Site == "Lupiro"|dat_mosq2$Site == "Njagi" ],
-       pch=15,cex=2,col="orange")
-points(dat_mosq2[,13][dat_mosq2$Country == "Tanzania" & dat_mosq2$Species.grouped == "A_funestus"] ~ 
-         dat_mosq2[,4][dat_mosq2$Country == "Tanzania" & dat_mosq2$Species.grouped == "A_funestus"],
-       pch=17,cex=2,col="orange")
-
-points(dat_mosq2[,13][dat_mosq2$Country == "Benin" & 
-                       dat_mosq2$Species.grouped == "A_funestus"&
-                       dat_mosq2$Site == "Lokohoue"] ~ 
-         dat_mosq2[,4][dat_mosq2$Country == "Benin" & 
-                         dat_mosq2$Species.grouped == "A_funestus"&
-                         dat_mosq2$Site == "Lokohoue"],
-       pch=17,cex=2,col="red")
-
-points(dat_mosq2[,13][dat_mosq2$Country == "Benin" & 
-                       dat_mosq2$Species.grouped == "A_funestus"&
-                       dat_mosq2$Site == "Tokoli"] ~ 
-         dat_mosq2[,4][dat_mosq2$Country == "Benin" & 
-                         dat_mosq2$Species.grouped == "A_funestus"&
-                         dat_mosq2$Site == "Tokoli"],
-       pch=17,cex=2,col="darkred")
-
-axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.lab=1.5,cex.axis=1.5,cex=1.5)
-
-points(c(phiI_16_a,phiI_16_b,phiI_16_c)~rep(2006,3),pch=8,cex=2,col="blue")
-#for(i in 1:61){
-#  segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
-#           y0=min(phiI1ALL[i,],na.rm=TRUE),y1=max(phiI1ALL[i,],na.rm=TRUE),
-#           lty=1,col="blue")
-#  
-#}
-
-legend(1995,0.25,legend=c("Kolombero Valley, Tanzania",
-                          "Tokoli-Vidjinnagnimon, Benin",
-                          "Lokohouè, Benin",
-                          "An. funestus",
-                          "An. gambiae s.l.",
-                          "Other Anopheles","Matched data: Geissbuhler et al. 2007"),
-       col=c("orange","darkred","red","grey","grey","black","blue"),
-       ncol=1,pch=c(19,19,19,17,15,1,8),cex=1.4)
-
-plot(dat_mosq2[,14] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
-     yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
-     ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))##phiB
-
-phiB1ALL[phiB1ALL >= 1] = NA
-for(i in 1:61){
-  segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
-           y0=quantile(phiB1ALL[i,],na.rm=TRUE,0.975),
-           y1=quantile(phiB1ALL[i,],na.rm=TRUE,0.025),
-           lty=1,col="grey")
-  
-}
-
 points(dat_mosq2[,14][dat_mosq2$Species.grouped == "1A_gambiae_sl"] ~ dat_mosq2[,4][dat_mosq2$Species.grouped == "1A_gambiae_sl"],pch=0)
 points(dat_mosq2[,14][dat_mosq2$Species.grouped == "A_funestus"] ~ dat_mosq2[,4][dat_mosq2$Species.grouped == "A_funestus"],pch=2)
 points(dat_mosq2[,14][dat_mosq2$Species.grouped != "1A_gambiae_sl" & dat_mosq2$Species.grouped != "A_funestus"] ~ 
@@ -381,6 +328,70 @@ points(dat_mosq2[,14][dat_mosq2$Country == "Benin" &
        pch=17,cex=2,col="red")
 
 points(dat_mosq2[,14][dat_mosq2$Country == "Benin" & 
+                       dat_mosq2$Species.grouped == "A_funestus"&
+                       dat_mosq2$Site == "Tokoli"] ~ 
+         dat_mosq2[,4][dat_mosq2$Country == "Benin" & 
+                         dat_mosq2$Species.grouped == "A_funestus"&
+                         dat_mosq2$Site == "Tokoli"],
+       pch=17,cex=2,col="darkred")
+
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.lab=1.5,cex.axis=1.5,cex=1.5)
+
+points(c(phiI_16_a,phiI_16_b,phiI_16_c)~rep(2006,3),pch=8,cex=2,col="blue")
+#for(i in 1:61){
+#  segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
+#           y0=min(phiI1ALL[i,],na.rm=TRUE),y1=max(phiI1ALL[i,],na.rm=TRUE),
+#           lty=1,col="blue")
+#  
+#}
+
+
+legend(1995,0.25,legend=c("Kolombero Valley, Tanzania",
+                          "Tokoli-Vidjinnagnimon, Benin",
+                          "Lokohouè, Benin",
+                          "An. funestus",
+                          "An. gambiae s.l.",
+                          "Other Anopheles","Matched data: Geissbuhler et al. 2007"),
+       col=c("orange","darkred","red","grey","grey","black","blue"),
+       ncol=1,pch=c(19,19,19,17,15,1,8),cex=1.4)
+boxplot()
+plot(dat_mosq2[,15] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
+     yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
+     ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))##phiB
+
+phiB1ALL[phiB1ALL >= 1] = NA
+for(i in 1:61){
+  segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
+           y0=quantile(phiB1ALL[i,],na.rm=TRUE,0.975),
+           y1=quantile(phiB1ALL[i,],na.rm=TRUE,0.025),
+           lty=1,col="grey")
+  
+}
+
+points(dat_mosq2[,15][dat_mosq2$Species.grouped == "1A_gambiae_sl"] ~ dat_mosq2[,4][dat_mosq2$Species.grouped == "1A_gambiae_sl"],pch=0)
+points(dat_mosq2[,15][dat_mosq2$Species.grouped == "A_funestus"] ~ dat_mosq2[,4][dat_mosq2$Species.grouped == "A_funestus"],pch=2)
+points(dat_mosq2[,15][dat_mosq2$Species.grouped != "1A_gambiae_sl" & dat_mosq2$Species.grouped != "A_funestus"] ~ 
+         dat_mosq2[,4][dat_mosq2$Species.grouped != "1A_gambiae_sl" & dat_mosq2$Species.grouped != "A_funestus"],pch=1)
+points(dat_mosq2[,15][dat_mosq2$Country == "Tanzania" & 
+                       dat_mosq2$Species.grouped == "1A_gambiae_sl" &
+                       dat_mosq2$Site == "Lupiro" |dat_mosq2$Site == "Njagi" ] ~ 
+         dat_mosq2[,4][dat_mosq2$Country == "Tanzania" & 
+                         dat_mosq2$Species.grouped == "1A_gambiae_sl"&
+                         dat_mosq2$Site == "Lupiro"|dat_mosq2$Site == "Njagi" ],
+       pch=15,cex=2,col="orange")
+points(dat_mosq2[,15][dat_mosq2$Country == "Tanzania" & dat_mosq2$Species.grouped == "A_funestus"] ~ 
+         dat_mosq2[,4][dat_mosq2$Country == "Tanzania" & dat_mosq2$Species.grouped == "A_funestus"],
+       pch=17,cex=2,col="orange")
+
+points(dat_mosq2[,15][dat_mosq2$Country == "Benin" & 
+                       dat_mosq2$Species.grouped == "A_funestus"&
+                       dat_mosq2$Site == "Lokohoue"] ~ 
+         dat_mosq2[,4][dat_mosq2$Country == "Benin" & 
+                         dat_mosq2$Species.grouped == "A_funestus"&
+                         dat_mosq2$Site == "Lokohoue"],
+       pch=17,cex=2,col="red")
+
+points(dat_mosq2[,15][dat_mosq2$Country == "Benin" & 
                        dat_mosq2$Species.grouped == "A_funestus"&
                        dat_mosq2$Site == "Tokoli"] ~ 
          dat_mosq2[,4][dat_mosq2$Country == "Benin" & 
@@ -425,8 +436,8 @@ summary(PHIB,na.rm=TRUE)
 ###
 ###
 ### Is there a statistical trend in phiI and phiB over time?
-summary(lm(dat_mosq2[,13] ~ dat_mosq2[,4]))
 summary(lm(dat_mosq2[,14] ~ dat_mosq2[,4]))
+summary(lm(dat_mosq2[,15] ~ dat_mosq2[,4]))
 
 dat_mosq2$trans_phiI = 57.295*asin(dat_mosq2[,13])
 dat_mosq2$trans_phiB = 57.295*asin(dat_mosq2[,14])
@@ -438,7 +449,7 @@ summary(dat_mosq2$Species.grouped)
 
 #MOD1 <- glmm(trans_phiI ~ Species.grouped + Year + (1|Country))
 
-    #i.glm<-glm(Allmean_phiI~Species.grouped+Year+Country, data=dat_mosq2,family=quasibinomial(link= "logit" ))
+    #i.glm<-glm(Allmean_phiI~Species.grouped+Year+Country+setting, data=dat_mosq2,family=quasibinomial(link= "logit" ))
     i.glm<-glm(Allmean_phiI~Year+Country, data=dat_mosq2) #,family=quasibinomial(link= "logit" )
     summary.lm(i.glm)
     theta = i.glm$deviance / i.glm$df.residual ##not over-dispersed
@@ -448,7 +459,7 @@ summary(dat_mosq2$Species.grouped)
     plot(resid(i.glm,type="deviance")~dat_mosq2$Species.grouped) 
 exp(cbind(coef(i.glm), confint(i.glm)))  
 
-library(lme4)
+
     mod1<-lmer(Allmean_phiI~Year+(1|Country), data=dat_mosq2)
     chmod1<-lmer(Allmean_phiI~1+(1|Country), data=dat_mosq2)
     anova(mod1,chmod1)
@@ -458,7 +469,7 @@ se2 <- sqrt(diag(vcov(mod1)))
 tab <- cbind(Est = fixef(mod1), LL = fixef(mod1) - 1.96 * se2, UL = fixef(mod1) + 1.96 * se2)
 print(exp(tab),digits=3) #to get quick odds ratios for glmm - these show you how important the different levels of each factor are
 
-library(sjPlot)
+
 sjp.setTheme(theme = "forestgrey", 
              geom.label.size = 5, 
              axis.textsize = 1.6, 
@@ -543,7 +554,6 @@ theta = i.glmb$deviance / i.glmb$df.residual ##not over-dispersed
 #plot(resid(i.glmb,type="deviance")~dat_mosq2$Species.grouped) 
 exp(cbind(coef(i.glmb), confint(i.glmb)))
 
-library(lme4)
 mod2<-lmer(Allmean_phiB~Year+(1|Country), data=dat_mosq2)
 chmod2<-lmer(Allmean_phiB~1+(1|Country), data=dat_mosq2)
 anova(mod2,chmod2)
@@ -553,13 +563,6 @@ confint(mod2)
 se2 <- sqrt(diag(vcov(mod2)))
 tab <- cbind(Est = fixef(mod2), LL = fixef(mod2) - 1.96 * se2, UL = fixef(mod2) + 1.96 * se2)
 print(exp(tab),digits=3) #to get quick odds ratios for glmm - these show you how important the different levels of each factor are
-
-library(sjPlot)
-#sjp.setTheme(theme = "forestgrey", 
-#             geom.label.size = 5, 
-#             axis.textsize = 1.6, 
-#             axis.title.size = 1.9,
-#             title.size=2)
 
 #sjp.glmer(mod2, y.offset = .2)
 ## sort all predictors
@@ -755,6 +758,134 @@ for(i in 1:length(unique(dat_mosq2$Country))){
   points(dat_mosq2$Allmean_phiB[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
            dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
 }
+
+##
+write.csv(phiI1ALL,"C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
+write.csv(phiB1ALL,"C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+## Add in the phiI + phiB.CSV data so that the 9th column is the first distribution of phi values
+
+DAT_Box = read.csv("C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
+DAT_Box = DAT_Box[with(DAT_Box, order(DAT_Box$Year)), ]
+Tanzania = subset(DAT_Box,DAT_Box$Country=="Tanzania")
+phiI_tan = t(Tanzania[,9:1339])
+#par(mfrow=c(1,1))
+par(mar=c(6,5,5,5))
+boxplot(NA,NA,c(phiI_tan[,1],phiI_tan[,2]),NA,NA,NA,NA,
+        c(phiI_tan[,3],phiI_tan[,4]),NA,
+        c(phiI_tan[,5],phiI_tan[,6]),NA,
+        c(phiI_tan[,7],phiI_tan[,9]),NA,NA,        
+        c(phiI_tan[,10],phiI_tan[,11]),NA,NA,NA,NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,
+        ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])),
+        xlab="Year",cex.lab=1.5,cex.axis=1.8,col=transp("dodgerblue"))
+unique(Tanzania$Year)
+axis(1,las=0,at=seq(1,21,2),labels=seq(1995,2015,2),cex=1.8,cex.axis=1.8)
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
+par(new=T)
+par(mar=c(6,5,5,4.5))
+Kenya = subset(DAT_Box,DAT_Box$Country=="Kenya")
+phiI_ken = t(Kenya[,9:1339])
+Kenya[1:8,1:10]
+boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_ken[,3],phiI_ken[,4]),NA,
+        c(phiI_ken[,5],phiI_ken[,8]),NA,NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("firebrick",0.2))
+par(new=T)
+par(mar=c(6,5,5,4))
+Ghana = subset(DAT_Box,DAT_Box$Country=="Ghana")
+phiI_gha = t(Ghana[,9:1339]);dim(phiI_gha)
+Ghana[1:6,1:10]
+boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_gha[,1]),NA,
+        c(phiI_gha[,2],phiI_gha[,5]),NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_gha[,6]),
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("gold"))
+par(new=T)
+par(mar=c(6,5,5,3.5))
+Uganda = subset(DAT_Box,DAT_Box$Country=="Uganda")
+phiI_uga = t(Ghana[,9:1339]);dim(phiI_uga)
+Uganda[1:6,1:10]
+boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_uga[,1],phiI_uga[,2]),
+        c(phiI_uga[,3]),
+        c(phiI_uga[,4],phiI_uga[,5]),NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("red"))
+par(new=T)
+par(mar=c(6,5,5,3))
+Benin = subset(DAT_Box,DAT_Box$Country=="Benin")
+phiI_ben = t(Benin[,9:1339]);dim(phiI_ben)
+Benin[1:8,1:10]
+boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_ben[,1],phiI_ben[,2]),
+        c(phiI_ben[,3],phiI_ben[,4]),NA,
+        c(phiI_ben[,5],phiI_ben[,8]),NA,NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("aquamarine3"))
+
+legend(1,0.5,legend=c("Benin","Ghana","Kenya","Tanzania","Uganda"),
+       col=c("aquamarine3","gold",transp(c("firebrick"),0.2),"dodgerblue","red"),
+       pch=15,cex=1.4)
+
+
+DAT_Box2 = read.csv("C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+DAT_Box2 = DAT_Box2[with(DAT_Box2, order(DAT_Box2$Year)), ]
+Tanzania = subset(DAT_Box2,DAT_Box2$Country=="Tanzania")
+phiI_tan = t(Tanzania[,9:250])
+#par(mfrow=c(1,1))
+par(mar=c(6,5,5,5))
+boxplot(NA,NA,c(phiI_tan[,1],phiI_tan[,2]),NA,NA,NA,NA,
+        c(phiI_tan[,3],phiI_tan[,4]),NA,
+        c(phiI_tan[,5],phiI_tan[,6]),NA,
+        c(phiI_tan[,7],phiI_tan[,9]),NA,NA,        
+        c(phiI_tan[,10],phiI_tan[,11]),NA,NA,NA,NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,
+        ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[B])),
+        xlab="Year",cex.lab=1.5,cex.axis=1.8,col=transp("dodgerblue"))
+unique(Tanzania$Year)
+axis(1,las=0,at=seq(1,21,2),labels=seq(1995,2015,2),cex=1.8,cex.axis=1.8)
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
+par(new=T)
+par(mar=c(6,5,5,4.5))
+Kenya = subset(DAT_Box2,DAT_Box2$Country=="Kenya")
+phiI_ken = t(Kenya[,9:250])
+Kenya[1:8,1:10]
+boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_ken[,3],phiI_ken[,4]),NA,
+        c(phiI_ken[,5],phiI_ken[,8]),NA,NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("firebrick",0.2))
+par(new=T)
+par(mar=c(6,5,5,4))
+Ghana = subset(DAT_Box2,DAT_Box2$Country=="Ghana")
+phiI_gha = t(Ghana[,9:250]);dim(phiI_gha)
+Ghana[1:6,1:10]
+boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_gha[,1]),NA,
+        c(phiI_gha[,2],phiI_gha[,5]),NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_gha[,6]),
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("gold"))
+par(new=T)
+par(mar=c(6,5,5,3.5))
+Uganda = subset(DAT_Box2,DAT_Box2$Country=="Uganda")
+phiI_uga = t(Ghana[,9:250]);dim(phiI_uga)
+Uganda[1:6,1:10]
+boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_uga[,1],phiI_uga[,2]),
+        c(phiI_uga[,3]),
+        c(phiI_uga[,4],phiI_uga[,5]),NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("red"))
+par(new=T)
+par(mar=c(6,5,5,3))
+Benin = subset(DAT_Box2,DAT_Box2$Country=="Benin")
+phiI_ben = t(Benin[,9:250]);dim(phiI_ben)
+Benin[1:8,1:10]
+boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+        c(phiI_ben[,1],phiI_ben[,2]),
+        c(phiI_ben[,3],phiI_ben[,4]),NA,
+        c(phiI_ben[,5],phiI_ben[,8]),NA,NA,NA,NA,
+        xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,col=transp("aquamarine3"))
+
+legend(1,0.5,legend=c("Benin","Ghana","Kenya","Tanzania","Uganda"),
+       col=c("aquamarine3","gold",transp(c("firebrick"),0.2),"dodgerblue","red"),
+       pch=15,cex=1.4)
 
 ##########################
 ###
