@@ -198,8 +198,9 @@ for(j in 1:61){
 phiB_TESTnumALL <- array(dim=c(24,61,2),data=NA)
   phiI_TESTnumALL <- phiI_TESTdenomALL <-array(dim=c(24,61,11),data=NA) 
 
-  for(j in 1:61){
-    for(i in 1:24) {
+  
+  for(i in 1:24) {
+    for(j in 1:61){
       phiB_TESTnumALL[i,j,1]   <- dat_inbed[i,3] * dat_mosq$Inside_mosq[vec_sets[j]+i]
       phiB_TESTnumALL[i,j,2]   <- dat_inbed[i,4] * dat_mosq$Inside_mosq[vec_sets[j]+i]
       
@@ -215,50 +216,57 @@ phiB_TESTnumALL <- array(dim=c(24,61,2),data=NA)
       phiI_TESTnumALL[i,j,10]   <- dat_indoor[i,12] * dat_mosq$Inside_mosq[vec_sets[j]+i]
       phiI_TESTnumALL[i,j,11]   <- dat_indoor[i,13] * dat_mosq$Inside_mosq[vec_sets[j]+i]
       
-      phiI_TESTdenomALL[i,j,1] <- (1-dat_indoor[i,3]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,2] <- (1-dat_indoor[i,4]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,3] <- (1-dat_indoor[i,5]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,4] <- (1-dat_indoor[i,6]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,5] <- (1-dat_indoor[i,7]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,6] <- (1-dat_indoor[i,8]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,7] <- (1-dat_indoor[i,9]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,8] <- (1-dat_indoor[i,10]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,9] <- (1-dat_indoor[i,11]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,10] <- (1-dat_indoor[i,12]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,11] <- (1-dat_indoor[i,13]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,1] <- dat_indoor[i,3] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,3]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,2] <- dat_indoor[i,4] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,4]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,3] <- dat_indoor[i,5] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,5]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,4] <- dat_indoor[i,6] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,6]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,5] <- dat_indoor[i,7] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,7]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,6] <- dat_indoor[i,8] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,8]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,7] <- dat_indoor[i,9] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,9]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,8] <- dat_indoor[i,10] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,10]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,9] <- dat_indoor[i,11] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,11]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,10] <- dat_indoor[i,12] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,12]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,11] <- dat_indoor[i,13] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,13]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
     }
   }
 
-phiB1ALL <- array(dim=c(61,242),data=NA)
-vec1 = seq(0,120,11)
-for(l in 1:11){
-  for(k in 1:11){
+phiB1ALL <- array(dim=c(61,22),data=NA)
     for(j in 1:61){
-      phiB1ALL[j,vec1[l]+k] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiB1ALL[j,121+vec1[l]+k] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-    }
-  }    
-}
+      phiB1ALL[j,1] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,1])
+      phiB1ALL[j,2] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,2])
+      phiB1ALL[j,3] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,3])
+      phiB1ALL[j,4] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,4])
+      phiB1ALL[j,5] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,5])
+      phiB1ALL[j,6] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,6])
+      phiB1ALL[j,7] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,7])
+      phiB1ALL[j,8] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,8])
+      phiB1ALL[j,9] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,9])
+      phiB1ALL[j,10] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,10])
+      phiB1ALL[j,11] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,11])
+      
+      phiB1ALL[j,12] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,1])
+      phiB1ALL[j,13] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,2])
+      phiB1ALL[j,14] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,3])
+      phiB1ALL[j,15] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,4])
+      phiB1ALL[j,16] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,5])
+      phiB1ALL[j,17] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,6])
+      phiB1ALL[j,18] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,7])
+      phiB1ALL[j,19] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,8])
+      phiB1ALL[j,20] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,9])
+      phiB1ALL[j,21] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,10])
+      phiB1ALL[j,22] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,11])
+      
+    }    
 
 
-phiI1ALL <- array(dim=c(61,1331),data=NA)
+
+phiI1ALL <- array(dim=c(61,11),data=NA)
 for(k in 1:11){
-  for(l in 1:11){
     for(j in 1:61){
-      phiI1ALL[j,vec1[l]+k]     <- sum(phiI_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,121+vec1[l]+k]  <- sum(phiI_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,242+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,3]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,363+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,4]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,484+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,5]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,605+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,6]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,726+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,7]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,847+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,8]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,968+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,9]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,1089+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,10]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-      phiI1ALL[j,1210+vec1[l]+k] <- sum(phiI_TESTnumALL[1:24,j,11]) / sum(phiI_TESTdenomALL[1:24,j,k] + phiI_TESTnumALL[1:24,j,l])
-    }
+      phiI1ALL[j,k]     <- sum(phiI_TESTnumALL[1:24,j,k]) / sum(phiI_TESTdenomALL[1:24,j,k])
+      }
   }    
-}  
+summary(phiI1ALL)  
 
 ##Each row is the confidence intervals for the specific mosquito data
 dat_mosq2 = read.csv("C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI.csv",header=TRUE)
@@ -295,7 +303,6 @@ par(mar=c(5,6,5,5))
 plot(dat_mosq2[,14] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
      yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
      ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))##phiB
-phiI1ALL[phiI1ALL >= 1] <- NA
 
 for(i in 1:61){
   segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
@@ -354,7 +361,7 @@ legend(1995,0.25,legend=c("Kolombero Valley, Tanzania",
                           "Other Anopheles","Matched data: Geissbuhler et al. 2007"),
        col=c("orange","darkred","red","grey","grey","black","blue"),
        ncol=1,pch=c(19,19,19,17,15,1,8),cex=1.4)
-boxplot()
+
 plot(dat_mosq2[,15] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
      yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
      ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))##phiB
@@ -414,20 +421,20 @@ points(c(phiB_16_a,phiB_16_b,phiB_16_c)~rep(2006,3),pch=8,cex=2,col="blue")
 PHII = c(phiI1ALL) 
 PHIB = c(phiB1ALL) 
 
-hist(PHII,breaks=50,col=transp("red",0.6),border=NA,main="",xlim=c(0,1),
+hist(PHII,breaks=50,col=transp("red",0.6),border=NA,main="",xlim=c(0,1),ylim=c(0,200),
      ylab="Frequency", xlab="Proportion of mosquitoes biting",cex.lab=1.4,cex.axis=1.4,yaxt="n")
 axis(2,las=2,at=seq(0,5000,1000),labels=seq(0,5000,1000), cex=1.4,cex.lab=1.4,cex.axis=1.4)
 hist(PHIB,add=TRUE,breaks=50,col=transp("blue",0.6),border=NA)
 abline(v=mean(PHIB,na.rm=TRUE),lty=2,lwd=2,col="blue4")
 abline(v=mean(PHII,na.rm=TRUE),lty=2,lwd=2,col="darkred")
-text(mean(PHIB,na.rm=TRUE)-0.15,5000,expression(paste("In bed bites ", phi[B])),cex=1.5)
-text(mean(PHII,na.rm=TRUE)-0.05,4000,expression(paste("Indoor bites ", phi[I])),cex=1.5)
+text(mean(PHIB,na.rm=TRUE)-0.15,200,expression(paste("In bed bites ", phi[B])),cex=1.5)
+text(mean(PHII,na.rm=TRUE)-0.05,100,expression(paste("Indoor bites ", phi[I])),cex=1.5)
 
-text(mean(PHIB,na.rm=TRUE)-0.07,4800,"Mean: 0.75",cex=1.5,col="blue4",font=4)
-text(mean(PHII,na.rm=TRUE)-0.04,3800,"Mean: 0.85",cex=1.5,col="darkred",font=4)
+text(mean(PHIB,na.rm=TRUE)-0.07,190,"Mean: 0.746",cex=1.5,col="blue4",font=4)
+text(mean(PHII,na.rm=TRUE)-0.04,90,"Mean: 0.859",cex=1.5,col="darkred",font=4)
 
-text(median(PHIB,na.rm=TRUE)-0.07,4600,"Median: 0.78",cex=1.5,col="blue4",font=4)
-text(median(PHII,na.rm=TRUE)-0.06,3600,"Median: 0.88",cex=1.5,col="darkred",font=4)
+text(median(PHIB,na.rm=TRUE)-0.07,180,"Median: 0.785",cex=1.5,col="blue4",font=4)
+text(median(PHII,na.rm=TRUE)-0.06,80,"Median: 0.891",cex=1.5,col="darkred",font=4)
 
 summary(PHII,na.rm=TRUE)
 summary(PHIB,na.rm=TRUE)
