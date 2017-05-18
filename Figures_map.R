@@ -59,9 +59,9 @@ legend(-15,-5,legend=c("Mosquito biting behaviour",
 ###
 ###
 ### Figure 2: Summary metadata, mosquitoes activity times, people indoors and in bed
-dat_mosq = read.csv("C:\\Users\\Ellie\\Documents\\STUDENTS\\BITING TIMES_Janetta Skarp\\phiI_phiB_rawdata.csv",header=TRUE)
-dat_indoor = read.csv("C:\\Users\\Ellie\\Documents\\STUDENTS\\BITING TIMES_Janetta Skarp\\Human_indoor_vs_time.csv",header=TRUE)
-dat_inbed = read.csv("C:\\Users\\Ellie\\Documents\\STUDENTS\\BITING TIMES_Janetta Skarp\\Human_sleeping_vs_time(1).csv",header=TRUE)
+dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
+dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
+dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
 
 par(mfrow=c(1,3))
 
@@ -269,7 +269,7 @@ for(k in 1:11){
 summary(phiI1ALL)  
 
 ##Each row is the confidence intervals for the specific mosquito data
-dat_mosq2 = read.csv("C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI.csv",header=TRUE)
+dat_mosq2 = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI.csv",header=TRUE)
 
 ##if using the mean data for each country 
 ##with mean for indoor and in bed proportion of people
@@ -767,11 +767,11 @@ for(i in 1:length(unique(dat_mosq2$Country))){
 }
 
 ##
-write.csv(phiI1ALL,"C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
-write.csv(phiB1ALL,"C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+write.csv(phiI1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
+write.csv(phiB1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
 ## Add in the phiI + phiB.CSV data so that the 9th column is the first distribution of phi values
 
-DAT_Box = read.csv("C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
+DAT_Box = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
 DAT_Box = DAT_Box[with(DAT_Box, order(DAT_Box$Year)), ]
 Tanzania = subset(DAT_Box,DAT_Box$Country=="Tanzania")
 phiI_tan = t(Tanzania[,9:1339])
@@ -833,7 +833,7 @@ legend(1,0.5,legend=c("Benin","Ghana","Kenya","Tanzania","Uganda"),
        pch=15,cex=1.4)
 
 
-DAT_Box2 = read.csv("C:\\Users\\Ellie\\Documents\\Insecticide resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+DAT_Box2 = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
 DAT_Box2 = DAT_Box2[with(DAT_Box2, order(DAT_Box2$Year)), ]
 Tanzania = subset(DAT_Box2,DAT_Box2$Country=="Tanzania")
 phiI_tan = t(Tanzania[,9:250])
@@ -845,7 +845,7 @@ boxplot(NA,NA,c(phiI_tan[,1],phiI_tan[,2]),NA,NA,NA,NA,
         c(phiI_tan[,7],phiI_tan[,9]),NA,NA,        
         c(phiI_tan[,10],phiI_tan[,11]),NA,NA,NA,NA,NA,NA,
         xaxt="n",yaxt="n",ylim=c(0,1),frame=FALSE,
-        ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[B])),
+        ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])),
         xlab="Year",cex.lab=1.5,cex.axis=1.8,col=transp("dodgerblue"))
 unique(Tanzania$Year)
 axis(1,las=0,at=seq(1,21,2),labels=seq(1995,2015,2),cex=1.8,cex.axis=1.8)
