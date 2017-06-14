@@ -49,7 +49,7 @@ points(0.06,5.69,col="purple",cex=2, pch=22) ## Tchouassi et al 2012
 points(9.1,4.02,col="purple",cex=2, pch=22) ## Tanga et al 2011 (in Tanga et al 2010 too)
 points(-1.3,6.57,col="purple",cex=2, pch=22) ## Tuno et al 2010
 
-legend(-15,-5,legend=c("Mosquito biting behaviour",
+legend(-30,-5,legend=c("Mosquito biting behaviour",
                     "Human indoor behaviour",
                     "Human bed behaviour"),
        col=c("purple","aquamarine3","orange"),
@@ -74,7 +74,7 @@ plot(dat_mosq[veca[1]:vecb[1],4] ~ c(1:24),ylim=c(-0.5,0.5),pch="",
 axis(2,las=2,at=c(-0.4,-0.2,0,0.2,0.4),labels=c(0.4,0.2,0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
 for(i in 1:length(veca)){
   lines(dat_mosq[veca[i]:vecb[i],2] ~ c(1:24))
-  lines(-dat_mosq[veca[i]:vecb[i],3] ~ c(1:24),col="grey")
+  lines(-dat_mosq[veca[i]:vecb[i],3] ~ c(1:24),col="black")
 }
 
 dat_gamb = subset(dat_mosq,dat_mosq$species_cleaned == "A_gambiae")
@@ -82,7 +82,7 @@ veca_G = seq(1,nrow(dat_gamb),24)
 vecb_G = c(veca_G[2:22]-1,524)
 for(i in 1:length(veca_G)){
   lines(dat_gamb[veca_G[i]:vecb_G[i],2] ~ c(1:24),col="red",lty=2)
-  lines(-dat_gamb[veca_G[i]:vecb_G[i],3] ~ c(1:24),col="darkred",lty=2)
+  lines(-dat_gamb[veca_G[i]:vecb_G[i],3] ~ c(1:24),col="red",lty=2)
 }
 
 dat_fun = subset(dat_mosq,dat_mosq$species_cleaned == "A_funestus")
@@ -90,7 +90,7 @@ veca_F = seq(1,nrow(dat_fun),24)
 vecb_F = c(veca_F[2:22]-1,456)
 for(i in 1:length(veca_F)){
   lines(dat_fun[veca_F[i]:vecb_F[i],2] ~ c(1:24),col="cyan2")
-  lines(-dat_fun[veca_F[i]:vecb_F[i],3] ~ c(1:24),col="blue")
+  lines(-dat_fun[veca_F[i]:vecb_F[i],3] ~ c(1:24),col="cyan2")
 }
 
 text(21,0.05,"Indoor activity",cex=1.6)
@@ -98,8 +98,8 @@ text(21,-0.05,"Outdoor activity",cex=1.6)
 axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
 text(24,0.45,"A",cex=2)
 
-legend(15,-0.2,legend=c("An. funestus","An. gambiae"),
-       col=c("blue","red"),lty=2,cex=1.4)
+legend(15,-0.2,legend=c("An. funestus","An. gambiae","Other"),
+       col=c("cyan2","red","black"),lty=1,lwd=2,cex=1.4)
 
 plot(dat_indoor[,2]~dat_indoor[,1],pch="",bty="n",ylab="Proportion of people indoors",
      xlab="Time (hours)",cex.lab=1.2,ylim=c(0,1),xaxt="n",las=2,cex.axis=1.4)
@@ -120,6 +120,13 @@ lines(dat_indoor[1:24,13]~dat_indoor[1:24,1],col="orange",lwd=2)##Tanzania
 lines(dat_indoor[,14]~dat_indoor[,1],lty=2,lwd=3)##Average
 text(24,1,"B",cex=2)
 
+legend(16,0.8,legend=c("Tanzania",
+                       "Burina Faso",
+                       "Zambia",
+                       "Kenya",
+                       "Benin"),
+       lty=1,lwd=2,cex=1.4,col=c("orange","purple","blue","aquamarine3","darkred"))
+
 plot(dat_inbed[,3]~dat_inbed[1:24,1],pch="",bty="n",ylab="Proportion of people in bed",
      xlab="Time (hours)",cex.lab=1.2,ylim=c(0,1),xaxt="n",las=2,cex.axis=1.4)
 axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
@@ -129,12 +136,6 @@ lines(dat_inbed[1:24,4]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
 lines(dat_inbed[,5]~dat_inbed[,1],lty=2,lwd=3)##Average
 text(24,1,"C",cex=2)
 
-legend(16,0.8,legend=c("Tanzania",
-                     "Burina Faso",
-                     "Zambia",
-                     "Kenya",
-                     "Benin"),
-       lty=1,cex=1.4,col=c("orange","purple","blue","aquamarine3","darkred"))
 
 ##########################
 ###
@@ -266,7 +267,8 @@ for(k in 1:11){
       phiI1ALL[j,k]     <- sum(phiI_TESTnumALL[1:24,j,k]) / sum(phiI_TESTdenomALL[1:24,j,k])
       }
   }    
-summary(phiI1ALL)  
+as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
+as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
 
 ##Each row is the confidence intervals for the specific mosquito data
 dat_mosq2 = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI.csv",header=TRUE)
@@ -304,11 +306,24 @@ plot(dat_mosq2[,14] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
      yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
      ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))##phiB
 
+quantile(c(phiI1ALL),c(0.025,0.25,0.5,0.75,0.975))  
+
+LOW1 = c(0,0.5045155,0.8140084,0.8908540,0.9400264,0.9890247,1)
+val = c(0.2,0.4,0.6,0.6,0.4,0.2)
+for(i in 1:6){
+  polygon(c(min(dat_mosq2[,4]),max(dat_mosq2[,4]+1),
+            max(dat_mosq2[,4]+1),min(dat_mosq2[,4])),
+          c(LOW1[i],LOW1[i],
+            LOW1[i+1],LOW1[i+1]),
+          col=transp("grey",val[i]),border = FALSE)
+}
+abline(h=median(c(phiI1ALL)),lwd=2,col="grey")
+
 for(i in 1:61){
   segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
            y0=quantile(phiI1ALL[i,],na.rm=TRUE,0.975),
            y1=quantile(phiI1ALL[i,],na.rm=TRUE,0.025),
-           lty=1,col="grey")
+           lty=1,col="black")
   
 }
 points(dat_mosq2[,14][dat_mosq2$Species.grouped == "1A_gambiae_sl"] ~ dat_mosq2[,4][dat_mosq2$Species.grouped == "1A_gambiae_sl"],pch=0)
@@ -353,7 +368,7 @@ points(c(phiI_16_a,phiI_16_b,phiI_16_c)~rep(2006,3),pch=8,cex=2,col="blue")
 #}
 
 
-legend(1995,0.25,legend=c("Kolombero Valley, Tanzania",
+legend(1995,0.38,legend=c("Kolombero Valley, Tanzania",
                           "Tokoli-Vidjinnagnimon, Benin",
                           "Lokohouè, Benin",
                           "An. funestus",
@@ -367,11 +382,25 @@ plot(dat_mosq2[,15] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
      ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))##phiB
 
 phiB1ALL[phiB1ALL >= 1] = NA
+
+quantile(c(phiB1ALL),c(0.025,0.25,0.5,0.75,0.975),na.rm=TRUE)  
+
+LOW1 = c(0,0.3758026,0.6669899,0.7851768,0.8560957,0.9533279,1)
+val = c(0.2,0.4,0.6,0.6,0.4,0.2)
+for(i in 1:6){
+  polygon(c(min(dat_mosq2[,4]),max(dat_mosq2[,4]+1),
+            max(dat_mosq2[,4]+1),min(dat_mosq2[,4])),
+          c(LOW1[i],LOW1[i],
+            LOW1[i+1],LOW1[i+1]),
+          col=transp("grey",val[i]),border = FALSE)
+}
+abline(h=median(c(phiB1ALL),na.rm=TRUE),lwd=2,col="grey")
+
 for(i in 1:61){
   segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
            y0=quantile(phiB1ALL[i,],na.rm=TRUE,0.975),
            y1=quantile(phiB1ALL[i,],na.rm=TRUE,0.025),
-           lty=1,col="grey")
+           lty=1,col="black")
   
 }
 
@@ -421,23 +450,74 @@ points(c(phiB_16_a,phiB_16_b,phiB_16_c)~rep(2006,3),pch=8,cex=2,col="blue")
 PHII = c(phiI1ALL) 
 PHIB = c(phiB1ALL) 
 
-hist(PHII,breaks=50,col=transp("red",0.6),border=NA,main="",xlim=c(0,1),ylim=c(0,200),
+hist(PHII,breaks=50,col=transp("red",0.6),border=NA,main="",xlim=c(0,1),ylim=c(0,100),
      ylab="Frequency", xlab="Proportion of mosquitoes biting",cex.lab=1.4,cex.axis=1.4,yaxt="n")
-axis(2,las=2,at=seq(0,5000,1000),labels=seq(0,5000,1000), cex=1.4,cex.lab=1.4,cex.axis=1.4)
+axis(2,las=2,at=seq(0,100,20),labels=seq(0,100,20), cex=1.4,cex.lab=1.4,cex.axis=1.4)
 hist(PHIB,add=TRUE,breaks=50,col=transp("blue",0.6),border=NA)
 abline(v=mean(PHIB,na.rm=TRUE),lty=2,lwd=2,col="blue4")
 abline(v=mean(PHII,na.rm=TRUE),lty=2,lwd=2,col="darkred")
-text(mean(PHIB,na.rm=TRUE)-0.15,200,expression(paste("In bed bites ", phi[B])),cex=1.5)
-text(mean(PHII,na.rm=TRUE)-0.05,100,expression(paste("Indoor bites ", phi[I])),cex=1.5)
+#text(mean(PHIB,na.rm=TRUE)-0.15,100,expression(paste("In bed bites ", phi[B])),cex=1.5)
+#text(mean(PHII,na.rm=TRUE)-0.05,50,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
+text(0.2,100,expression(paste("In bed bites ", phi[B])),cex=1.5,col="darkblue")
+text(0.3,50,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
 
-text(mean(PHIB,na.rm=TRUE)-0.07,190,"Mean: 0.746",cex=1.5,col="blue4",font=4)
-text(mean(PHII,na.rm=TRUE)-0.04,90,"Mean: 0.859",cex=1.5,col="darkred",font=4)
+text(0.3,95,"Mean: 0.746",cex=1.5,col="blue4",font=4)
+text(0.4,45,"Mean: 0.859",cex=1.5,col="darkred",font=4)
 
-text(median(PHIB,na.rm=TRUE)-0.07,180,"Median: 0.785",cex=1.5,col="blue4",font=4)
-text(median(PHII,na.rm=TRUE)-0.06,80,"Median: 0.891",cex=1.5,col="darkred",font=4)
+text(0.3,90,"Median: 0.785",cex=1.5,col="blue4",font=4)
+text(0.4,40,"Median: 0.891",cex=1.5,col="darkred",font=4)
 
 summary(PHII,na.rm=TRUE)
 summary(PHIB,na.rm=TRUE)
+
+##################################
+##
+## Supplementary figure 
+##
+##
+dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
+dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
+dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
+
+veca = seq(1,nrow(dat_mosq),24)
+vecb = c(veca[2:61]-1,1464)
+vecc = c("red","purple","grey","aquamarine3","coral3","yellow","blue")
+
+dat_gamb = subset(dat_mosq,dat_mosq$species_cleaned == "A_gambiae")
+veca_G = seq(1,nrow(dat_gamb),24)
+vecb_G = c(veca_G[2:22]-1,524)
+
+dat_fun = subset(dat_mosq,dat_mosq$species_cleaned == "A_funestus")
+veca_F = seq(1,nrow(dat_fun),24)
+vecb_F = c(veca_F[2:22]-1,456)
+
+par(mar=c(5,5,5,5))
+par(mfrow=c(2,3))
+
+func = function(datam,val1,tab1,col1){
+  plot(dat_indoor[,2]~dat_indoor[,1],pch="",bty="n",ylab="Proportion of people indoors",
+       xlab="Time (hours)",cex.lab=1.6,ylim=c(0,1),xaxt="n",las=2,cex.axis=1.6)
+  axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.6,cex=1.6)
+  axis(4,las=2,at=seq(0,1,by=0.2),labels=seq(0,1,by=0.2),cex.axis=1.4,cex.lab=1.6)
+  mtext(side=4,line=3,"Proportion of mosquito bites",cex=1)
+  polygon(c(dat_indoor[,1]),
+          c(dat_indoor[,14]),
+          col="grey",border=NA)##Average
+  
+  polygon(c(dat_inbed[,1]),c(dat_inbed[,5]),
+          col="grey55",border=NA)
+  #lines(dat_gamb[veca_G[39]:vecb_G[39],2] ~ c(1:24),col="blue",lty=1,lwd=1)
+  lines(datam[veca_F[val1]:vecb_F[val1],2] ~ c(1:24),col=col1,lty=1,lwd=1)
+  lines(datam[veca_F[val1]:vecb_F[val1],3] ~ c(1:24),col=col1,lty=2,lwd=1)
+  text(24,1,tab1,cex=2)
+}
+func(dat_fun,13,"A","cyan2")
+func(dat_fun,15,"B","cyan2")
+func(dat_fun,17,"C","cyan2")
+
+func(dat_fun,14,"D","cyan2")
+func(dat_fun,16,"E","cyan2")
+func(dat_fun,18,"F","cyan2")
 
 ##########################
 ###
@@ -445,6 +525,21 @@ summary(PHIB,na.rm=TRUE)
 ### Is there a statistical trend in phiI and phiB over time?
 summary(lm(dat_mosq2[,14] ~ dat_mosq2[,4]))
 summary(lm(dat_mosq2[,15] ~ dat_mosq2[,4]))
+
+summary(lm(dat_mosq2[,16] ~ dat_mosq2[,4]))
+summary(lm(dat_mosq2[,17] ~ dat_mosq2[,4]))
+
+summary(lm(dat_mosq2[,2] ~ dat_mosq2[,4]))
+summary(lm(dat_mosq2[,3] ~ dat_mosq2[,4]))
+
+plot(dat_mosq2[,3] ~ dat_mosq2[,14],ylim=c(0,1),xlim=c(0,1))
+abline(lm(dat_mosq2[,3] ~ dat_mosq2[,14]+0))
+points(dat_mosq2[,16] ~ dat_mosq2[,14],pch=20)
+abline(lm(dat_mosq2[,16] ~ dat_mosq2[,14]+0),lty=2)
+points(dat_mosq2[,3] ~ dat_mosq2[,16],pch=15)
+abline(lm(dat_mosq2[,3] ~ dat_mosq2[,16]+0),lty=3)
+points(dat_mosq2[,14] ~ dat_mosq2[,16],pch=20,col="red")
+abline(lm(dat_mosq2[,14] ~ dat_mosq2[,16]+0),lty=2,col="red")
 
 dat_mosq2$trans_phiI = 57.295*asin(dat_mosq2[,13])
 dat_mosq2$trans_phiB = 57.295*asin(dat_mosq2[,14])
@@ -454,7 +549,8 @@ levels(dat_mosq2$Species.grouped)[4] <- "A_gambiae_sl"
 levels(dat_mosq2$Species.grouped)[4:7] <- "An_other"
 summary(dat_mosq2$Species.grouped)
 
-#MOD1 <- glmm(trans_phiI ~ Species.grouped + Year + (1|Country))
+MOD1 <- lmer(phiI ~ Year + (1|Species.grouped) + (1|Country),data=dat_mosq2)
+MOD2 <- lmer(phiB ~ Year + (1|Species.grouped) + (1|Country),data=dat_mosq2)
 
     #i.glm<-glm(Allmean_phiI~Species.grouped+Year+Country+setting, data=dat_mosq2,family=quasibinomial(link= "logit" ))
     i.glm<-glm(Allmean_phiI~Year+Country, data=dat_mosq2) #,family=quasibinomial(link= "logit" )
@@ -767,8 +863,8 @@ for(i in 1:length(unique(dat_mosq2$Country))){
 }
 
 ##
-write.csv(phiI1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
-write.csv(phiB1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+#write.csv(phiI1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
+#write.csv(phiB1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
 ## Add in the phiI + phiB.CSV data so that the 9th column is the first distribution of phi values
 
 DAT_Box = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
@@ -903,4 +999,920 @@ legend(1,0.5,legend=c("Benin","Ghana","Kenya","Tanzania","Uganda"),
     ##phiB (as behavioural resistance) 
     ##EIR, and 
     ##Mechanical resistance
+
+######################
+## Run the model with phiI and phiB 
+## for quantiles 25% 50% and 75% 
+
+## also do 5% ... 95% quantiles to estimate relationship between prevalence 2-12 and phiI and phiB
+library(MalariaLaunchR)
+
+phi_function<-function(site,
+                       
+                       ITN, IRS,
+                       
+                       phi_I,phi_B,
+                        
+                       irs_decay_mort1_1, irs_decay_mort2_1,irs_decay_succ1_1,
+                       irs_decay_succ2_1,	irs_decay_det1_1,	irs_decay_det2_1,
+                       itn_repel_fun_1,	itn_repel_gamb_ss_1,	itn_repel_arab_1,
+                       itn_kill_fun_1,	itn_kill_gamb_ss_1,	itn_kill_arab_1,
+                       itn_half_life,
+                       
+                       run_name){
+  Run_name<-run_name
+  draw<-0
+  
+  # Load the site_file file
+  site_file<-read.table(paste0('F:/Ellies_cool_model_folder2/model_files/sites/seasonal_sites/Site_', site, '.txt'))
+  pop_size<- 80000 #Sim_pop_size(site_file[site_file[,1]=='prev',2])
+  
+  Int_set_up<-paste('num_people', pop_size, 'output_type 0 itn 1 itn_coverage', ITN, 'irs 1 irs_coverage', IRS,
+                    
+                    'fun_Q_in',phi_I,'fun_Q_bed',phi_B,
+                    'arab_Q_in',phi_I,'arab_Q_bed',phi_B,
+                    'gamb_ss_Q_in',phi_I,'gamb_ss_Q_bed',phi_B,
+                    
+                    'add change_irs 1 change_irs_time 0 change_itn 1 change_itn_time 0',  
+                    'irs_decay_mort1_1', irs_decay_mort1_1,	'irs_decay_mort2_1', irs_decay_mort2_1,	'irs_decay_succ1_1', irs_decay_succ1_1,
+                    'irs_decay_succ2_1', irs_decay_succ2_1,	'irs_decay_det1_1', irs_decay_det1_1,	'irs_decay_det2_1', irs_decay_det2_1,
+                    'itn_repel_fun_1', itn_repel_fun_1, 'itn_repel_gamb_ss_1', itn_repel_gamb_ss_1, 'itn_repel_arab_1', itn_repel_arab_1,
+                    'itn_kill_fun_1', itn_kill_fun_1, 'itn_kill_gamb_ss_1', itn_kill_gamb_ss_1, 'itn_kill_arab_1', itn_kill_arab_1,
+                    'itn_half_life_1', itn_half_life,
+                    
+                    'add irs_ellie 1')
+  Options<-paste(Int_set_up)
+  
+  ## Run the simulation
+  Model_launcher(OutputName = paste(Run_name, site, draw, sep='_'),
+                 OutputRoot = paste0("F:/Ellies_output_folder/", Run_name, '/draw_', draw),
+                 Options=Options,
+                 Exe = "F:/Ellies_cool_model_folder2/bin/Indiv_MalariaLaunchR_2.0.exe",
+                 Root="F:/Ellies_cool_model_folder2/model_files",
+                 Site=paste0('seasonal_sites/Site_', site, '.txt'),
+                 Parameter_draw = draw,
+                 Return_output = FALSE)
+}
+
+
+## ON COMP
+#inp_phi = read.csv("F:/phiI_B_estimates_res0_cov80.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res0_cov80_LLINonly.csv",header=TRUE)
+
+#inp_phi = read.csv("F:/phiI_B_estimates_res0_cov20.csv",header=TRUE)
+inp_phi = read.csv("F:/phiI_B_estimates_res0_cov20_LLINonly.csv",header=TRUE)
+
+#inp_phi = read.csv("F:/phiI_B_estimates_res0_cov50.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res0_cov50_LLINonly.csv",header=TRUE)
+
+#inp_phi = read.csv("F:/phiI_B_estimates_res50_cov80.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res50_cov80_LLINonly.csv",header=TRUE)
+###inp_phi = read.csv("F:/phiI_B_estimates_noVecInterventions.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res20_cov50_LLINonly.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res20_cov50.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res40_cov50_LLINonly.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res40_cov50.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res60_cov50_LLINonly.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res60_cov50.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res80_cov50_LLINonly.csv",header=TRUE)
+#inp_phi = read.csv("F:/phiI_B_estimates_res80_cov50.csv",header=TRUE)
+
+#for(i in 1:3){
+#  phi_function(site=inp_phi[i,1], 
+#                
+#                ITN=inp_phi[i,2], IRS=inp_phi[i,3],
+#                
+#                phi_I=inp_phi[i,4],phi_B=inp_phi[i,5],
+#                irs_decay_mort1_1=inp_phi[i,6], irs_decay_mort2_1=inp_phi[i,7], 
+#                irs_decay_succ1_1=inp_phi[i,8], irs_decay_succ2_1=inp_phi[i,9], 
+#                irs_decay_det1_1=inp_phi[i,10], irs_decay_det2_1=inp_phi[i,11],
+#                itn_repel_fun_1=inp_phi[i,12], itn_repel_gamb_ss_1=inp_phi[i,13], itn_repel_arab_1=inp_phi[i,14], 
+#                itn_kill_fun_1=inp_phi[i,15], itn_kill_gamb_ss_1=inp_phi[i,16], itn_kill_arab_1=inp_phi[i,17],
+#                
+#               itn_half_life = inp_phi[i,18],
+#                run_name="phi")
+#  
+#}
+
+phi_res0_prev = 
+
+phi_res0_prev_irs80_nets80 = 
+  phi_res0_prev_nets80 = 
+  phi_res0_prev_irs50_nets50 = 
+  phi_res0_prev_nets50 = 
+  phi_res0_prev_irs20_nets20 = 
+  phi_res0_prev_nets20 = 
+  
+  phi_res20_prev_irs50_nets50 = 
+  phi_res20_prev_nets50 = 
+  phi_res40_prev_irs50_nets50 = 
+  phi_res40_prev_nets50 = 
+  phi_res60_prev_irs50_nets50 = 
+  phi_res60_prev_nets50 = 
+  phi_res80_prev_irs50_nets50 = 
+  phi_res80_prev_nets50 = 
+  
+  phi_res50_prev_irs80_nets80 = 
+  phi_res50_prev_nets80 = 
+  phi_res50_prev_irs50_nets50 = 
+  phi_res50_prev_nets50 = 
+  phi_res50_prev_irs20_nets20 = 
+  phi_res50_prev_nets20 = 
+  
+  phi_res100_prev_irs80_nets80 = 
+  phi_res100_prev_nets80 = 
+  phi_res100_prev_irs50_nets50 = 
+  phi_res100_prev_nets50 = 
+  phi_res100_prev_irs20_nets20 = 
+  phi_res100_prev_nets20 = 
+  
+  expand.grid(time = seq(-5,20,length=1301))
+for(i in 1:44){
+  phi_res0_prev[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_noVecInterventions/draw_0/draw_0_noVecInterventions",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+    
+  phi_res0_prev_irs50_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res0_IRS50andLLIN50/draw_0/draw_0_res0_IRS50andLLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res0_prev_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res0_LLIN50/draw_0/draw_0_res0_LLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res20_prev_irs50_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res20_IRS50andLLIN50/draw_0/draw_0_res20_IRS50andLLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res20_prev_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res20_LLIN50/draw_0/draw_0_res20_LLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res40_prev_irs50_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res40_IRS50andLLIN50/draw_0/draw_0_res40_IRS50andLLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res40_prev_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res40_LLIN50/draw_0/draw_0_res40_LLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res50_prev_irs50_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res50_IRS50andLLIN50/draw_0/draw_0_res50_IRS50andLLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res50_prev_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res50_LLIN50/draw_0/draw_0_res50_LLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res60_prev_irs50_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res60_IRS50andLLIN50/draw_0/draw_0_res60_IRS50andLLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res60_prev_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res60_LLIN50/draw_0/draw_0_res60_LLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res80_prev_irs50_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res80_IRS50andLLIN50/draw_0/draw_0_res80_IRS50andLLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res80_prev_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res80_LLIN50/draw_0/draw_0_res80_LLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res100_prev_irs50_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res100_IRS50andLLIN50/draw_0/draw_0_res100_IRS50andLLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res100_prev_nets50[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res100_LLIN50/draw_0/draw_0_res100_LLIN50",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  
+  phi_res0_prev_irs80_nets80[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res0_IRS80andLLIN80/draw_0/draw_0_res0_IRS80andLLIN80",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res0_prev_nets80[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res0_LLIN80/draw_0/draw_0_res0_LLIN80",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res0_prev_irs20_nets20[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res0_IRS20andLLIN20/draw_0/draw_0_res0_IRS20andLLIN20",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res0_prev_nets20[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res0_LLIN20/draw_0/draw_0_res0_LLIN20",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  
+  phi_res50_prev_irs80_nets80[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res50_IRS80andLLIN80/draw_0/draw_0_res50_IRS80andLLIN80",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res50_prev_nets80[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res50_LLIN80/draw_0/draw_0_res50_LLIN80",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res50_prev_irs20_nets20[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res50_IRS20andLLIN20/draw_0/draw_0_res50_IRS20andLLIN20",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res50_prev_nets20[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res50_LLIN20/draw_0/draw_0_res50_LLIN20",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  
+  phi_res100_prev_irs80_nets80[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res100_IRS80andLLIN80/draw_0/draw_0_res100_IRS80andLLIN80",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res100_prev_nets80[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res100_LLIN80/draw_0/draw_0_res100_LLIN80",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res100_prev_irs20_nets20[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res100_IRS20andLLIN20/draw_0/draw_0_res100_IRS20andLLIN20",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_res100_prev_nets20[,i+1] <- read.table(paste("F:/Ellies_output_folder/phi/draw_0_res100_LLIN20/draw_0/draw_0_res100_LLIN20",inp_phi[i,1],"0.txt",sep="_"),header=TRUE)[,2]
+  
+}
+##Estimating lost efficacy
+##No resistance comparison for each season with IRS only are columns 2 to 5
+##20, 50, 80 and 100 are cols 10-13, 18-21, 26-29, 34-37
+
+vec_hs = seq(2,42,by=4)
+vec_pe = vec_hs + 1
+vec_se = vec_hs + 2
+vec_bi = vec_hs + 3
+
+vec_s = vec_pe
+prev_res0 = prev_res0_irs20_nets20 = prev_res50_irs20_nets20 =  prev_res100_irs20_nets20 =  
+  prev_res0_irs50_nets50 = prev_res50_irs50_nets50 =  prev_res100_irs50_nets50 =  
+  prev_res0_irs80_nets80 = prev_res50_irs80_nets80 =  prev_res100_irs80_nets80 =  
+  prev_res0_nets20 = prev_res50_nets20 = prev_res100_nets20 =  
+  prev_res0_nets50 = prev_res50_nets50 = prev_res100_nets50 =   
+  prev_res0_nets80 = prev_res50_nets80 = prev_res100_nets80 =  
+  prev_res20_irs50_nets50 = prev_res40_irs50_nets50 = prev_res50_irs50_nets50 =
+prev_res60_irs50_nets50 = prev_res80_irs50_nets50 = prev_res100_irs50_nets50 =
+prev_res20_nets50 = prev_res40_nets50 = prev_res50_nets50 =
+prev_res60_nets50 = prev_res80_nets50 = prev_res100_nets50 = numeric(11)
+
+for(i in 1:11){
+  prev_res0[i]  = phi_res0_prev[572,vec_s[i]]
+  
+  prev_res0_irs20_nets20[i]  = phi_res0_prev_irs20_nets20[572,vec_s[i]]
+  prev_res50_irs20_nets20[i] = phi_res50_prev_irs20_nets20[572,vec_s[i]]
+  prev_res100_irs20_nets20[i] = phi_res100_prev_irs20_nets20[572,vec_s[i]]
+  
+  prev_res0_irs50_nets50[i]  = phi_res0_prev_irs50_nets50[572,vec_s[i]]
+  prev_res50_irs50_nets50[i] = phi_res50_prev_irs50_nets50[572,vec_s[i]]
+  prev_res100_irs50_nets50[i] = phi_res100_prev_irs50_nets50[572,vec_s[i]]
+  
+  prev_res0_irs80_nets80[i]  = phi_res0_prev_irs80_nets80[572,vec_s[i]]
+  prev_res50_irs80_nets80[i] = phi_res50_prev_irs80_nets80[572,vec_s[i]]
+  prev_res100_irs80_nets80[i] = phi_res100_prev_irs80_nets80[572,vec_s[i]]
+  
+  prev_res0_nets20[i]  = phi_res0_prev_nets20[572,vec_s[i]]
+  prev_res50_nets20[i] = phi_res50_prev_nets20[572,vec_s[i]]
+  prev_res100_nets20[i] = phi_res100_prev_nets20[572,vec_s[i]]
+  
+  prev_res0_nets50[i]  = phi_res0_prev_nets50[572,vec_s[i]]
+  prev_res50_nets50[i] = phi_res50_prev_nets50[572,vec_s[i]]
+  prev_res100_nets50[i] = phi_res100_prev_nets50[572,vec_s[i]]
+  
+  prev_res0_nets80[i]  = phi_res0_prev_nets80[572,vec_s[i]]
+  prev_res50_nets80[i] = phi_res50_prev_nets80[572,vec_s[i]]
+  prev_res100_nets80[i] = phi_res100_prev_nets80[572,vec_s[i]]
+  
+  prev_res20_irs50_nets50[i] =phi_res20_prev_irs50_nets50[572,vec_s[i]]
+  prev_res40_irs50_nets50[i] =phi_res40_prev_irs50_nets50[572,vec_s[i]]
+  prev_res60_irs50_nets50[i] =phi_res60_prev_irs50_nets50[572,vec_s[i]]
+  prev_res80_irs50_nets50[i] =phi_res80_prev_irs50_nets50[572,vec_s[i]]
+  
+  prev_res20_nets50[i] =phi_res20_prev_nets50[572,vec_s[i]]
+  prev_res40_nets50[i] =phi_res40_prev_nets50[572,vec_s[i]]
+  prev_res60_nets50[i] =phi_res60_prev_nets50[572,vec_s[i]]
+  prev_res80_nets50[i] =phi_res80_prev_nets50[572,vec_s[i]]
+}
+
+phiI = unique(inp_phi$phi_I)
+phiB = unique(inp_phi$phi_B)
+
+dat_sums = expand.grid(year=rep(6,209))
+dat_sums[,2] = c(prev_res0,
+                 prev_res0_irs20_nets20,prev_res50_irs20_nets20,prev_res100_irs20_nets20,
+                 prev_res0_nets20,prev_res50_nets20,prev_res100_nets20,
+                 prev_res0_irs50_nets50,prev_res50_irs50_nets50,prev_res100_irs50_nets50,
+                 prev_res0_nets50,prev_res50_nets50,prev_res100_nets50,
+                 prev_res0_irs80_nets80,prev_res50_irs80_nets80,prev_res100_irs80_nets80,
+                 prev_res0_nets80,prev_res50_nets80,prev_res100_nets80)
+dat_sums[,3] = rep(phiI,19)
+dat_sums[,4] = rep(phiB,19)
+dat_sums[,5] = c(rep(0,length(phiI)),rep(c(rep(0,length(phiI)),rep(50,length(phiI)),rep(100,length(phiI))),6)) # Resistance
+dat_sums[,6] = c(rep(0,length(phiI)),
+                 c(rep(20,3*length(phiI)),rep(0,3*length(phiI)),
+                       rep(50,3*length(phiI)),rep(0,3*length(phiI)),
+                       rep(80,3*length(phiI)),rep(0,3*length(phiI))) ) # IRS cover
+dat_sums[,7] = c(rep(0,length(phiI)),rep(20,6*length(phiI)),rep(50,6*length(phiI)),rep(80,6*length(phiI)) ) # net cover
+colnames(dat_sums) = c("Year","Prevalence_2_10","phiI","phiB","Resistance","IRS_cov","LLIN_cov")
+head(dat_sums)
+
+#############################################
+##
+## Efficacy of res_0
+##
+##Efficacy = (1 - (prev_with_intervention / prev_without_intervention)) * 100
+Efficacy = array(dim=c(11,6))
+Efficacy50 = array(dim=c(11,6))
+Efficacy100 = array(dim=c(11,6))
+vec_net = c(20,50,80,20,50,80)
+vec_irs = c(0,0,0,20,50,80)
+for(i in 1:6){
+  Efficacy[,i] = (1 - (dat_sums$Prevalence_2_10[dat_sums$Resistance=="0" & 
+                                              dat_sums$IRS_cov == vec_irs[i] &
+                                              dat_sums$LLIN_cov == vec_net[i]] / 
+                     dat_sums$Prevalence_2_10[dat_sums$Resistance=="0" & 
+                                                dat_sums$IRS_cov == "0" &
+                                                dat_sums$LLIN_cov == "0"])) * 100
+ 
+  Efficacy50[,i] = (1 - (dat_sums$Prevalence_2_10[dat_sums$Resistance=="50" & 
+                                                  dat_sums$IRS_cov == vec_irs[i] &
+                                                  dat_sums$LLIN_cov == vec_net[i]] / 
+                         dat_sums$Prevalence_2_10[dat_sums$Resistance=="0" & 
+                                                    dat_sums$IRS_cov == "0" &
+                                                    dat_sums$LLIN_cov == "0"])) * 100
+  
+  Efficacy100[,i] = (1 - (dat_sums$Prevalence_2_10[dat_sums$Resistance=="100" & 
+                                                  dat_sums$IRS_cov == vec_irs[i] &
+                                                  dat_sums$LLIN_cov == vec_net[i]] / 
+                         dat_sums$Prevalence_2_10[dat_sums$Resistance=="0" & 
+                                                    dat_sums$IRS_cov == "0" &
+                                                    dat_sums$LLIN_cov == "0"])) * 100
+  
+}
+
+
+dat_sums2 = expand.grid(year=rep(6,11*15))
+dat_sums2$Prevalence_2_10 =c(prev_res0,
+                             prev_res0_irs50_nets50,
+                             prev_res20_irs50_nets50,prev_res40_irs50_nets50,prev_res50_irs50_nets50,
+                             prev_res60_irs50_nets50,prev_res80_irs50_nets50,prev_res100_irs50_nets50,
+                             prev_res0_nets50,
+                             prev_res20_nets50,prev_res40_nets50,prev_res50_nets50,
+                             prev_res60_nets50,prev_res80_nets50,prev_res100_nets50)
+
+dat_sums2$Resistance = c(rep(c(0,0,20,40,50,60,80,100),each=11),rep(c(0,20,40,50,60,80,100),each=11))
+dat_sums2$IRS_cov = c(rep(0,11),rep(50,11*7),rep(0,11*7))
+dat_sums2$LLIN_cov = c(rep(0,11),rep(50,11*14)) 
+
+vec_res = c(0,0,20,20,40,40,50,50,60,60,80,80,100,100)
+vec_irs2 = c(0,50,0,50,0,50,0,50,0,50,0,50,0,50)
+
+
+Efficacy_cov50 = array(dim=c(11,14))
+for(i in 1:14){
+  Efficacy_cov50[,i] = (1 - (dat_sums2$Prevalence_2_10[dat_sums2$Resistance == vec_res[i] & 
+                                                  dat_sums2$IRS_cov == vec_irs2[i] &
+                                                  dat_sums2$LLIN_cov == "50"] / 
+                         dat_sums2$Prevalence_2_10[dat_sums2$Resistance=="0" & 
+                                                    dat_sums2$IRS_cov == "0" &
+                                                    dat_sums2$LLIN_cov == "0"])) * 100
+}
+
+(1 - (dat_sums2$Prevalence_2_10[dat_sums2$Resistance == "80" & 
+                                  dat_sums2$IRS_cov == "50" &
+                                  dat_sums2$LLIN_cov == "50"] / 
+        dat_sums2$Prevalence_2_10[dat_sums2$Resistance=="0" & 
+                                    dat_sums2$IRS_cov == "0" &
+                                    dat_sums2$LLIN_cov == "0"])) * 100
+
+par(mfrow=c(1,2))
+plot(Efficacy[,1]~phiI,ylim=c(0,100),xlim=c(0.4,1),
+     ylab="Vector intervention efficacy (%)",bty="n",pch="",
+     xlab=expression(phi[I]),cex.lab=1.6,cex.axis=1.6,yaxt="n")
+axis(2,las=2,at=seq(0,100,by=20),label=seq(0,100,by=20),cex.lab=1.6,cex.axis=1.6)
+lty_vec=c(2,2,2,1,1,1)
+lwd_vec=c(1,2,3,1,2,3)
+for(i in 1:6){
+  lines(Efficacy[,i]~phiI,lty=lty_vec[i],lwd=lwd_vec[i])
+}
+effs_irs_nets=effs_nets=array(dim=c(7,11))
+for(i in 1:11){
+  effs_irs_nets[,i] = c(Efficacy_cov50[i,1],Efficacy_cov50[i,3],Efficacy_cov50[i,5],Efficacy_cov50[i,7],
+                        Efficacy_cov50[i,9],Efficacy_cov50[i,11],Efficacy_cov50[i,13])
+  effs_nets[,i] =     c(Efficacy_cov50[i,2],Efficacy_cov50[i,4],Efficacy_cov50[i,6],Efficacy_cov50[i,8],
+                        Efficacy_cov50[i,10],Efficacy_cov50[i,12],Efficacy_cov50[i,14])
+}
+
+res2 = c(0,20,40,50,60,80,100)
+plot(effs_irs_nets[,1]~res2,ylim=c(0,100),xlim=c(0,100),
+     ylab="Vector intervention efficacy (%)",bty="n",pch="",
+     xlab="Physiological resistance",cex.lab=1.6,cex.axis=1.6,yaxt="n")
+axis(2,las=2,at=seq(0,100,by=20),label=seq(0,100,by=20),cex.lab=1.6,cex.axis=1.6)
+
+#for(i in 1:11){
+#  lines(effs_irs_nets[,i]~res2,lty=1,lwd=1)
+#  lines(effs_nets[,i]~res2,lty=2,lwd=1)
+#}
+
+vec_col = c(0.1,0.3,0.5,0.7,0.9,0.9,0.7,0.5,0.3,0.1)
+for(i in 1:10){
+  polygon(c(res2,rev(res2)),
+          c(effs_irs_nets[,i],rev(effs_irs_nets[,i+1])),col=transp("grey",vec_col[i]),border=NA)
+  polygon(c(res2,rev(res2)),
+          c(effs_nets[,i],rev(effs_nets[,i+1])),col=transp("grey",vec_col[i]),border=NA)
+}
+lines(effs_irs_nets[,6]~res2,lty=1,lwd=2)
+lines(effs_nets[,6]~res2,lty=2,lwd=2)
+
+explore_seas_f = function(vec_s,seas1,choose_col,
+                          phi_dat,phi_datb,
+                          phi_dat1,phi_dat2,phi_dat3,title_2){
+
+  
+  par(mfrow=c(1,2))
+  plot(phi_dat[157:520,seas1]~phi_dat[157:520,1],
+       ylab="Prevalence 2 - 10 year olds",yaxt = "n",cex.axis=1.6,cex.lab=1.6,
+       xlab="Time (years)",bty="n",pch="",ylim=c(0,0.4))
+  axis(2,las=2,at=seq(0,0.4,by=0.1),labels=seq(0,0.4,by=0.1),cex.axis=1.6,cex.lab=1.6)
+  vec_lty=rep(c(1,2,3,4),11)
+  
+  for(i in 1:11){
+    lines(phi_dat[157:520,vec_s[i]]~phi_dat[157:520,1],lty=1,col="grey")
+    lines(phi_datb[157:520,vec_s[i]]~phi_datb[157:520,1],lty=2,col="grey")
+  }
+  abline(v=0,lty=2,col="grey")
+  
+  vec=c(0.1,0.3,0.5,0.7,0.9,0.9,0.7,0.5,0.3,0.1)
+  for(i in 1:10){
+    polygon(c(phi_dat[157:520,1],rev(phi_dat[157:520,1])),
+            c(phi_dat[157:520,vec_s[i]],rev(phi_dat[157:520,vec_s[i+1]])),
+            col=transp("grey",vec[i]),border = FALSE)
+  
+    polygon(c(phi_datb[157:520,1],rev(phi_datb[157:520,1])),
+            c(phi_datb[157:520,vec_s[i]],rev(phi_datb[157:520,vec_s[i+1]])),
+            col=transp("grey",vec[i]),border = FALSE)
+    
+    }
+  
+  
+  lines(phi_dat[157:520,seas1]~phi_dat[157:520,1],lty=1,lwd=2,col="black")
+  lines(phi_datb[157:520,seas1]~phi_datb[157:520,1],lty=2,lwd=2,col="black",0.6)
+  
+  par(mar=c(6,6,2,2))
+  boxplot(phi_dat1,phi_dat2,phi_dat3,ylim=c(0,0.4),
+          ylab="Prevalence 2 - 10 years",yaxt="n",col=transp("darkred",0.6),
+          xlab=title_2,xaxt="n",cex.lab=1.6,cex.axis=1.6,frame=FALSE)
+  axis(2,las=2,at=c(0,0.1,0.2,0.3,0.4),labels=c(0,0.1,0.2,0.3,0.4),cex.lab=1.6,cex.axis=1.6)
+  axis(1,at=c(1,2,3),labels=c(20,50,80),cex.lab=1.6,cex.axis=1.6)
+  
+}
+seas1=23
+phi_datb=phi_res0_prev_nets50
+phi_dat=phi_res0_prev_irs50_nets50
+explore_seas_f(vec_pe,23,"blue",
+               phi_res0_prev_irs50_nets50,phi_res0_prev_nets50,
+               prev_res0_irs20_nets20,prev_res0_irs50_nets50,prev_res0_irs80_nets80,
+               "Intervention coverage level")
+
+plot(prev_res0_irs20_nets20~phiI,ylim=c(0,0.3))
+lines(prev_res0_irs20_nets20~phiI,col="blue",lwd=2)
+lines(prev_res50_irs20_nets20~phiI,col="darkred",lwd=2)
+lines(prev_res100_irs20_nets20~phiI,col="orange",lwd=2)
+
+lines(prev_res0_irs50_nets50~phiI,col="blue",lwd=2)
+lines(prev_res50_irs50_nets50~phiI,col="darkred",lwd=2)
+lines(prev_res100_irs50_nets50~phiI,col="orange",lwd=2)
+
+lines(prev_res0_irs80_nets80~phiI,col="blue",lwd=2)
+lines(prev_res50_irs80_nets80~phiI,col="darkred",lwd=2)
+lines(prev_res100_irs80_nets80~phiI,col="orange",lwd=2)
+
+lines(prev_res0_nets20~phiI,col="blue",lwd=2,lty=2)
+lines(prev_res50_nets20~phiI,col="darkred",lwd=2,lty=2)
+lines(prev_res0_nets50~phiI,col="blue",lwd=2,lty=2)
+lines(prev_res50_nets50~phiI,col="darkred",lwd=2,lty=2)
+lines(prev_res0_nets80~phiI,col="blue",lwd=2,lty=2)
+lines(prev_res50_nets80~phiI,col="darkred",lwd=2,lty=2)
+
+################################################################
+##
+## Try looking at what happens when you have a shift in phi and resistance
+##
+################################################################
+phi2_function<-function(site,
+                       
+                       ITN, IRS,
+                       
+                       phi_I,phi_B,
+                       
+                       irs_decay_mort1_1, irs_decay_mort2_1,irs_decay_succ1_1,
+                       irs_decay_succ2_1,	irs_decay_det1_1,	irs_decay_det2_1,
+                       itn_repel_fun_1,	itn_repel_gamb_ss_1,	itn_repel_arab_1,
+                       itn_kill_fun_1,	itn_kill_gamb_ss_1,	itn_kill_arab_1,
+                       itn_half_life,
+                       
+                       run_name){
+  Run_name<-run_name
+  draw<-0
+  
+  # Load the site_file file
+  site_file<-read.table(paste0('F:/Ellies_cool_model_folder2/model_files/sites/seasonal_sites/Site_', site, '.txt'))
+  pop_size<- 80000 #Sim_pop_size(site_file[site_file[,1]=='prev',2])
+  
+  Int_set_up<-paste('num_people', pop_size, 'output_type 0 itn 1 itn_coverage', ITN, 'irs 1 irs_coverage', IRS,
+                    
+                    'fun_Q_in',phi_I,'fun_Q_bed',phi_B,
+                    'arab_Q_in',phi_I,'arab_Q_bed',phi_B,
+                    'gamb_ss_Q_in',phi_I,'gamb_ss_Q_bed',phi_B,
+                    
+                    'add change_irs 1 change_irs_time 0 change_itn 1 change_itn_time 0',  
+                    'irs_decay_mort1_1', irs_decay_mort1_1,	'irs_decay_mort2_1', irs_decay_mort2_1,	'irs_decay_succ1_1', irs_decay_succ1_1,
+                    'irs_decay_succ2_1', irs_decay_succ2_1,	'irs_decay_det1_1', irs_decay_det1_1,	'irs_decay_det2_1', irs_decay_det2_1,
+                    'itn_repel_fun_1', itn_repel_fun_1, 'itn_repel_gamb_ss_1', itn_repel_gamb_ss_1, 'itn_repel_arab_1', itn_repel_arab_1,
+                    'itn_kill_fun_1', itn_kill_fun_1, 'itn_kill_gamb_ss_1', itn_kill_gamb_ss_1, 'itn_kill_arab_1', itn_kill_arab_1,
+                    'itn_half_life', itn_half_life,
+                    
+                    'add irs_ellie 1')
+  Options<-paste(Int_set_up)
+  
+  ## Run the simulation
+  Model_launcher(OutputName = paste(Run_name, site, draw, sep='_'),
+                 OutputRoot = paste0("F:/Ellies_output_folder/", Run_name, '/draw_', draw),
+                 Options=Options,
+                 Exe = "F:/Ellies_cool_model_folder2/bin/Indiv_MalariaLaunchR_2.0.exe",
+                 Root="F:/Ellies_cool_model_folder2/model_files",
+                 Site=paste0('seasonal_sites/Site_', site, '.txt'),
+                 Parameter_draw = draw,
+                 Return_output = FALSE)
+}
+
+
+## ON COMP
+inp_phi = read.csv("F:/phiI_B_beh_res50_peren_seas.csv",header=TRUE)
+
+#for(i in 1:nrow(inp_phi)){
+#  phi2_function(site=inp_phi[i,1], 
+#               
+#               ITN=inp_phi[i,2], IRS=inp_phi[i,3],
+#               
+#               phi_I=inp_phi[i,4],phi_B=inp_phi[i,5],
+#               irs_decay_mort1_1=inp_phi[i,6], irs_decay_mort2_1=inp_phi[i,7], 
+#               irs_decay_succ1_1=inp_phi[i,8], irs_decay_succ2_1=inp_phi[i,9], 
+#               irs_decay_det1_1=inp_phi[i,10], irs_decay_det2_1=inp_phi[i,11],
+#               itn_repel_fun_1=inp_phi[i,12], itn_repel_gamb_ss_1=inp_phi[i,13], itn_repel_arab_1=inp_phi[i,14], 
+#               itn_kill_fun_1=inp_phi[i,15], itn_kill_gamb_ss_1=inp_phi[i,16], itn_kill_arab_1=inp_phi[i,17],
+#               itn_half_life = inp_phi[i,18],
+#               
+#               run_name="phiI_B_beh_res50_peren_seas")
+#  
+#}
+
+phi_behav_res_vec_pe = 
+  phi_behav_res_vec_se = 
+  expand.grid(time = seq(-5,20,length=1301))
+vec_intervene_pe = seq(2,46,by=4)
+vec_intervene_se = vec_intervene_pe+1
+for(i in 1:12){
+  phi_behav_res_vec_pe[,i+1] <- read.table(paste("F:/Ellies_output_folder/phiI_B_beh_res50_peren_seas/draw_0/phiI_B_beh_res50_peren_seas",vec_intervene_pe[i],"0.txt",sep="_"),header=TRUE)[,2]
+  phi_behav_res_vec_se[,i+1] <- read.table(paste("F:/Ellies_output_folder/phiI_B_beh_res50_peren_seas/draw_0/phiI_B_beh_res50_peren_seas",vec_intervene_se[i],"0.txt",sep="_"),header=TRUE)[,2]
+}
+par(mfrow=c(1,2))
+plot(phi_behav_res_vec_pe[157:520,2]~phi_behav_res_vec_pe[157:520,1],
+     ylab="Prevalence 2 - 10 year olds",yaxt = "n",cex.axis=1.6,cex.lab=1.6,
+     xlab="Time (years)",bty="n",pch="",ylim=c(0,0.4),
+     main="Perennial setting")
+axis(2,las=2,at=seq(0,0.4,by=0.1),labels=seq(0,0.4,by=0.1),cex.axis=1.6,cex.lab=1.6)
+vec_lty=rep(c(1,2,3,4),11)
+
+vec_col=rep(c("grey","blue","darkred"),each=2)
+vec_lty=rep(c(1,2),3)
+vec_lty2=rep(c(3,4),3)
+for(i in 1:6){
+  lines(phi_behav_res_vec_pe[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lty=vec_lty[i],col=vec_col[i])
+#  lines(phi_behav_res_vec_se[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lty=vec_lty[i],col=vec_col[i])
+}
+for(i in 1:6){
+  lines(phi_behav_res_vec_pe[157:520,i+7]~phi_behav_res_vec_pe[157:520,1],lwd=2,lty=vec_lty2[i],col=vec_col[i])
+  #  lines(phi_behav_res_vec_se[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lwd=2,lty=vec_lty[i],col=vec_col[i])
+}
+
+abline(v=0,lty=2,col="grey")
+
+legend(-1.8,0.4,legend=c("Baseline",
+                "Behavioural change: (25th percentile)",
+                "Physiological change: (50% resistance)",
+                "Behavioural and physiological change"),
+       bty="n",lty=c(1,2,3,4),lwd=2)
+legend(-1.9,0.2,title = "IRS and LLIN coverage",
+       legend=c("20%",
+                "50%",
+                "80%"),
+       col=c("grey","blue","darkred"),lty=1,bty="n",lwd=2)
+
+plot(phi_behav_res_vec_se[157:520,2]~phi_behav_res_vec_se[157:520,1],
+     ylab="Prevalence 2 - 10 year olds",yaxt = "n",cex.axis=1.6,cex.lab=1.6,
+     xlab="Time (years)",bty="n",pch="",ylim=c(0,0.4),
+     main="Seasonal setting")
+axis(2,las=2,at=seq(0,0.4,by=0.1),labels=seq(0,0.4,by=0.1),cex.axis=1.6,cex.lab=1.6)
+vec_lty=rep(c(1,2,3,4),11)
+
+vec_col=rep(c("grey","blue","darkred"),each=2)
+vec_lty=rep(c(1,2),3)
+vec_lty2=rep(c(3,4),3)
+for(i in 1:6){
+  lines(phi_behav_res_vec_se[157:520,i+1]~phi_behav_res_vec_se[157:520,1],lty=vec_lty[i],col=vec_col[i])
+  #  lines(phi_behav_res_vec_se[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lty=vec_lty[i],col=vec_col[i])
+}
+for(i in 1:6){
+  lines(phi_behav_res_vec_se[157:520,i+7]~phi_behav_res_vec_se[157:520,1],lwd=2,lty=vec_lty2[i],col=vec_col[i])
+  #  lines(phi_behav_res_vec_se[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lwd=2,lty=vec_lty[i],col=vec_col[i])
+}
+
+abline(v=0,lty=2,col="grey")
+
+##############################################
+##
+## Quantifying these interactions
+##
+##############################################
+
+## Percentage increase in prevalence relative to baseline (no behavioural or physiological resistance)
+## Lost protection 3 years after intervention starts
+##For 20% coverage
+a20 = (1 - (phi_behav_res_vec_se[416,2]/
+  phi_behav_res_vec_se[416,3]) )* 100 ## due to behavioural change
+
+b20 = (1 - (phi_behav_res_vec_se[416,2]/
+       phi_behav_res_vec_se[416,8]) )* 100 ## due to physiological change
+
+c20 = (1 - (phi_behav_res_vec_se[416,2]/
+       phi_behav_res_vec_se[416,9]) )* 100 ## due to behavioural and physiological change
+
+
+##For 50% coverage
+a50 = (1 - (phi_behav_res_vec_se[416,4]/
+        phi_behav_res_vec_se[416,5]) )* 100 ## due to behavioural change
+
+b50 = (1 - (phi_behav_res_vec_se[416,4]/
+        phi_behav_res_vec_se[416,10]) )* 100 ## due to physiological change
+
+c50 = (1 - (phi_behav_res_vec_se[416,4]/
+        phi_behav_res_vec_se[416,11]) )* 100 ## due to behavioural and physiological change
+
+##For 80% coverage
+a80 = (1 - (phi_behav_res_vec_se[416,6]/
+        phi_behav_res_vec_se[416,7]) )* 100 ## due to behavioural change
+
+b80 = (1 - (phi_behav_res_vec_se[416,6]/
+        phi_behav_res_vec_se[416,12]) )* 100 ## due to physiological change
+
+c80 = (1 - (phi_behav_res_vec_se[416,6]/
+        phi_behav_res_vec_se[416,13]) )* 100 ## due to behavioural and physiological change
+
+par(mfrow= c(1,1))
+plot(c(a20,a50,a80)~c(20,50,80),ylim=c(0,100))
+points(c(b20,b50,b80)~c(20,50,80))
+points(c(c20,c50,c80)~c(20,50,80))
+##############################################
+##
+## Quantifying these interactions
+##
+##############################################
+
+##Figure 1 (option 1)
+par(mfrow=c(1,1))
+newmap <- getMap(resolution = "low")
+plot(newmap, xlim = c(-15, 50), ylim = c(-35, 40), asp = 1,col="grey95", border="grey65")
+points(36.88,-7.87,col="orange",cex=2,pch=17) ## Killeen et al 2006 ##**HUMAN BED BEHAVIOUR
+points(2.116,6.35,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
+points(2.09,6.26,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
+points(39.23,-6.81,col="orange",cex=2,pch=17) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
+
+points(36.6,-8.1,col="aquamarine3",cex=2, pch=20)##Russell et al. 2011 ## HUMAN INDOOR BEHAVIOUR
+points(39.23,-6.81,col="aquamarine3",cex=2,pch=20) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
+points(-1.33,12.6,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (1)  ##HUMAN INDOOR BEHAVIOUR
+points(-1.78,12.587,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (2)##HUMAN INDOOR BEHAVIOUR
+points(29.83,-15.43,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (3)##HUMAN INDOOR BEHAVIOUR
+points(36.6,-9.07,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (4)  ##HUMAN INDOOR BEHAVIOUR
+points(39.15,-7.9,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (5)  ##HUMAN INDOOR BEHAVIOUR
+points(34.78,-0.1,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (6)  ##HUMAN INDOOR BEHAVIOUR
+points(2.116,6.35,col="aquamarine3",cex=2, pch=20) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
+points(2.09,6.26,col="aquamarine3",cex=2, pch=20) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
+
+points(34.9,-0.175,col="purple",cex=2, pch=22) ## Githeko et al. 1996
+points(32.48,-25.9,col="purple",cex=2, pch=22) ## Mendis et al 2006
+points(9.47,0.399,col="purple",cex=2, pch=22) ## Mourou et al 2012
+points(30.40,1.57,col="purple",cex=2, pch=22) ## Ojuka et al. 2015 (1)
+points(30.48,2.98,col="purple",cex=2, pch=22) ## Ojuka et al. 2015 (2)
+points(8.7,3.5,col="purple",cex=2, pch=22) ## Overgaard et al. 2012
+points(0.44,6.35,col="purple",cex=2, pch=22) ## Owusu et al 2016
+points(-15.3,13.6,col="purple",cex=2, pch=22) ## Quinones et al 1997
+points(33.0,1.0,col="purple",cex=2, pch=22) ##Kabbale et al. 2013
+points(34.38,-0.18,col="purple",cex=2, pch=22) ##Bayoh et al. 2014
+points(8.7,3.5,col="purple",cex=2, pch=22) ##Bradley et al. 2015
+points(34.92,-0.43,col="purple",cex=2, pch=22) ##Cooke et al. 2015
+points(-16.4,13.72,col="purple",cex=2, pch=22) ## Fontenille et al. 1997
+points(0.06,5.69,col="purple",cex=2, pch=22) ## Tchouassi et al 2012
+points(9.1,4.02,col="purple",cex=2, pch=22) ## Tanga et al 2011 (in Tanga et al 2010 too)
+points(-1.3,6.57,col="purple",cex=2, pch=22) ## Tuno et al 2010
+#text(48,42,"A",cex=2)
+legend(-22,-10,legend=c("Mosquito biting behaviour",
+                       "Human indoor behaviour",
+                       "Human bed behaviour"),
+       col=c("purple","aquamarine3","orange"),
+       pch=c(22,20,17),cex=1)
+
+##Figure 4 (option 1)
+par(mfrow=c(1,3))
+
+vec_s = vec_pe
+explore_seas_f = function(vec_s,seas1,choose_col,
+                          phi_dat,phi_datb,
+                          phi_dat1,phi_dat2,phi_dat3,title_2){
+  
+  
+  plot(phi_dat[157:520,seas1]~phi_dat[157:520,1],
+       ylab="Prevalence 2 - 10 year olds",yaxt = "n",cex.axis=1.6,cex.lab=1.6,
+       xlab="Time (years)",bty="n",pch="",ylim=c(0,0.4))
+  axis(2,las=2,at=seq(0,0.4,by=0.1),labels=seq(0,0.4,by=0.1),cex.axis=1.6,cex.lab=1.6)
+  vec_lty=rep(c(1,2,3,4),11)
+  
+  for(i in 1:11){
+    lines(phi_dat[157:520,vec_s[i]]~phi_dat[157:520,1],lty=1,col="grey")
+    lines(phi_datb[157:520,vec_s[i]]~phi_datb[157:520,1],lty=2,col="grey")
+  }
+  abline(v=0,lty=2,col="grey")
+  
+  vec=c(0.1,0.3,0.5,0.7,0.9,0.9,0.7,0.5,0.3,0.1)
+  for(i in 1:10){
+    polygon(c(phi_dat[157:520,1],rev(phi_dat[157:520,1])),
+            c(phi_dat[157:520,vec_s[i]],rev(phi_dat[157:520,vec_s[i+1]])),
+            col=transp("grey",vec[i]),border = FALSE)
+    
+    polygon(c(phi_datb[157:520,1],rev(phi_datb[157:520,1])),
+            c(phi_datb[157:520,vec_s[i]],rev(phi_datb[157:520,vec_s[i+1]])),
+            col=transp("grey",vec[i]),border = FALSE)
+    
+  }
+  
+  
+  lines(phi_dat[157:520,seas1]~phi_dat[157:520,1],lty=1,lwd=2,col="black")
+  lines(phi_datb[157:520,seas1]~phi_datb[157:520,1],lty=2,lwd=2,col="black",0.6)
+  
+}
+seas1=23
+explore_seas_f(vec_pe,23,"blue",
+               phi_res0_prev_irs50_nets50,phi_res0_prev_nets50,
+               prev_res0_irs20_nets20,prev_res0_irs50_nets50,prev_res0_irs80_nets80,
+               "Intervention coverage level")
+legend(-1.9,0.2,cex=1.4,
+       title = "IRS and LLIN coverage",
+       legend=c("50% LLIN",
+                "50% IRS & LLIN"),
+       col="black",lty=c(2,1),bty="n",lwd=2)
+
+text(5,0.4,"A",cex=2)
+
+
+plot(phi_behav_res_vec_pe[157:520,2]~phi_behav_res_vec_pe[157:520,1],
+     ylab="Prevalence 2 - 10 year olds",yaxt = "n",cex.axis=1.6,cex.lab=1.6,
+     xlab="Time (years)",bty="n",pch="",ylim=c(0,0.4))
+     #main="Perennial setting"
+axis(2,las=2,at=seq(0,0.4,by=0.1),labels=seq(0,0.4,by=0.1),cex.axis=1.6,cex.lab=1.6)
+vec_lty=rep(c(1,2,3,4),11)
+
+vec_col=rep(c("grey","blue","darkred"),each=2)
+vec_lty=rep(c(1,2),3)
+vec_lty2=rep(c(3,4),3)
+for(i in 1:6){
+  lines(phi_behav_res_vec_pe[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lty=vec_lty[i],col=vec_col[i])
+  #  lines(phi_behav_res_vec_se[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lty=vec_lty[i],col=vec_col[i])
+}
+for(i in 1:6){
+  lines(phi_behav_res_vec_pe[157:520,i+7]~phi_behav_res_vec_pe[157:520,1],lwd=2,lty=vec_lty2[i],col=vec_col[i])
+  #  lines(phi_behav_res_vec_se[157:520,i+1]~phi_behav_res_vec_pe[157:520,1],lwd=2,lty=vec_lty[i],col=vec_col[i])
+}
+
+abline(v=0,lty=2,col="grey")
+
+legend(-1.8,0.4,cex=1.4,legend=c("Baseline",
+                         "Behavioural change: (25th percentile)",
+                         "Physiological change: (50% resistance)",
+                         "Behavioural and physiological change"),
+       bty="n",lty=c(1,2,3,4),lwd=2)
+legend(-1.9,0.2,cex=1.4,title = "IRS and LLIN coverage",
+       legend=c("20% IRS & LLIN",
+                "50% IRS & LLIN",
+                "80% IRS & LLIN"),
+       col=c("grey","blue","darkred"),lty=1,bty="n",lwd=2)
+text(5,0.4,"B",cex=2)
+
+##(option 2)
+res2 = c(0,20,40,50,60,80,100)
+plot(effs_irs_nets[,1]~res2,ylim=c(0,100),xlim=c(0,100),
+     ylab="Vector intervention efficacy (%)",bty="n",pch="",
+     xlab="Physiological resistance",cex.lab=1.6,cex.axis=1.6,yaxt="n")
+axis(2,las=2,at=seq(0,100,by=20),label=seq(0,100,by=20),cex.lab=1.6,cex.axis=1.6)
+
+#for(i in 1:11){
+#  lines(effs_irs_nets[,i]~res2,lty=1,lwd=1)
+#  lines(effs_nets[,i]~res2,lty=2,lwd=1)
+#}
+
+vec_col = c(0.1,0.3,0.5,0.7,0.9,0.9,0.7,0.5,0.3,0.1)
+for(i in 1:10){
+  polygon(c(res2,rev(res2)),
+          c(effs_irs_nets[,i],rev(effs_irs_nets[,i+1])),col=transp("grey",vec_col[i]),border=NA)
+  polygon(c(res2,rev(res2)),
+          c(effs_nets[,i],rev(effs_nets[,i+1])),col=transp("grey",vec_col[i]),border=NA)
+}
+lines(effs_irs_nets[,6]~res2,lty=1,lwd=2)
+lines(effs_nets[,6]~res2,lty=2,lwd=2)
+
+text(100,100,"C",cex=2)
+
+#################################
+##
+## Impact of resistance
+##
+TIME = 1:365
+
+#Lagos
+seasonal_a0=	0.2859
+seasonal_a1=	-0.2431
+seasonal_b1=	0.0019
+seasonal_a2=	-0.0279
+seasonal_b2=	-0.0964
+seasonal_a3=	-0.0271
+seasonal_b3=	0.1008
+#Doma and Nasawara
+seasonal_a0=	0.2862
+seasonal_a1=	-0.2656
+seasonal_b1=	-0.105
+seasonal_a2=	-0.0908
+seasonal_b2=	0.0277
+seasonal_a3=	0.0929
+seasonal_b3=	0.0385
+#Plateau
+seasonal_a0=	0.2861
+seasonal_a1=	-0.28
+seasonal_b1=	-0.0985
+seasonal_a2=	-0.081
+seasonal_b2=	0.0294
+seasonal_a3=	0.1069
+seasonal_b3=	0.0376
+#Rivers
+seasonal_a0=	0.2856
+seasonal_a1=	-0.1812
+seasonal_b1=	-0.082
+seasonal_a2=	-0.0893
+seasonal_b2=	0.0017
+seasonal_a3=	0.0335
+seasonal_b3=	0.0329
+
+
+##Liberia - Bong County
+seasonal_a0=	0.2853
+seasonal_a1=	-0.1574
+seasonal_b1=	0.0083
+seasonal_a2=	-0.093
+seasonal_b2=	-0.0388
+seasonal_a3=	0.0097
+seasonal_b3=	0.0278
+
+ssa0 = seasonal_a0
+ssa1 = seasonal_a1
+ssb1 =  seasonal_b1
+ssa2 = seasonal_a2
+ssb2 = seasonal_b2
+ssa3 = seasonal_a3
+ssb3 = seasonal_b3
+
+###divide by theta_c to make mean 1
+
+data = (ssa0+ssa1*cos(2*pi*TIME/365)+ssa2*cos(2*2*pi*TIME/365)+ssa3*cos(3*2*pi*TIME/365)+ssb1*sin(2*pi*TIME/365)+ssb2*sin(2*2*pi*TIME/365)+ ssb3*sin(3*2*pi*TIME/365) )
+
+data[which(data < 0)] = 0.001
+
+mean(data)
+plot(TIME,data)
+
+
+#seas_mosqs = expand.grid(Doma = c(data[91:365],data[1:90])) ##Doma
+#seas_mosqs[,2] = c(data[91:365],data[1:90]) ##Lagos
+#seas_mosqs[,3] = c(data[91:365],data[1:90]) ##Nasarawa
+#seas_mosqs[,4] = c(data[91:365],data[1:90]) ##Plateau
+#seas_mosqs[,5] = c(data[91:365],data[1:90]) ##Rivers
+
+## Nigeria seasonal patterns of phiI and phiB
+dat_nig = read.table("H:/Ellie/IRS and resistance/PMI/Nigeria2014biting_behaviour.txt",header=TRUE)
+head(dat_nig)
+
+vec_lab = c("A","B","C","D","E")
+par(mar=c(5,5,5,5))
+par(mfrow=c(2,3))
+for(i in 1:5){
+  
+  plot(seas_Lagos~TIME,pch="",bty="n",yaxt="n",xaxt="n",ylab="",xlab="")
+  lines(seas_Lagos~TIME,lwd=3,col="grey",lty=3)
+  
+  par(new=T)
+  plot(dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[i]] ~ 
+         dat_nig$order[dat_nig$place == levels(dat_nig$place)[i]],bty="n",pch="",
+       ylim=c(0,1),xlim=c(1,12),ylab="Proportion of mosquitoes biting",
+       xlab = "Time (months)",xaxt="n",main=levels(dat_nig$place)[i],yaxt="n",
+       cex.lab=1.6,cex.axis=1.6)
+  
+    lines(dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[i]] ~ 
+          dat_nig$order[dat_nig$place == levels(dat_nig$place)[i]],lty=1,lwd=2)
+    lines(dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[i]] ~ 
+          dat_nig$order[dat_nig$place == levels(dat_nig$place)[i]],lty=1,col="blue",lwd=2)
+    
+    text(12,0.95,vec_lab[i],cex=2)
+    
+    axis(1,at=c(1,4,7,10),labels=c("March","June","Sept","Dec"),cex.lab=1.6,cex.axis=1.6)
+    axis(2,las=2,at=seq(0,1,by=0.2),labels=seq(0,1,by=0.2),cex.lab=1.6,cex.axis=1.6)
+    axis(4,las=2,at=seq(0,0.8,by=0.2),labels=seq(0,0.8,by=0.2),cex.lab=1.6,cex.axis=1.6)
+    mtext(text="Seasonal peak in mosquitoes",side=4,line=3,cex.lab=1.6,cex.axis=1.6)
+}
+
+boxplot(dat_nig$phi_i,dat_nig$phi_b,xaxt="n",yaxt="n",ylim=c(0,1),cex.lab=1.6,
+        ylab="Proportion of mosquitoes biting",col=c("white",transp("blue")))
+axis(1,at=c(1,2),labels=c(expression(phi[I]),expression(phi[B])),cex.lab=1.6,cex.axis=1.6)
+axis(2,las=2,at=seq(0,1,by=0.2),labels=seq(0,1,by=0.2),cex.lab=1.6,cex.axis=1.6)
+abline(h= median(PHII),lty=2,col="grey")
+abline(h= median(PHIB,na.rm=TRUE),lty=2,col="blue")
+
+text(2.45,0.95,"F",cex=2)
+
+
+
+
+
+
+## Liberia seasonal patterns of phiI and phiB
+dat_lib = read.table("H:/Ellie/IRS and resistance/PMI/Liberia2013biting_behaviour.txt",header=TRUE)
+head(dat_lib)
+
+par(mar=c(5,5,5,5))
+par(mfrow=c(1,2))
+i=3
+  
+  plot(data~TIME,pch="",bty="n",yaxt="n",xaxt="n",ylab="",xlab="")
+  lines(data~TIME,lwd=3,col="grey",lty=3)
+  
+  par(new=T)
+  plot(dat_lib$PHII[dat_lib$place == levels(dat_lib$place)[i]] ~ 
+         dat_lib$order[dat_lib$place == levels(dat_lib$place)[i]],bty="n",pch="",
+       ylim=c(0,1),xlim=c(1,12),ylab="Proportion of mosquitoes biting",
+       xlab = "Time (months)",xaxt="n",main="Sergeant Kollie Town",yaxt="n",
+       cex.lab=1.6,cex.axis=1.6)
+  
+  lines(dat_lib$PHII[dat_lib$place == levels(dat_lib$place)[i]] ~ 
+          dat_lib$order[dat_lib$place == levels(dat_lib$place)[i]],lty=1,lwd=2)
+  lines(dat_lib$PHIB[dat_lib$place == levels(dat_lib$place)[i]] ~ 
+          dat_lib$order[dat_lib$place == levels(dat_lib$place)[i]],lty=1,col="blue",lwd=2)
+  
+  text(12,0.95,"A",cex=2)
+  
+  axis(1,at=c(1,4,7,10),labels=c("March","June","Sept","Dec"),cex.lab=1.6,cex.axis=1.6)
+  axis(2,las=2,at=seq(0,1,by=0.2),labels=seq(0,1,by=0.2),cex.lab=1.6,cex.axis=1.6)
+  axis(4,las=2,at=seq(0,0.8,by=0.2),labels=seq(0,0.8,by=0.2),cex.lab=1.6,cex.axis=1.6)
+  mtext(text="Seasonal peak in mosquitoes",side=4,line=3,cex=1.6,cex.axis=1.6)
+
+
+boxplot(dat_lib$PHII,dat_lib$PHIB,xaxt="n",yaxt="n",ylim=c(0,1),cex.lab=1.6,
+        ylab="Proportion of mosquitoes biting",col=c("white",transp("blue")))
+axis(1,at=c(1,2),labels=c(expression(phi[I]),expression(phi[B])),cex.lab=1.6,cex.axis=1.6)
+axis(2,las=2,at=seq(0,1,by=0.2),labels=seq(0,1,by=0.2),cex.lab=1.6,cex.axis=1.6)
+abline(h= median(PHII),lty=2,col="grey")
+abline(h= median(PHIB,na.rm=TRUE),lty=2,col="blue")
+
+text(2.45,0.95,"B",cex=2)
 
