@@ -1648,7 +1648,7 @@ legend(-22,-10,legend=c("Mosquito biting behaviour",
        col=c("purple","aquamarine3","orange"),
        pch=c(22,20,17),cex=1)
 
-##Figure 4 (option 1)
+##Figure 5 (option 1)
 par(mfrow=c(1,3))
 
 vec_s = vec_pe
@@ -1695,9 +1695,16 @@ legend(-1.9,0.2,cex=1.4,
        title = "IRS and LLIN coverage",
        legend=c("50% LLIN",
                 "50% IRS & LLIN"),
-       col="black",lty=c(2,1),bty="n",lwd=2)
+       col="black",lty=c(1,2),bty="n",lwd=2)
 
 text(5,0.4,"A",cex=2)
+vec=c(0.1,0.3,0.5,0.7,0.9,1,0.9,0.7,0.5,0.3,0.1)
+phi_b_ranges = round(as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  ),3)
+phi_i_ranges = round(as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  ),3)
+
+legend(1.5,0.4,title = expression(paste(phi[I], "   &   ", phi[B])),
+       legend= c(phi_i_ranges,phi_b_ranges),ncol=2,cex=1.4,
+       lty=1,col=c(transp("black",vec)))
 
 
 plot(phi_behav_res_vec_pe[157:520,2]~phi_behav_res_vec_pe[157:520,1],
@@ -1752,11 +1759,10 @@ for(i in 1:10){
   polygon(c(res2,rev(res2)),
           c(effs_nets[,i],rev(effs_nets[,i+1])),col=transp("grey",vec_col[i]),border=NA)
 }
-lines(effs_irs_nets[,6]~res2,lty=1,lwd=2)
-lines(effs_nets[,6]~res2,lty=2,lwd=2)
+lines(effs_irs_nets[,6]~res2,lty=2,lwd=2)
+lines(effs_nets[,6]~res2,lty=1,lwd=2)
 
 text(100,100,"C",cex=2)
-
 #################################
 ##
 ## Impact of resistance
@@ -1839,8 +1845,8 @@ par(mar=c(5,5,5,5))
 par(mfrow=c(2,3))
 for(i in 1:5){
   
-  plot(seas_Lagos~TIME,pch="",bty="n",yaxt="n",xaxt="n",ylab="",xlab="")
-  lines(seas_Lagos~TIME,lwd=3,col="grey",lty=3)
+  plot(seas_mosqs[,i]~TIME,pch="",bty="n",yaxt="n",xaxt="n",ylab="",xlab="")
+  lines(seas_mosqs[,i]~TIME,lwd=3,col="grey",lty=3)
   
   par(new=T)
   plot(dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[i]] ~ 
@@ -1872,9 +1878,125 @@ abline(h= median(PHIB,na.rm=TRUE),lty=2,col="blue")
 text(2.45,0.95,"F",cex=2)
 
 
+######################
+## test if correlations
+Months_abundance = array(dim=c(12,5))
+for(i in 1:5){
+  Months_abundance[,i] = c(seas_mosqs[1,i],seas_mosqs[32,i],seas_mosqs[60,i],
+                           seas_mosqs[91,i],seas_mosqs[121,i],seas_mosqs[152,i],
+                           seas_mosqs[183,i],seas_mosqs[213,i],seas_mosqs[244,i],
+                           seas_mosqs[274,i],seas_mosqs[304,i],seas_mosqs[334,i])
+  
+}
+phi_i_nig = c(dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[1]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[2]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[3]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[4]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[5]])
+
+phi_b_nig = c(dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[1]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[2]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[3]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[4]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[5]])
+ab_mosq = c(Months_abundance)
+country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"),each=12)
+moda = lmer(phi_i_nig ~ ab_mosq + (1|country), REML = FALSE)
+modb = lmer(phi_i_nig ~ 1 + (1|country), REML = FALSE)
+modc = glm(phi_i_nig ~ ab_mosq + country)
+
+modc_i = glm(phi_i_nig[37:48] ~ ab_mosq[37:48])
+summary.lm(modc_i)
+
+anova(moda,modb, test="F")
+
+summary(moda)
+coef(moda)
+
+newDat <- data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
+                                   each=length(sort(predict(moda)))), 
+                     ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5) )
+newDat$pred <- predict(moda, newDat)
+newDat
+
+library(merTools)
+preds <- predictInterval(moda, newdata = newDat, n.sims = 999)
+head(preds)
+
+preds_dat = data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
+                                     each=length(sort(predict(moda)))), 
+                       ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5),
+                       preds = preds$fit,
+                       preds_upp = preds$upr,
+                       preds_low = preds$lwr)
+
+par(mfrow=c(1,2))
+dtab = data.frame(phi_i_nig,phi_b_nig,ab_mosq,country)
+plot(dtab$phi_i_nig[dtab$country == levels(dtab$country)[1]] ~ 
+       dtab$ab_mosq[dtab$country == levels(dtab$country)[1]],
+     ylab=expression(phi[I]),xlab="Mosquito relative abundance",
+     ylim=c(0.2,1),xlim=c(0,1),cex.lab=1.6,cex.axis=1.6,yaxt="n",bty="n")
+axis(2,las=2,seq(0.2,1,0.2),labels=seq(0.2,1,0.2),cex.lab=1.6,cex.axis=1.6)
+vec_pch=1:5
+vec_lty=1:5
+vec_col = c("darkred","blue","darkgreen","darkorange","grey")
+for(i in 2){
+  
+  polygon(c(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]])),
+          c(preds_dat$preds_upp[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$preds_low[preds_dat$country == levels(preds_dat$country)[i]])),col=transp(vec_col[i],0.2),border=NA)
+  points(dtab$phi_i_nig[dtab$country == levels(dtab$country)[i]] ~ 
+           dtab$ab_mosq[dtab$country == levels(dtab$country)[i]],pch=vec_pch[i],col=vec_col[i])
+  lines(preds_dat$preds[preds_dat$country == levels(preds_dat$country)[i]] ~ 
+          preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],lty=vec_lty[i],col=vec_col[i],lwd=2)
+
+  }
+#lines(sort(predict(moda))~seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))))
+
+moda = lmer(phi_b_nig ~ ab_mosq + (1|country), REML = FALSE)
+modb = lmer(phi_b_nig ~ 1 + (1|country), REML = FALSE)
+anova(moda,modb, test="F")
+
+summary(moda)
+coef(moda)
+
+modc_i = glm(phi_b_nig[49:60] ~ ab_mosq[49:60])
+summary.lm(modc_i)
 
 
+newDat <- data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
+                                   each=length(sort(predict(moda)))), 
+                     ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5) )
+newDat$pred <- predict(moda, newDat)
+newDat
 
+#library(merTools)
+preds <- predictInterval(moda, newdata = newDat, n.sims = 999)
+head(preds)
+
+preds_dat = data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
+                                     each=length(sort(predict(moda)))), 
+                       ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5),
+                       preds = preds$fit,
+                       preds_upp = preds$upr,
+                       preds_low = preds$lwr)
+
+
+plot(dtab$phi_b_nig[dtab$country == levels(dtab$country)[1]] ~ 
+       dtab$ab_mosq[dtab$country == levels(dtab$country)[1]],
+     ylab=expression(phi[B]),xlab="Mosquito relative abundance",
+     ylim=c(0.2,1),xlim=c(0,1),cex.lab=1.6,cex.axis=1.6,yaxt="n",bty="n")
+axis(2,las=2,seq(0.2,1,0.2),labels=seq(0.2,1,0.2),cex.lab=1.6,cex.axis=1.6)
+
+for(i in 5){
+  
+  polygon(c(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]])),
+          c(preds_dat$preds_upp[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$preds_low[preds_dat$country == levels(preds_dat$country)[i]])),col=transp(vec_col[i],0.2),border=NA)
+  points(dtab$phi_b_nig[dtab$country == levels(dtab$country)[i]] ~ 
+           dtab$ab_mosq[dtab$country == levels(dtab$country)[i]],pch=vec_pch[i],col=vec_col[i])
+  lines(preds_dat$preds[preds_dat$country == levels(preds_dat$country)[i]] ~ 
+          preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],lty=vec_lty[i],col=vec_col[i],lwd=2)
+  
+}
 
 ## Liberia seasonal patterns of phiI and phiB
 dat_lib = read.table("H:/Ellie/IRS and resistance/PMI/Liberia2013biting_behaviour.txt",header=TRUE)
@@ -1916,3 +2038,144 @@ abline(h= median(PHIB,na.rm=TRUE),lty=2,col="blue")
 
 text(2.45,0.95,"B",cex=2)
 
+
+#######################################
+##
+## Country level assessment with PMI data
+
+coun = read.table("H:/Ellie/IRS and resistance/PMI/COUNTRY_PHI.txt",header=TRUE)
+head(coun)
+
+par(mfrow=c(1,2))
+PHII = c(phiI1ALL) 
+PHIB = c(phiB1ALL) 
+
+hist(PHII,breaks=50,col=transp("red",0.6),border=NA,xlim=c(0,1),ylim=c(0,100),
+     ylab="Frequency", xlab="Proportion of mosquitoes biting",
+     main="Meta-analysis data",cex.lab=1.4,cex.axis=1.4,yaxt="n")
+axis(2,las=2,at=seq(0,100,20),labels=seq(0,100,20), cex=1.4,cex.lab=1.4,cex.axis=1.4)
+hist(PHIB,add=TRUE,breaks=50,col=transp("blue",0.6),border=NA)
+abline(v=mean(PHIB,na.rm=TRUE),lty=2,lwd=2,col="blue4")
+abline(v=mean(PHII,na.rm=TRUE),lty=2,lwd=2,col="darkred")
+#text(mean(PHIB,na.rm=TRUE)-0.15,100,expression(paste("In bed bites ", phi[B])),cex=1.5)
+#text(mean(PHII,na.rm=TRUE)-0.05,50,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
+text(0.2,100,expression(paste("In bed bites ", phi[B])),cex=1.5,col="darkblue")
+text(0.3,50,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
+
+text(0.3,95,"Mean: 0.746",cex=1.4,col="blue4",font=4)
+text(0.4,45,"Mean: 0.859",cex=1.4,col="darkred",font=4)
+
+text(0.3,90,"Median: 0.785",cex=1.4,col="blue4",font=4)
+text(0.4,40,"Median: 0.891",cex=1.4,col="darkred",font=4)
+
+summary(PHII,na.rm=TRUE)
+summary(PHIB,na.rm=TRUE)
+
+
+hist(coun[,6],breaks=50,col=transp("red",0.6),border=NA,xlim=c(0,1),ylim=c(0,20),
+     ylab="Frequency", xlab="Proportion of mosquitoes biting",
+     main="PMI data",cex.lab=1.4,cex.axis=1.4,yaxt="n")
+axis(2,las=2,at=seq(0,20,5),labels=seq(0,20,5), cex=1.4,cex.lab=1.4,cex.axis=1.4)
+hist(coun[,7],add=TRUE,breaks=50,col=transp("blue",0.6),border=NA)
+abline(v=mean(coun[,7],na.rm=TRUE),lty=2,lwd=2,col="blue4")
+abline(v=mean(coun[,6],na.rm=TRUE),lty=2,lwd=2,col="darkred")
+#text(mean(PHIB,na.rm=TRUE)-0.15,100,expression(paste("In bed bites ", phi[B])),cex=1.5)
+#text(mean(PHII,na.rm=TRUE)-0.05,50,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
+text(0.2,20,expression(paste("In bed bites ", phi[B])),cex=1.5,col="darkblue")
+text(0.3,10,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
+
+text(0.3,19,"Mean: 0.686",cex=1.4,col="blue4",font=4)
+text(0.4,9,"Mean: 0.840",cex=1.4,col="darkred",font=4)
+
+text(0.3,18,"Median: 0.715",cex=1.4,col="blue4",font=4)
+text(0.4,8,"Median: 0.859",cex=1.4,col="darkred",font=4)
+
+summary(coun[,6],na.rm=TRUE)
+summary(coun[,7],na.rm=TRUE)
+
+head(coun)
+par(mfrow=c(1,1))
+coun$x=(1 - coun$deltamethrin)
+plot(coun[,6] ~ coun$x, bty="n", cex.lab = 1.6, cex.axis = 1.6,
+     ylab=expression(paste("Behavioural resistance, ", phi[I])),
+     xlab="Physiological resistance, bioassay resistance test",
+     ylim=c(0,1),xlim=c(0,1),yaxt="n")
+axis(2,las=2,at=seq(0,1,0.2),label=seq(0,1,0.2),cex.lab=1.6,cex.axis=1.6)
+summary.lm(lm(coun[,6] ~ coun$x))
+
+coun2 = subset(coun, coun$sprayed == "spray" | coun$sprayed == "control")
+dim(coun2)
+tapply(coun2$phi_B,coun2$sprayed,median)
+tapply(coun2$phi_I,coun2$sprayed,mean)
+  summary(coun2$species)
+
+MOD1 <- lmer(phi_I ~ sprayed + (1|Country),data=coun2)
+MOD1temp <- lmer(phi_I ~ 1 + (1|Country),data=coun2)
+anova(MOD1,MOD1temp)
+
+MOD1 <- lmer(phi_B ~ sprayed + (1|Country),data=coun2)
+MOD1temp <- lmer(phi_B ~ 1 + (1|Country),data=coun2)
+anova(MOD1,MOD1temp)
+
+
+se2 <- sqrt(diag(vcov(MOD1)))
+tab <- cbind(Est = fixef(MOD1), LL = fixef(MOD1) - 1.96 * se2, UL = fixef(MOD1) + 1.96 * se2)
+print(exp(tab),digits=3) #to get quick odds ratios for glmm - these show you how important the different levels of each factor are
+
+
+sjp.setTheme(theme = "forestgrey", 
+             geom.label.size = 5, 
+             axis.textsize = 1.6, 
+             axis.title.size = 1.9,
+             title.size=2)
+
+sjp.glmer(MOD1, y.offset = .2, show.values = TRUE, type = "eff")
+# sort all predictors
+sjp.glmer(MOD1,
+          facet.grid = FALSE,
+          sort = "sort.all",
+          y.offset = .2)
+
+# plot qq-plot of random effects: dots should be along the line
+sjp.glmer(MOD1, type = "re.qq")
+
+####################################
+##
+## Figure 4
+par(mfrow=c(1,2))
+par(mar=c(10,5,2,2))
+boxplot(coun$phi_I ~ coun$Country, ylim=c(0,1.1), frame=FALSE,
+        cex.lab=1.6,cex.axis=1.6,yaxt="n",xaxt="n",
+        col=transp("darkred",0.5),ylab="Proportion of mosquitoes biting")
+axis(2,las=2,at=seq(0,1,0.2),label=seq(0,1,0.2),cex.lab=1.6,cex.axis=1.6)
+axis(1,las=2,at=1:11,labels=unique(levels(coun$Country)),cex.lab=1.6,cex.axis=1.6)
+numI = c(as.numeric(c(summary(coun$Country))))
+num=1:11
+for(i in 1:11){
+  text(num[i],0.02,numI[i])
+  }
+text(11,1.1,"A",cex=2)
+par(new=TRUE)
+boxplot(coun$phi_B ~ coun$Country, ylim=c(0,1), frame=FALSE,
+        cex.lab=1.6,cex.axis=1.6,yaxt="n",xaxt="n",
+        col=transp("darkblue",0.5),ylab="Proportion of mosquitoes biting")
+legend(8.5,0.4,bty="n",
+       legend = c(expression(phi[I]),
+                        expression(phi[B])),
+       col=transp(c("darkred","darkblue"),0.4),pch=15,cex=2)
+
+par(mar=c(5,5,2,2))
+plot(coun[,6] ~ coun$x, pch="",bty="n", cex.lab = 1.6, cex.axis = 1.6,
+     ylab=expression(paste("Behavioural resistance, ", phi[I])),
+     xlab="Physiological (deltamethrin) resistance",
+     ylim=c(0,1),xlim=c(0,1),yaxt="n")
+axis(2,las=2,at=seq(0,1,0.2),label=seq(0,1,0.2),cex.lab=1.6,cex.axis=1.6)
+text(1,1,"B",cex=2)
+vec_pch = 1:11
+for(i in 1:11){
+  points(coun[,6][coun$Country == levels(coun$Country)[i]] ~ 
+           coun$x[coun$Country == levels(coun$Country)[i]],pch=vec_pch[i])
+}
+legend(0.15,0.3,
+  legend=c(names(summary(coun$Country))),ncol=3,
+       pch=vec_pch)
