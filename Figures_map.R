@@ -1878,125 +1878,7 @@ abline(h= median(PHIB,na.rm=TRUE),lty=2,col="blue")
 text(2.45,0.95,"F",cex=2)
 
 
-######################
-## test if correlations
-Months_abundance = array(dim=c(12,5))
-for(i in 1:5){
-  Months_abundance[,i] = c(seas_mosqs[1,i],seas_mosqs[32,i],seas_mosqs[60,i],
-                           seas_mosqs[91,i],seas_mosqs[121,i],seas_mosqs[152,i],
-                           seas_mosqs[183,i],seas_mosqs[213,i],seas_mosqs[244,i],
-                           seas_mosqs[274,i],seas_mosqs[304,i],seas_mosqs[334,i])
-  
-}
-phi_i_nig = c(dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[1]],
-              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[2]],
-              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[3]],
-              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[4]],
-              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[5]])
 
-phi_b_nig = c(dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[1]],
-              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[2]],
-              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[3]],
-              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[4]],
-              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[5]])
-ab_mosq = c(Months_abundance)
-country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"),each=12)
-moda = lmer(phi_i_nig ~ ab_mosq + (1|country), REML = FALSE)
-modb = lmer(phi_i_nig ~ 1 + (1|country), REML = FALSE)
-modc = glm(phi_i_nig ~ ab_mosq + country)
-
-modc_i = glm(phi_i_nig[37:48] ~ ab_mosq[37:48])
-summary.lm(modc_i)
-
-anova(moda,modb, test="F")
-
-summary(moda)
-coef(moda)
-
-newDat <- data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
-                                   each=length(sort(predict(moda)))), 
-                     ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5) )
-newDat$pred <- predict(moda, newDat)
-newDat
-
-library(merTools)
-preds <- predictInterval(moda, newdata = newDat, n.sims = 999)
-head(preds)
-
-preds_dat = data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
-                                     each=length(sort(predict(moda)))), 
-                       ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5),
-                       preds = preds$fit,
-                       preds_upp = preds$upr,
-                       preds_low = preds$lwr)
-
-par(mfrow=c(1,2))
-dtab = data.frame(phi_i_nig,phi_b_nig,ab_mosq,country)
-plot(dtab$phi_i_nig[dtab$country == levels(dtab$country)[1]] ~ 
-       dtab$ab_mosq[dtab$country == levels(dtab$country)[1]],
-     ylab=expression(phi[I]),xlab="Mosquito relative abundance",
-     ylim=c(0.2,1),xlim=c(0,1),cex.lab=1.6,cex.axis=1.6,yaxt="n",bty="n")
-axis(2,las=2,seq(0.2,1,0.2),labels=seq(0.2,1,0.2),cex.lab=1.6,cex.axis=1.6)
-vec_pch=1:5
-vec_lty=1:5
-vec_col = c("darkred","blue","darkgreen","darkorange","grey")
-for(i in 2){
-  
-  polygon(c(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]])),
-          c(preds_dat$preds_upp[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$preds_low[preds_dat$country == levels(preds_dat$country)[i]])),col=transp(vec_col[i],0.2),border=NA)
-  points(dtab$phi_i_nig[dtab$country == levels(dtab$country)[i]] ~ 
-           dtab$ab_mosq[dtab$country == levels(dtab$country)[i]],pch=vec_pch[i],col=vec_col[i])
-  lines(preds_dat$preds[preds_dat$country == levels(preds_dat$country)[i]] ~ 
-          preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],lty=vec_lty[i],col=vec_col[i],lwd=2)
-
-  }
-#lines(sort(predict(moda))~seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))))
-
-moda = lmer(phi_b_nig ~ ab_mosq + (1|country), REML = FALSE)
-modb = lmer(phi_b_nig ~ 1 + (1|country), REML = FALSE)
-anova(moda,modb, test="F")
-
-summary(moda)
-coef(moda)
-
-modc_i = glm(phi_b_nig[49:60] ~ ab_mosq[49:60])
-summary.lm(modc_i)
-
-
-newDat <- data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
-                                   each=length(sort(predict(moda)))), 
-                     ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5) )
-newDat$pred <- predict(moda, newDat)
-newDat
-
-#library(merTools)
-preds <- predictInterval(moda, newdata = newDat, n.sims = 999)
-head(preds)
-
-preds_dat = data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers"), 
-                                     each=length(sort(predict(moda)))), 
-                       ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),5),
-                       preds = preds$fit,
-                       preds_upp = preds$upr,
-                       preds_low = preds$lwr)
-
-
-plot(dtab$phi_b_nig[dtab$country == levels(dtab$country)[1]] ~ 
-       dtab$ab_mosq[dtab$country == levels(dtab$country)[1]],
-     ylab=expression(phi[B]),xlab="Mosquito relative abundance",
-     ylim=c(0.2,1),xlim=c(0,1),cex.lab=1.6,cex.axis=1.6,yaxt="n",bty="n")
-axis(2,las=2,seq(0.2,1,0.2),labels=seq(0.2,1,0.2),cex.lab=1.6,cex.axis=1.6)
-
-for(i in 5){
-  
-  polygon(c(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]])),
-          c(preds_dat$preds_upp[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$preds_low[preds_dat$country == levels(preds_dat$country)[i]])),col=transp(vec_col[i],0.2),border=NA)
-  points(dtab$phi_b_nig[dtab$country == levels(dtab$country)[i]] ~ 
-           dtab$ab_mosq[dtab$country == levels(dtab$country)[i]],pch=vec_pch[i],col=vec_col[i])
-  lines(preds_dat$preds[preds_dat$country == levels(preds_dat$country)[i]] ~ 
-          preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],lty=vec_lty[i],col=vec_col[i],lwd=2)
-  
-}
 
 ## Liberia seasonal patterns of phiI and phiB
 dat_lib = read.table("H:/Ellie/IRS and resistance/PMI/Liberia2013biting_behaviour.txt",header=TRUE)
@@ -2038,6 +1920,132 @@ abline(h= median(PHIB,na.rm=TRUE),lty=2,col="blue")
 
 text(2.45,0.95,"B",cex=2)
 
+
+
+######################
+## test if correlations
+Months_abundance = array(dim=c(12,5))
+for(i in 1:5){
+  Months_abundance[,i] = c(seas_mosqs[1,i],seas_mosqs[32,i],seas_mosqs[60,i],
+                           seas_mosqs[91,i],seas_mosqs[121,i],seas_mosqs[152,i],
+                           seas_mosqs[183,i],seas_mosqs[213,i],seas_mosqs[244,i],
+                           seas_mosqs[274,i],seas_mosqs[304,i],seas_mosqs[334,i])
+  
+}
+phi_i_nig = c(dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[1]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[2]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[3]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[4]],
+              dat_nig$phi_i[dat_nig$place == levels(dat_nig$place)[5]],
+              c(dat_lib$PHII[dat_lib$place == levels(dat_lib$place)[3]],NA,NA))
+
+phi_b_nig = c(dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[1]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[2]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[3]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[4]],
+              dat_nig$phi_b[dat_nig$place == levels(dat_nig$place)[5]],
+              c(dat_lib$PHIB[dat_lib$place == levels(dat_lib$place)[3]],NA,NA))
+ab_mosq = c(Months_abundance,data[1],data[32],data[60],
+            data[91],data[121],data[152],
+            data[183],data[213],data[244],
+            data[274],data[304],data[334])
+country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers","SKT"),each=12)
+moda = lmer(phi_i_nig ~ ab_mosq + (1|country), REML = FALSE)
+modb = lmer(phi_i_nig ~ 1 + (1|country), REML = FALSE)
+modc = glm(phi_i_nig ~ ab_mosq + country)
+
+modc_i = glm(phi_i_nig[37:48] ~ ab_mosq[37:48])
+summary.lm(modc_i)
+
+anova(moda,modb, test="F")
+
+summary(moda)
+coef(moda)
+
+newDat <- data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers","SKT"), 
+                                   each=length(sort(predict(moda)))), 
+                     ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),6) )
+newDat$pred <- predict(moda, newDat)
+#newDat
+
+library(merTools)
+preds <- predictInterval(moda, newdata = newDat, n.sims = 999)
+head(preds)
+
+preds_dat = data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers","SKT"), 
+                                     each=length(sort(predict(moda)))), 
+                       ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),6),
+                       preds = preds$fit,
+                       preds_upp = preds$upr,
+                       preds_low = preds$lwr)
+
+par(mfrow=c(1,2))
+dtab = data.frame(phi_i_nig,phi_b_nig,ab_mosq,country)
+plot(dtab$phi_i_nig[dtab$country == levels(dtab$country)[1]] ~ 
+       dtab$ab_mosq[dtab$country == levels(dtab$country)[1]],
+     ylab=expression(phi[I]),xlab="Mosquito relative abundance",
+     ylim=c(0.2,1),xlim=c(0,1),cex.lab=1.6,cex.axis=1.6,yaxt="n",bty="n")
+axis(2,las=2,seq(0.2,1,0.2),labels=seq(0.2,1,0.2),cex.lab=1.6,cex.axis=1.6)
+vec_pch=1:6
+vec_lty=1:6
+vec_col = c("darkred","blue","darkgreen","darkorange","grey","cyan3")
+for(i in 6){
+  
+  polygon(c(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]])),
+          c(preds_dat$preds_upp[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$preds_low[preds_dat$country == levels(preds_dat$country)[i]])),col=transp(vec_col[i],0.2),border=NA)
+  points(dtab$phi_i_nig[dtab$country == levels(dtab$country)[i]] ~ 
+           dtab$ab_mosq[dtab$country == levels(dtab$country)[i]],pch=vec_pch[i],col=vec_col[i])
+  lines(preds_dat$preds[preds_dat$country == levels(preds_dat$country)[i]] ~ 
+          preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],lty=vec_lty[i],col=vec_col[i],lwd=2)
+  
+}
+#lines(sort(predict(moda))~seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))))
+
+moda = lmer(phi_b_nig ~ ab_mosq + (1|country), REML = FALSE)
+modb = lmer(phi_b_nig ~ 1 + (1|country), REML = FALSE)
+anova(moda,modb, test="F")
+
+summary(moda)
+coef(moda)
+
+modc_i = glm(phi_b_nig[61:72] ~ ab_mosq[61:72])
+summary.lm(modc_i)
+
+
+newDat <- data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers","SKT"), 
+                                   each=length(sort(predict(moda)))), 
+                     ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),6) )
+newDat$pred <- predict(moda, newDat)
+#newDat
+
+#library(merTools)
+preds <- predictInterval(moda, newdata = newDat, n.sims = 999)
+head(preds)
+
+preds_dat = data.frame(country = rep(c("Doma", "Lagos", "Nasawara", "Plateau", "Rivers","SKT"), 
+                                     each=length(sort(predict(moda)))), 
+                       ab_mosq = rep(seq(min(ab_mosq),max(ab_mosq),length=length(sort(predict(moda)))),6),
+                       preds = preds$fit,
+                       preds_upp = preds$upr,
+                       preds_low = preds$lwr)
+
+
+plot(dtab$phi_b_nig[dtab$country == levels(dtab$country)[1]] ~ 
+       dtab$ab_mosq[dtab$country == levels(dtab$country)[1]],
+     ylab=expression(phi[B]),xlab="Mosquito relative abundance",
+     ylim=c(0.2,1),xlim=c(0,1),cex.lab=1.6,cex.axis=1.6,yaxt="n",bty="n")
+axis(2,las=2,seq(0.2,1,0.2),labels=seq(0.2,1,0.2),cex.lab=1.6,cex.axis=1.6)
+
+for(i in 6){
+  
+  polygon(c(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]])),
+          c(preds_dat$preds_upp[preds_dat$country == levels(preds_dat$country)[i]],rev(preds_dat$preds_low[preds_dat$country == levels(preds_dat$country)[i]])),col=transp(vec_col[i],0.2),border=NA)
+  points(dtab$phi_b_nig[dtab$country == levels(dtab$country)[i]] ~ 
+           dtab$ab_mosq[dtab$country == levels(dtab$country)[i]],pch=vec_pch[i],col=vec_col[i])
+  lines(preds_dat$preds[preds_dat$country == levels(preds_dat$country)[i]] ~ 
+          preds_dat$ab_mosq[preds_dat$country == levels(preds_dat$country)[i]],lty=vec_lty[i],col=vec_col[i],lwd=2)
+  
+}
 
 #######################################
 ##
