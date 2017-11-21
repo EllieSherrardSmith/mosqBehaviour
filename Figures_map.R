@@ -20,6 +20,7 @@ points(36.88,-7.87,col="orange",cex=2,pch=17) ## Killeen et al 2006 ##**HUMAN BE
 points(2.116,6.35,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
 points(2.09,6.26,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
 points(39.23,-6.81,col="orange",cex=2,pch=17) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
+points(36.88,-16.87,col="orange",cex=2,pch=17) ## Beale et al. new data ##**HUMAN BED BEHAVIOUR
 
 points(36.6,-8.1,col="aquamarine3",cex=2, pch=20)##Russell et al. 2011 ## HUMAN INDOOR BEHAVIOUR
 points(39.23,-6.81,col="aquamarine3",cex=2,pch=20) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
@@ -49,7 +50,7 @@ points(0.06,5.69,col="purple",cex=2, pch=22) ## Tchouassi et al 2012
 points(9.1,4.02,col="purple",cex=2, pch=22) ## Tanga et al 2011 (in Tanga et al 2010 too)
 points(-1.3,6.57,col="purple",cex=2, pch=22) ## Tuno et al 2010
 
-legend(-30,-5,legend=c("Mosquito biting behaviour",
+legend(-16,-5,legend=c("Mosquito biting behaviour",
                     "Human indoor behaviour",
                     "Human bed behaviour"),
        col=c("purple","aquamarine3","orange"),
@@ -67,15 +68,121 @@ dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behavio
 dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
 dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
 
-par(mfrow=c(1,3))
+activity_mosqfunALL = function(title){
+  hours_vec = c(16:24,1:15)
+  mean_in_mosq = mean_out_mosq = 
+    max_in_mosq = max_out_mosq = min_in_mosq = min_out_mosq = numeric(24)
+  for(j in 1:24){
+    mean_in_mosq[j] = mean(dat_mosq[,2][dat_mosq[,1] == hours_vec[j]])
+    mean_out_mosq[j] = mean(dat_mosq[,3][dat_mosq[,1] == hours_vec[j]])
+    
+    max_in_mosq[j] = max(dat_mosq[,2][dat_mosq[,1] == hours_vec[j]])
+    max_out_mosq[j] = max(dat_mosq[,3][dat_mosq[,1] == hours_vec[j]])
+    
+    min_in_mosq[j] = min(dat_mosq[,2][dat_mosq[,1] == hours_vec[j]])
+    min_out_mosq[j] = min(dat_mosq[,3][dat_mosq[,1] == hours_vec[j]])
+    
+  }
+  
+  plot(mean_in_mosq~c(1:24),ylim=c(0,0.4),main=title,
+       bty="n",ylab="Proportion of active mosquitoes",yaxt="n",pch="",
+       xlab="Time (hours)",cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
+  axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
+  axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
+  polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosq,rev(min_in_mosq)),col=transp("blue",0.5),border=NA)
+  polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosq,rev(min_out_mosq)),col=transp("grey",0.5),border=NA)
+  lines(mean_in_mosq~c(1:24),lwd=2,col="blue")
+  lines(mean_out_mosq~c(1:24),lwd=2,lty=2)
+  
+}
+
+activity_mosqfun = function(species,title,xlabs){
+  hours_vec = c(16:24,1:15)
+  mean_in_mosq = mean_out_mosq = 
+    max_in_mosq = max_out_mosq = min_in_mosq = min_out_mosq = numeric(24)
+  for(j in 1:24){
+    mean_in_mosq[j] = mean(dat_mosq[,2][dat_mosq[,1] == hours_vec[j] & dat_mosq$species_cleaned == species])
+    mean_out_mosq[j] = mean(dat_mosq[,3][dat_mosq[,1] == hours_vec[j] & dat_mosq$species_cleaned == species])
+    
+    max_in_mosq[j] = max(dat_mosq[,2][dat_mosq[,1] == hours_vec[j] & dat_mosq$species_cleaned == species])
+    max_out_mosq[j] = max(dat_mosq[,3][dat_mosq[,1] == hours_vec[j] & dat_mosq$species_cleaned == species])
+    
+    min_in_mosq[j] = min(dat_mosq[,2][dat_mosq[,1] == hours_vec[j] & dat_mosq$species_cleaned == species])
+    min_out_mosq[j] = min(dat_mosq[,3][dat_mosq[,1] == hours_vec[j] & dat_mosq$species_cleaned == species])
+    
+  }
+  
+  plot(mean_in_mosq~c(1:24),ylim=c(0,0.4),main=title,
+       bty="n",ylab="Proportion of active mosquitoes",yaxt="n",pch="",
+       xlab=xlabs,cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
+  axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
+  axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
+  abline(h=0.05,lty=3,col="grey")
+  abline(h=0.1,lty=3,col="grey")
+  abline(h=0.15,lty=3,col="grey")
+  abline(h=0.2,lty=3,col="grey")
+  polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosq,rev(min_in_mosq)),col=transp("blue",0.5),border=NA)
+  polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosq,rev(min_out_mosq)),col=transp("grey",0.5),border=NA)
+  lines(mean_in_mosq~c(1:24),lwd=2,col="blue")
+  lines(mean_out_mosq~c(1:24),lwd=2,lty=2)
+  
+}
+par(mfrow=c(1,1))
+activity_mosqfunALL(title = "All mosquitoes")
+
+par(mfrow=c(3,1))
+activity_mosqfun(species =  "A_funestus",
+                 title = "An funestus",xlabs = "")
+activity_mosqfun(species =  "A_gambiae",
+                 title = "An gambiae",xlabs = "")
+activity_mosqfun(species =  "A_arabiensis",
+                 title = "An arabiensis",xlabs = "Time (hours)")
+
+legend(1,0.4,legend = c("Indoor","Outdoor"),border=NA,cex=1.6,bty="n",
+       col=transp(c("blue","black"),0.5),lty=c(1,2),pch=15,lwd=2)
+
+par(mfrow=c(3,1))
+par(mar=c(5,8,2,2))
+
+plot(mean_in_mosq~c(1:24),ylim=c(0,0.5),
+     bty="n",ylab="Proportion of active mosquitoes",yaxt="n",pch="",
+     xlab="Time (hours)",cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
+axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
+axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
+polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosq,rev(min_in_mosq)),col=transp("blue",0.5),border=NA)
+polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosq,rev(min_out_mosq)),col=transp("grey",0.5),border=NA)
+lines(mean_in_mosq~c(1:24),lwd=2,col="blue")
+lines(mean_out_mosq~c(1:24),lwd=2,lty=2)
+
+plot(mean_in_mosqf~c(1:24),ylim=c(0,0.5),
+     bty="n",ylab="Proportion of active A funestus",yaxt="n",pch="",
+     xlab="Time (hours)",cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
+axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
+axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
+polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosqf,rev(min_in_mosqf)),col=transp("blue",0.5),border=NA)
+polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosqf,rev(min_out_mosqf)),col=transp("grey",0.5),border=NA)
+lines(mean_in_mosqf~c(1:24),lwd=2,col="blue")
+lines(mean_out_mosqf~c(1:24),lwd=2,lty=2)
+
+plot(mean_in_mosqg~c(1:24),ylim=c(0,0.5),
+     bty="n",ylab="Proportion of active A gambiae sl",yaxt="n",pch="",
+     xlab="Time (hours)",cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
+axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
+axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
+polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosqg,rev(min_in_mosqg)),col=transp("blue",0.5),border=NA)
+polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosqg,rev(min_out_mosqg)),col=transp("grey",0.5),border=NA)
+lines(mean_in_mosqg~c(1:24),lwd=2,col="blue")
+lines(mean_out_mosqg~c(1:24),lwd=2,lty=2)
+
+par(mfrow=c(3,1))
 
 veca = seq(1,nrow(dat_mosq),24)
 vecb = c(veca[2:61]-1,1464)
 vecc = c("red","purple","grey","aquamarine3","coral3","yellow","blue")
 plot(dat_mosq[veca[1]:vecb[1],4] ~ c(1:24),ylim=c(-0.5,0.5),pch="",
      bty="n",ylab="Proportion of active mosquitoes",yaxt="n",
-     xlab="Time (hours)",cex.lab=1.4,xaxt="n",las=2,cex.axis=1.4)
-axis(2,las=2,at=c(-0.4,-0.2,0,0.2,0.4),labels=c(0.4,0.2,0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
+     xlab="Time (hours)",cex.lab=1.6,xaxt="n",las=2,cex.axis=1.6)
+axis(2,las=2,at=c(-0.4,-0.2,0,0.2,0.4),labels=c(0.4,0.2,0.0,0.2,0.4),cex.axis=1.6,cex=1.6)
 for(i in 1:length(veca)){
   lines(dat_mosq[veca[i]:vecb[i],2] ~ c(1:24))
   lines(-dat_mosq[veca[i]:vecb[i],3] ~ c(1:24),col="black")
@@ -102,12 +209,12 @@ text(21,-0.05,"Outdoor activity",cex=1.6)
 axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
 text(24,0.45,"A",cex=2)
 
-legend(15,-0.2,legend=c("An. funestus","An. gambiae","Other"),
+legend(15,-0.1,legend=c("An. funestus","An. gambiae","Other"),
        col=c("cyan2","red","black"),lty=1,lwd=2,cex=1.4)
 
 plot(dat_indoor[,2]~dat_indoor[,1],pch="",bty="n",ylab="Proportion of people indoors",
-     xlab="Time (hours)",cex.lab=1.2,ylim=c(0,1),xaxt="n",las=2,cex.axis=1.4)
-axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
+     xlab="Time (hours)",cex.lab=1.6,ylim=c(0,1),xaxt="n",las=2,cex.axis=1.6)
+axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.6,cex=1.6)
 for(i in 3:5){
   lines(dat_indoor[1:24,i]~dat_indoor[1:24,1],col="orange",lwd=2)##Tanzania
 }
@@ -124,22 +231,32 @@ lines(dat_indoor[1:24,13]~dat_indoor[1:24,1],col="orange",lwd=2)##Tanzania
 lines(dat_indoor[,14]~dat_indoor[,1],lty=2,lwd=3)##Average
 text(24,1,"B",cex=2)
 
-legend(16,0.8,legend=c("Tanzania",
-                       "Burina Faso",
-                       "Zambia",
-                       "Kenya",
-                       "Benin"),
-       lty=1,lwd=2,cex=1.4,col=c("orange","purple","blue","aquamarine3","darkred"))
+
+dat_inbed = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\Human_sleeping_vs_time_Beale_data_added.csv",header=TRUE)
 
 plot(dat_inbed[,3]~dat_inbed[1:24,1],pch="",bty="n",ylab="Proportion of people in bed",
-     xlab="Time (hours)",cex.lab=1.2,ylim=c(0,1),xaxt="n",las=2,cex.axis=1.4)
-axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
-lines(dat_inbed[1:24,3]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
-lines(dat_inbed[1:24,4]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
+     xlab="Time (hours)",cex.lab=1.6,ylim=c(0,1),xaxt="n",las=2,cex.axis=1.6)
+axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.6,cex=1.6)
 
-lines(dat_inbed[,5]~dat_inbed[,1],lty=2,lwd=3)##Average
+#for(i in 3:736){
+#  lines(dat_inbed[1:24,i]~dat_inbed[1:24,1],col=transp("blue",0.3),lwd=2)##Tanzania
+#}
+library(adegenet)
+lines(dat_inbed[1:24,735]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
+lines(dat_inbed[1:24,736]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
+lines(dat_inbed[1:24,739]~dat_inbed[1:24,1],col=transp("blue",0.5),lwd=2)##Mozambique_Beale average data
+
+lines(dat_inbed[,737]~dat_inbed[,1],lty=2,lwd=3,col="darkorange")##Average Tanzania
+#lines(dat_inbed[,739]~dat_inbed[,1],lty=2,lwd=3,col="blue")##Average Mozambique
+#polygon(c(dat_inbed[,1],rev(dat_inbed[,1])),c(dat_inbed[,740],rev(dat_inbed[,741])),border=NA,col=transp("blue",0.3))
 text(24,1,"C",cex=2)
-
+legend(16.2,0.9,legend=c("Tanzania",
+                         "Burina Faso",
+                         "Zambia",
+                         "Kenya",
+                         "Benin",
+                         "Mozambique"),
+       lty=1,lwd=2,cex=1.4,col=c("orange","purple","blue","aquamarine3","darkred",transp("blue",0.5)))
 
 ##########################
 ###
@@ -153,6 +270,7 @@ text(24,1,"C",cex=2)
 ## All possible combinations of phiI AND phiB
 
 head(dat_mosq)
+dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
 
 ##Calculate phiI and B for the only study we have all the data (code #16)
 phiB_TESTnum16 <- dat_inbed[,4] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][1:24]
@@ -273,6 +391,63 @@ for(k in 1:11){
   }    
 as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
 as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
+##See Beale bed data
+dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
+dat_inbed = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\Human_sleeping_vs_time_Beale_data_added.csv",header=TRUE)
+dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
+
+vec_sets = seq(0,1464,24) ##This is the start of each set of data for 24 hours
+vec2 = c(2:61,1) ##This is the start of each set of data for 24 hours
+
+##Now simulate for all of the data combinations i.e. of all the mosquito populations crossed with each piece of human data
+##dat_indoor[,3:11]  ## individual studies on humans indoors
+##dat_inbed[,3:4]     ## individual studies on humans in bed
+
+phiB_TESTnumALL <- array(dim=c(24,61,3),data=NA)
+phiI_TESTnumALL <- phiI_TESTdenomALL <-array(dim=c(24,61,11),data=NA) 
+
+##Calculate numerator for all of the phiB options
+for(i in 1:24) {
+  for(j in 1:61){
+      phiB_TESTnumALL[i,j,1]   <- dat_inbed[i,733] * dat_mosq$Inside_mosq[vec_sets[j]+i]
+      phiB_TESTnumALL[i,j,2]   <- dat_inbed[i,734] * dat_mosq$Inside_mosq[vec_sets[j]+i]
+      phiB_TESTnumALL[i,j,3]   <- dat_inbed[i,739] * dat_mosq$Inside_mosq[vec_sets[j]+i]
+  }
+}
+
+##Calculate numerator and denominator for all of the phiI options
+for(i in 1:24) {
+  for(j in 1:61){
+    for(k in 1:11){
+      phiI_TESTnumALL[i,j,k]   <- dat_indoor[i,k+2] * dat_mosq$Inside_mosq[vec_sets[j]+i]
+      phiI_TESTdenomALL[i,j,k] <- dat_indoor[i,k+2] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,k+2]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
+      
+    }
+  }
+}
+
+##Calculate PHI_B for all options making an assumption that people go indoors when they go to bed
+veccount = seq(0,8063,by=11)
+phiB1ALL <- array(dim=c(61,8074),data=NA)
+for(j in 1:61){
+  for(k in 1:11){
+    for(b in 1:3){
+      
+      phiB1ALL[j,veccount[b]+k] <- ifelse(sum(phiB_TESTnumALL[1:24,j,b]) / sum(phiI_TESTdenomALL[1:24,j,k]) < 1,
+                                          sum(phiB_TESTnumALL[1:24,j,b]) / sum(phiI_TESTdenomALL[1:24,j,k]), 1)
+    }
+  }
+}
+
+##Calculate PHI_I for all options
+phiI1ALL <- array(dim=c(61,11),data=NA)
+for(k in 1:11){
+  for(j in 1:61){
+    phiI1ALL[j,k]     <- sum(phiI_TESTnumALL[1:24,j,k]) / sum(phiI_TESTdenomALL[1:24,j,k])
+  }
+}    
+as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975),na.rm=TRUE)  )
+as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
 
 ##Each row is the confidence intervals for the specific mosquito data
 dat_mosq2 = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI.csv",header=TRUE)
@@ -304,24 +479,25 @@ dat_mosq2$Allmedian_phiB = Allmedian_phiB
 #points(dat_mosq2[,2]~dat_mosq2$Allmean_phiB,ylim=c(0,1),xlim=c(0,1),pch=15,col="red")
 #abline(a = 0, b = 1, col = 4)
 
-par(mfrow=c(1,3))
+par(mfrow=c(3,1))
 par(mar=c(5,6,5,5))
-plot(dat_mosq2[,14] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
-     yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
+plot(dat_mosq2[,14] ~ dat_mosq2[,4],xlab="Year",xlim=c(1998,2015),ylim=c(0,1),
+     yaxt="n",bty="n",cex.lab=1.6,cex.axis=1.5,pch="",
      ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))##phiB
 
 quantile(c(phiI1ALL),c(0.025,0.25,0.5,0.75,0.975))  
 
 LOW1 = c(0,0.5045155,0.8140084,0.8908540,0.9400264,0.9890247,1)
+
 val = c(0.2,0.4,0.6,0.6,0.4,0.2)
 for(i in 1:6){
-  polygon(c(min(dat_mosq2[,4]),max(dat_mosq2[,4]+1),
-            max(dat_mosq2[,4]+1),min(dat_mosq2[,4])),
+  polygon(c(1998,2001,
+            2001,1998),
           c(LOW1[i],LOW1[i],
             LOW1[i+1],LOW1[i+1]),
           col=transp("grey",val[i]),border = FALSE)
 }
-abline(h=median(c(phiI1ALL)),lwd=2,col="grey")
+segments(x0=1998,x1=2001,y0=median(c(phiI1ALL)),y1=median(c(phiI1ALL)),lwd=2,col="grey")
 
 for(i in 1:61){
   segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
@@ -370,35 +546,35 @@ points(c(phiI_16_a,phiI_16_b,phiI_16_c)~rep(2006,3),pch=8,cex=2,col="blue")
 #           lty=1,col="blue")
 #  
 #}
+text(2015.5,1,"A",cex=2)
 
-
-legend(1995,0.38,legend=c("Kolombero Valley, Tanzania",
+legend(2002,0.38,legend=c("Kolombero Valley, Tanzania",
                           "Tokoli-Vidjinnagnimon, Benin",
                           "Lokohouè, Benin",
+                          "Matched data: Geissbuhler et al. 2007",
                           "An. funestus",
                           "An. gambiae s.l.",
-                          "Other Anopheles","Matched data: Geissbuhler et al. 2007"),
-       col=c("orange","darkred","red","grey","grey","black","blue"),
-       ncol=1,pch=c(19,19,19,17,15,1,8),cex=1.4)
+                          "Other Anopheles"),
+       col=c("orange","darkred","red","blue","grey","grey","black"),
+       ncol=2,pch=c(19,19,19,8,17,15,1),cex=1.2,bty="n")
 
-plot(dat_mosq2[,15] ~ dat_mosq2[,4],xlab="Year",xlim=c(1994,2015),ylim=c(0,1),
-     yaxt="n",bty="n",cex.lab=1.5,cex.axis=1.5,pch="",
+plot(dat_mosq2[,15] ~ dat_mosq2[,4],xlab="Year",xlim=c(1998,2015),ylim=c(0,1),
+     yaxt="n",bty="n",cex.lab=1.6,cex.axis=1.5,pch="",
      ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))##phiB
-
-phiB1ALL[phiB1ALL >= 1] = NA
 
 quantile(c(phiB1ALL),c(0.025,0.25,0.5,0.75,0.975),na.rm=TRUE)  
 
-LOW1 = c(0,0.3758026,0.6669899,0.7851768,0.8560957,0.9533279,1)
+LOW1 = c(0,0.4315768,0.7274631,0.8482166,0.9262436,0.9913500,1)
 val = c(0.2,0.4,0.6,0.6,0.4,0.2)
 for(i in 1:6){
-  polygon(c(min(dat_mosq2[,4]),max(dat_mosq2[,4]+1),
-            max(dat_mosq2[,4]+1),min(dat_mosq2[,4])),
+  polygon(c(1998,2001,
+            2001,1998),
           c(LOW1[i],LOW1[i],
             LOW1[i+1],LOW1[i+1]),
           col=transp("grey",val[i]),border = FALSE)
 }
-abline(h=median(c(phiB1ALL),na.rm=TRUE),lwd=2,col="grey")
+segments(x0=1998,x1=2001,y0=median(c(phiB1ALL),na.rm=TRUE),y1=median(c(phiB1ALL),na.rm=TRUE),lwd=2,col="grey")
+
 
 for(i in 1:61){
   segments(x0=dat_mosq2[,4][i],x1=dat_mosq2[,4][i],
@@ -450,26 +626,32 @@ points(c(phiB_16_a,phiB_16_b,phiB_16_c)~rep(2006,3),pch=8,cex=2,col="blue")
 #           lty=1,col="grey")
   
 #}
+text(2015.5,1,"B",cex=2)
+
 
 PHII = c(phiI1ALL) 
 PHIB = c(phiB1ALL) 
 
-hist(PHII,breaks=50,col=transp("red",0.6),border=NA,main="",xlim=c(0,1),ylim=c(0,100),
-     ylab="Frequency", xlab="Proportion of mosquitoes biting",cex.lab=1.4,cex.axis=1.4,yaxt="n")
-axis(2,las=2,at=seq(0,100,20),labels=seq(0,100,20), cex=1.4,cex.lab=1.4,cex.axis=1.4)
+hist(PHII,breaks=50,col=transp("red",0.6),border=NA,main="",xlim=c(0,1),ylim=c(0,200),
+     ylab="", xlab="Proportion of mosquitoes biting",cex.lab=1.6,cex.axis=1.5,yaxt="n")
+axis(2,las=2,at=seq(0,200,20),labels=seq(0,200,20), cex=1.4,cex.lab=1.6,cex.axis=1.5)
+mtext(side = 2,line=3.5,"Frequency")
 hist(PHIB,add=TRUE,breaks=50,col=transp("blue",0.6),border=NA)
 abline(v=mean(PHIB,na.rm=TRUE),lty=2,lwd=2,col="blue4")
 abline(v=mean(PHII,na.rm=TRUE),lty=2,lwd=2,col="darkred")
 #text(mean(PHIB,na.rm=TRUE)-0.15,100,expression(paste("In bed bites ", phi[B])),cex=1.5)
 #text(mean(PHII,na.rm=TRUE)-0.05,50,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
-text(0.2,100,expression(paste("In bed bites ", phi[B])),cex=1.5,col="darkblue")
-text(0.3,50,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
+text(0.2,200,expression(paste("In bed bites ", phi[B])),cex=1.5,col="darkblue")
+text(0.3,100,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
 
-text(0.3,95,"Mean: 0.746",cex=1.5,col="blue4",font=4)
-text(0.4,45,"Mean: 0.859",cex=1.5,col="darkred",font=4)
+text(0.3,185,"Mean: 0.817",cex=1.5,col="blue4",font=4)
+text(0.4,85,"Mean: 0.859",cex=1.5,col="darkred",font=4)
 
-text(0.3,90,"Median: 0.785",cex=1.5,col="blue4",font=4)
-text(0.4,40,"Median: 0.891",cex=1.5,col="darkred",font=4)
+text(0.3,170,"Median: 0.846",cex=1.5,col="blue4",font=4)
+text(0.4,70,"Median: 0.891",cex=1.5,col="darkred",font=4)
+
+text(1,200,"C",cex=2)
+
 
 summary(PHII,na.rm=TRUE)
 summary(PHIB,na.rm=TRUE)
@@ -1703,8 +1885,8 @@ legend(-1.9,0.2,cex=1.4,
 
 text(5,0.4,"A",cex=2)
 vec=c(0.1,0.3,0.5,0.7,0.9,1,0.9,0.7,0.5,0.3,0.1)
-phi_b_ranges = round(as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  ),3)
-phi_i_ranges = round(as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  ),3)
+phi_b_ranges = round(as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975),na.rm=TRUE)),3)
+phi_i_ranges = round(as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975),na.rm=TRUE)),3)
 
 legend(1.5,0.4,title = expression(paste(phi[I], "   &   ", phi[B])),
        legend= c(phi_i_ranges,phi_b_ranges),ncol=2,cex=1.4,
