@@ -9,9 +9,9 @@
 ## Supplementary figure 
 ##
 ##
-dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
-dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
-dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
+dat_mosq = read.csv("H:\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
+dat_indoor = read.csv("H:\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
+dat_inbed = read.csv("H:\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\Human_sleeping_vs_time_Beale_data_added.csv",header=TRUE)
 
 veca = seq(1,nrow(dat_mosq),24)
 vecb = c(veca[2:61]-1,1464)
@@ -38,7 +38,7 @@ func = function(datam,val1,tab1,col1){
           c(dat_indoor[,14]),
           col="grey",border=NA)##Average
   
-  polygon(c(dat_inbed[,1]),c(dat_inbed[,5]),
+  polygon(c(dat_inbed[,1]),c(dat_inbed[,738]),
           col="grey55",border=NA)
   #lines(dat_gamb[veca_G[39]:vecb_G[39],2] ~ c(1:24),col="blue",lty=1,lwd=1)
   lines(datam[veca_F[val1]:vecb_F[val1],2] ~ c(1:24),col=col1,lty=1,lwd=1)
@@ -62,10 +62,10 @@ func(dat_fun,18,"F","cyan2")
 ##s2
 ## Add in the phiI + phiB.CSV data so that the 9th column is the first distribution of phi values
 
-DAT_Box = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
+DAT_Box = read.csv("H:\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\phiI2ALL.csv")
 DAT_Box = DAT_Box[with(DAT_Box, order(DAT_Box$Year)), ]
 Tanzania = subset(DAT_Box,DAT_Box$Country=="Tanzania")
-phiI_tan = t(Tanzania[,9:1339])
+phiI_tan = t(Tanzania[,9:19])
 par(mfrow=c(1,2))
 par(mar=c(6,5,5,5))
 boxplot(NA,NA,c(phiI_tan[,1],phiI_tan[,2]),NA,NA,NA,NA,
@@ -84,7 +84,7 @@ axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)
 par(new=T)
 par(mar=c(6,5,5,4.5))
 Kenya = subset(DAT_Box,DAT_Box$Country=="Kenya")
-phiI_ken = t(Kenya[,9:1339])
+phiI_ken = t(Kenya[,9:19])
 Kenya[1:8,1:10]
 boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_ken[,3],phiI_ken[,4]),NA,
@@ -93,7 +93,7 @@ boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,4))
 Ghana = subset(DAT_Box,DAT_Box$Country=="Ghana")
-phiI_gha = t(Ghana[,9:1339]);dim(phiI_gha)
+phiI_gha = t(Ghana[,9:19]);dim(phiI_gha)
 Ghana[1:6,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_gha[,1]),NA,
@@ -103,7 +103,7 @@ boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,3.5))
 Uganda = subset(DAT_Box,DAT_Box$Country=="Uganda")
-phiI_uga = t(Ghana[,9:1339]);dim(phiI_uga)
+phiI_uga = t(Ghana[,9:19]);dim(phiI_uga)
 Uganda[1:6,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_uga[,1],phiI_uga[,2]),
@@ -113,7 +113,7 @@ boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,3))
 Benin = subset(DAT_Box,DAT_Box$Country=="Benin")
-phiI_ben = t(Benin[,9:1339]);dim(phiI_ben)
+phiI_ben = t(Benin[,9:19]);dim(phiI_ben)
 Benin[1:8,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_ben[,1],phiI_ben[,2]),
@@ -126,10 +126,10 @@ legend(1,0.3,legend=c("Benin","Ghana","Kenya","Tanzania","Uganda"),
        pch=15,cex=1.4,bty="n")
 
 
-DAT_Box2 = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+DAT_Box2 = read.csv("H:\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\phiB2ALL.csv")
 DAT_Box2 = DAT_Box2[with(DAT_Box2, order(DAT_Box2$Year)), ]
 Tanzania = subset(DAT_Box2,DAT_Box2$Country=="Tanzania")
-phiI_tan = t(Tanzania[,9:250])
+phiI_tan = t(Tanzania[,9:41])
 #par(mfrow=c(1,1))
 par(mar=c(6,5,5,5))
 boxplot(NA,NA,c(phiI_tan[,1],phiI_tan[,2]),NA,NA,NA,NA,
@@ -146,7 +146,7 @@ axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)
 par(new=T)
 par(mar=c(6,5,5,4.5))
 Kenya = subset(DAT_Box2,DAT_Box2$Country=="Kenya")
-phiI_ken = t(Kenya[,9:250])
+phiI_ken = t(Kenya[,9:41])
 Kenya[1:8,1:10]
 boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_ken[,3],phiI_ken[,4]),NA,
@@ -155,7 +155,7 @@ boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,4))
 Ghana = subset(DAT_Box2,DAT_Box2$Country=="Ghana")
-phiI_gha = t(Ghana[,9:250]);dim(phiI_gha)
+phiI_gha = t(Ghana[,9:41]);dim(phiI_gha)
 Ghana[1:6,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_gha[,1]),NA,
@@ -165,7 +165,7 @@ boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,3.5))
 Uganda = subset(DAT_Box2,DAT_Box2$Country=="Uganda")
-phiI_uga = t(Ghana[,9:250]);dim(phiI_uga)
+phiI_uga = t(Ghana[,9:41]);dim(phiI_uga)
 Uganda[1:6,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_uga[,1],phiI_uga[,2]),
@@ -175,7 +175,7 @@ boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,3))
 Benin = subset(DAT_Box2,DAT_Box2$Country=="Benin")
-phiI_ben = t(Benin[,9:250]);dim(phiI_ben)
+phiI_ben = t(Benin[,9:41]);dim(phiI_ben)
 Benin[1:8,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_ben[,1],phiI_ben[,2]),
@@ -257,8 +257,8 @@ PHIB = c(phiB1ALL)
 
 
 ## S3
-coun = read.table("H:/Ellie/IRS and resistance/PMI/COUNTRY_PHI.txt",header=TRUE)
-head(coun)
+coun = read.table("H:/IRS and resistance/PMI/COUNTRY_PHI2.txt",header=TRUE)
+names(coun)
 
 par(mfrow=c(1,2))
 
@@ -296,10 +296,10 @@ abline(v=mean(coun[,6],na.rm=TRUE),lty=2,lwd=2,col="darkred")
 text(0.2,18,expression(paste("In bed bites ", phi[B])),cex=1.5,col="darkblue")
 text(0.3,10,expression(paste("Indoor bites ", phi[I])),cex=1.5,col="darkred")
 
-text(0.3,17,"Mean: 0.686",cex=1.4,col="blue4",font=4)
+text(0.3,17,"Mean: 0.750",cex=1.4,col="blue4",font=4)
 text(0.4,9,"Mean: 0.840",cex=1.4,col="darkred",font=4)
 
-text(0.3,16,"Median: 0.715",cex=1.4,col="blue4",font=4)
+text(0.3,16,"Median: 0.771",cex=1.4,col="blue4",font=4)
 text(0.4,8,"Median: 0.859",cex=1.4,col="darkred",font=4)
 
 summary(coun[,6],na.rm=TRUE)
@@ -532,6 +532,88 @@ abline(h= median(PHIB,na.rm=TRUE),lty=2,col="blue")
 
 text(2.45,0.95,"B",cex=2)
 
+##############################
+##
+## Supplementary Figure 8
+##
+##############################
+
+##S8
+
+##Each row is the confidence intervals for the specific mosquito data
+dat_mosq1 = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI_Beale added.csv",header=TRUE)
+dat_mosq2 = subset(dat_mosq1,dat_mosq1$Study != "PMI")
 
 
+dat_mosq1$source = ifelse(dat_mosq1$Study == "PMI","PMI", "published")
 
+MOD1 <- lmer(phiI ~ Year + (1|Species.grouped) + (1|Country) + (1|source),data=dat_mosq1)
+MOD2 <- lmer(phiB ~ Year + (1|Species.grouped) + (1|Country) + (1|source),data=dat_mosq1)
+
+mod1<-lmer(phiI~Year+(1|Country), data=dat_mosq1)
+
+par(mfrow=c(1,2))
+datAnArab <- data.frame(preds = predict(mod1, data.frame(Year = dat_mosq1$Year), type="response", re.form = NA),
+                        exp1 = dat_mosq1$Year)
+
+plot(phiI~Year,data=dat_mosq1,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,xlim=c(2000,2015),
+     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
+
+##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
+lines(rev(sort(datAnArab$preds)) ~ sort(datAnArab$exp1),lty=1,lwd=1)
+polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
+        c(rev(sort(datAnArab$preds-6*se(datAnArab$preds))),
+          sort(datAnArab$preds+6*se(datAnArab$preds))),
+        col=transp("grey",0.2),border=NA)             
+
+##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
+cols=transp(c("red","red","aquamarine3","aquamarine3","blue",
+              "red","red","red","aquamarine3","blue",
+              "red","blue","red","blue","aquamarine3",
+              "aquamarine3","red","blue","aquamarine3","aquamarine3","aquamarine3"),0.5)
+pchs=rep(15,21)
+ltys=rep(1,21)
+for(i in 1:length(unique(dat_mosq1$Country))){
+  points(dat_mosq1$phiI[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"],col=cols[i],pch=15)
+  
+  points(dat_mosq1$phiI[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"],col=cols[i],pch=17)
+  
+}
+legend(2000,0.5,legend=c("West Africa","East Africa","Central Africa"),
+       col=c("red","blue","aquamarine3"),pch=20,cex=1.4,bty="n")
+
+legend(2000,0.15,legend=c("Dataset 1","Dataset 2"),
+       col=c("grey"),pch=c(15,17),cex=1.4,bty="n")
+text(2015,1,"A",cex=1.5)
+
+mod2<-lmer(phiB~Year+(1|Country), data=dat_mosq1)
+datAnArab <- data.frame(preds = predict(mod2, data.frame(Year = dat_mosq1$Year), type="response", re.form = NA),
+                        exp1 = dat_mosq1$Year)
+
+
+plot(phiB~Year,data=dat_mosq1,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,xlim=c(2000,2015),
+     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
+
+##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
+lines(rev(sort(datAnArab$preds)) ~ sort(datAnArab$exp1),lty=1,lwd=1)
+polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
+        c(rev(sort(datAnArab$preds-6*se(datAnArab$preds))),
+          sort(datAnArab$preds+6*se(datAnArab$preds))),
+        col=transp("grey",0.2),border=NA)             
+
+##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
+for(i in 1:length(unique(dat_mosq1$Country))){
+  points(dat_mosq1$phiB[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"],col=cols[i],pch=15)
+  
+  points(dat_mosq1$phiB[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"],col=cols[i],pch=17)
+  
+}
+
+text(2015,1,"B",cex=1.5)
+tapply(dat_mosq1$phiI,dat_mosq1$Country,length)

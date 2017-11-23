@@ -64,9 +64,9 @@ legend(-16,-5,legend=c("Mosquito biting behaviour",
 ###
 ###
 ### Figure 2: Summary metadata, mosquitoes activity times, people indoors and in bed
-dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
-dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
-dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
+dat_mosq = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
+dat_indoor = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
+dat_inbed = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\Human_sleeping_vs_time_Beale_data_added.csv",header=TRUE)
 
 activity_mosqfunALL = function(title){
   hours_vec = c(16:24,1:15)
@@ -112,6 +112,7 @@ activity_mosqfun = function(species,title,xlabs){
     
   }
   
+  
   plot(mean_in_mosq~c(1:24),ylim=c(0,0.4),main=title,
        bty="n",ylab="Proportion of active mosquitoes",yaxt="n",pch="",
        xlab=xlabs,cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
@@ -126,12 +127,18 @@ activity_mosqfun = function(species,title,xlabs){
   lines(mean_in_mosq~c(1:24),lwd=2,col="blue")
   lines(mean_out_mosq~c(1:24),lwd=2,lty=2)
   
+  return(list(mean_in_mosq,
+              mean_out_mosq,
+              max_in_mosq,
+              max_out_mosq,
+              min_in_mosq,
+              min_out_mosq))
 }
 par(mfrow=c(1,1))
 activity_mosqfunALL(title = "All mosquitoes")
 
 par(mfrow=c(3,1))
-activity_mosqfun(species =  "A_funestus",
+d = activity_mosqfun(species =  "A_funestus",
                  title = "An funestus",xlabs = "")
 activity_mosqfun(species =  "A_gambiae",
                  title = "An gambiae",xlabs = "")
@@ -141,38 +148,12 @@ activity_mosqfun(species =  "A_arabiensis",
 legend(1,0.4,legend = c("Indoor","Outdoor"),border=NA,cex=1.6,bty="n",
        col=transp(c("blue","black"),0.5),lty=c(1,2),pch=15,lwd=2)
 
-par(mfrow=c(3,1))
-par(mar=c(5,8,2,2))
-
-plot(mean_in_mosq~c(1:24),ylim=c(0,0.5),
-     bty="n",ylab="Proportion of active mosquitoes",yaxt="n",pch="",
-     xlab="Time (hours)",cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
-axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
-axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
-polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosq,rev(min_in_mosq)),col=transp("blue",0.5),border=NA)
-polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosq,rev(min_out_mosq)),col=transp("grey",0.5),border=NA)
-lines(mean_in_mosq~c(1:24),lwd=2,col="blue")
-lines(mean_out_mosq~c(1:24),lwd=2,lty=2)
-
-plot(mean_in_mosqf~c(1:24),ylim=c(0,0.5),
-     bty="n",ylab="Proportion of active A funestus",yaxt="n",pch="",
-     xlab="Time (hours)",cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
-axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
-axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
-polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosqf,rev(min_in_mosqf)),col=transp("blue",0.5),border=NA)
-polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosqf,rev(min_out_mosqf)),col=transp("grey",0.5),border=NA)
-lines(mean_in_mosqf~c(1:24),lwd=2,col="blue")
-lines(mean_out_mosqf~c(1:24),lwd=2,lty=2)
-
-plot(mean_in_mosqg~c(1:24),ylim=c(0,0.5),
-     bty="n",ylab="Proportion of active A gambiae sl",yaxt="n",pch="",
-     xlab="Time (hours)",cex.lab=1.5,xaxt="n",las=2,cex.axis=1.5)
-axis(2,las=2,at=c(0,0.2,0.4),labels=c(0.0,0.2,0.4),cex.axis=1.4,cex=1.4)
-axis(1,las=0, at=seq(1,24,2),labels=c(seq(16,24,2),seq(2,15,2)),cex.axis=1.4,cex=1.4)
-polygon(c(c(1:24),rev(c(1:24))),c(max_in_mosqg,rev(min_in_mosqg)),col=transp("blue",0.5),border=NA)
-polygon(c(c(1:24),rev(c(1:24))),c(max_out_mosqg,rev(min_out_mosqg)),col=transp("grey",0.5),border=NA)
-lines(mean_in_mosqg~c(1:24),lwd=2,col="blue")
-lines(mean_out_mosqg~c(1:24),lwd=2,lty=2)
+mean_in_mosq = d[[1]]
+mean_out_mosq= d[[2]]
+max_in_mosq = d[[3]]
+max_out_mosq = d[[4]]
+min_in_mosq = d[[5]]
+min_out_mosq = d[[6]]
 
 par(mfrow=c(3,1))
 
@@ -246,7 +227,7 @@ lines(dat_inbed[1:24,735]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
 lines(dat_inbed[1:24,736]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
 lines(dat_inbed[1:24,739]~dat_inbed[1:24,1],col=transp("blue",0.5),lwd=2)##Mozambique_Beale average data
 
-lines(dat_inbed[,737]~dat_inbed[,1],lty=2,lwd=3,col="darkorange")##Average Tanzania
+lines(dat_inbed$Average_all[1:24]~dat_inbed[1:24,1],lty=2,lwd=3,col="black")##Average Tanzania
 #lines(dat_inbed[,739]~dat_inbed[,1],lty=2,lwd=3,col="blue")##Average Mozambique
 #polygon(c(dat_inbed[,1],rev(dat_inbed[,1])),c(dat_inbed[,740],rev(dat_inbed[,741])),border=NA,col=transp("blue",0.3))
 text(24,1,"C",cex=2)
@@ -270,18 +251,17 @@ legend(16.2,0.9,legend=c("Tanzania",
 ## All possible combinations of phiI AND phiB
 
 head(dat_mosq)
-dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
 
 ##Calculate phiI and B for the only study we have all the data (code #16)
-phiB_TESTnum16 <- dat_inbed[,4] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][1:24]
+phiB_TESTnum16 <- dat_inbed[,738] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][1:24]
 phiI_TESTnum16 <- dat_indoor[,13] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][1:24]
 phiI_TESTdenom16 <- (1-dat_indoor[,13]) * dat_mosq$Outside_mosq[dat_mosq$Study == 16][1:24]
 
-phiB_TESTnum16B <- dat_inbed[,4] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][25:48]
+phiB_TESTnum16B <- dat_inbed[,738] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][25:48]
 phiI_TESTnum16B <- dat_indoor[,13] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][25:48]
 phiI_TESTdenom16B <- (1-dat_indoor[,13]) * dat_mosq$Outside_mosq[dat_mosq$Study == 16][25:48]
 
-phiB_TESTnum16C <- dat_inbed[,4] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][49:72]
+phiB_TESTnum16C <- dat_inbed[,738] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][49:72]
 phiI_TESTnum16C <- dat_indoor[,13] * dat_mosq$Inside_mosq[dat_mosq$Study == 16][49:72]
 phiI_TESTdenom16C <- (1-dat_indoor[,13]) * dat_mosq$Outside_mosq[dat_mosq$Study == 16][49:72]
 
@@ -294,107 +274,9 @@ phiB_16_b = sum(phiB_TESTnum16B) / sum(phiI_TESTdenom16B+phiI_TESTnum16B)
 phiI_16_c = sum(phiI_TESTnum16C) / sum(phiI_TESTdenom16C+phiI_TESTnum16C)
 phiB_16_c = sum(phiB_TESTnum16C) / sum(phiI_TESTdenom16C+phiI_TESTnum16C)
 
-vec_sets = seq(0,1464,24) ##This is the start of each set of data for 24 hours
-vec2 = c(2:61,1) ##This is the start of each set of data for 24 hours
-phiB_TESTnum <- phiI_TESTnum <- phiI_TESTdenom <- array(dim=c(24,61),data=NA)
-phiI1 <- phiB1 <- phiI1test <- numeric(61)
-
-for(j in 1:61){
-  for(i in 1:24) {
-    phiB_TESTnum[i,j] <- dat_mosq$Prop_Bed[vec_sets[j]+i] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-    phiI_TESTnum[i,j] <- dat_mosq$Prop_In[vec_sets[j]+i] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-    phiI_TESTdenom[i,j] <- (1-dat_mosq$Prop_In[vec_sets[j]+i]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-  }
-}
-
-
-for(j in 1:61){
-  phiI1[j] <- sum(phiI_TESTnum[1:24,j]) / sum(phiI_TESTdenom[1:24,j] + phiI_TESTnum[1:24,j])
-  phiB1[j] <- sum(phiB_TESTnum[1:24,j]) / sum(phiI_TESTdenom[1:24,j] + phiI_TESTnum[1:24,j])
-}
-##phiI and phiB are the data derived "average human behaviour" estimates
-
-##Now simulate for all of the data combinations i.e. of all the mosquito populations crossed with each piece of human data
-##dat_indoor[,3:11]  ## individual studies on humans indoors
-##dat_inbed[,3:4]     ## individual studies on humans in bed
-
-phiB_TESTnumALL <- array(dim=c(24,61,2),data=NA)
-  phiI_TESTnumALL <- phiI_TESTdenomALL <-array(dim=c(24,61,11),data=NA) 
-
-  
-  for(i in 1:24) {
-    for(j in 1:61){
-      phiB_TESTnumALL[i,j,1]   <- dat_inbed[i,3] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiB_TESTnumALL[i,j,2]   <- dat_inbed[i,4] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      
-      phiI_TESTnumALL[i,j,1]   <- dat_indoor[i,3] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,2]   <- dat_indoor[i,4] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,3]   <- dat_indoor[i,5] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,4]   <- dat_indoor[i,6] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,5]   <- dat_indoor[i,7] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,6]   <- dat_indoor[i,8] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,7]   <- dat_indoor[i,9] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,8]   <- dat_indoor[i,10] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,9]   <- dat_indoor[i,11] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,10]   <- dat_indoor[i,12] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiI_TESTnumALL[i,j,11]   <- dat_indoor[i,13] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      
-      phiI_TESTdenomALL[i,j,1] <- dat_indoor[i,3] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,3]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,2] <- dat_indoor[i,4] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,4]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,3] <- dat_indoor[i,5] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,5]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,4] <- dat_indoor[i,6] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,6]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,5] <- dat_indoor[i,7] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,7]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,6] <- dat_indoor[i,8] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,8]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,7] <- dat_indoor[i,9] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,9]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,8] <- dat_indoor[i,10] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,10]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,9] <- dat_indoor[i,11] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,11]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,10] <- dat_indoor[i,12] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,12]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-      phiI_TESTdenomALL[i,j,11] <- dat_indoor[i,13] * dat_mosq$Inside_mosq[vec_sets[j]+i] + (1-dat_indoor[i,13]) * dat_mosq$Outside_mosq[vec_sets[j]+i]
-    }
-  }
-
-phiB1ALL <- array(dim=c(61,22),data=NA)
-    for(j in 1:61){
-      phiB1ALL[j,1] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,1])
-      phiB1ALL[j,2] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,2])
-      phiB1ALL[j,3] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,3])
-      phiB1ALL[j,4] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,4])
-      phiB1ALL[j,5] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,5])
-      phiB1ALL[j,6] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,6])
-      phiB1ALL[j,7] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,7])
-      phiB1ALL[j,8] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,8])
-      phiB1ALL[j,9] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,9])
-      phiB1ALL[j,10] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,10])
-      phiB1ALL[j,11] <- sum(phiB_TESTnumALL[1:24,j,1]) / sum(phiI_TESTdenomALL[1:24,j,11])
-      
-      phiB1ALL[j,12] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,1])
-      phiB1ALL[j,13] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,2])
-      phiB1ALL[j,14] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,3])
-      phiB1ALL[j,15] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,4])
-      phiB1ALL[j,16] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,5])
-      phiB1ALL[j,17] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,6])
-      phiB1ALL[j,18] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,7])
-      phiB1ALL[j,19] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,8])
-      phiB1ALL[j,20] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,9])
-      phiB1ALL[j,21] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,10])
-      phiB1ALL[j,22] <- sum(phiB_TESTnumALL[1:24,j,2]) / sum(phiI_TESTdenomALL[1:24,j,11])
-      
-    }    
-
-
-
-phiI1ALL <- array(dim=c(61,11),data=NA)
-for(k in 1:11){
-    for(j in 1:61){
-      phiI1ALL[j,k]     <- sum(phiI_TESTnumALL[1:24,j,k]) / sum(phiI_TESTdenomALL[1:24,j,k])
-      }
-  }    
-as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
-as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
-##See Beale bed data
-dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
+dat_mosq = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
 dat_inbed = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\Human_sleeping_vs_time_Beale_data_added.csv",header=TRUE)
-dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
+dat_indoor = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
 
 vec_sets = seq(0,1464,24) ##This is the start of each set of data for 24 hours
 vec2 = c(2:61,1) ##This is the start of each set of data for 24 hours
@@ -409,9 +291,9 @@ phiI_TESTnumALL <- phiI_TESTdenomALL <-array(dim=c(24,61,11),data=NA)
 ##Calculate numerator for all of the phiB options
 for(i in 1:24) {
   for(j in 1:61){
-      phiB_TESTnumALL[i,j,1]   <- dat_inbed[i,733] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiB_TESTnumALL[i,j,2]   <- dat_inbed[i,734] * dat_mosq$Inside_mosq[vec_sets[j]+i]
-      phiB_TESTnumALL[i,j,3]   <- dat_inbed[i,739] * dat_mosq$Inside_mosq[vec_sets[j]+i]
+    phiB_TESTnumALL[i,j,1]   <- dat_inbed[i,733] * dat_mosq$Inside_mosq[vec_sets[j]+i]
+    phiB_TESTnumALL[i,j,2]   <- dat_inbed[i,734] * dat_mosq$Inside_mosq[vec_sets[j]+i]
+    phiB_TESTnumALL[i,j,3]   <- dat_inbed[i,739] * dat_mosq$Inside_mosq[vec_sets[j]+i]
   }
 }
 
@@ -428,7 +310,7 @@ for(i in 1:24) {
 
 ##Calculate PHI_B for all options making an assumption that people go indoors when they go to bed
 veccount = seq(0,8063,by=11)
-phiB1ALL <- array(dim=c(61,8074),data=NA)
+phiB1ALL <- array(dim=c(61,33),data=NA)
 for(j in 1:61){
   for(k in 1:11){
     for(b in 1:3){
@@ -448,14 +330,17 @@ for(k in 1:11){
 }    
 as.numeric(quantile(c(phiB1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975),na.rm=TRUE)  )
 as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.95,0.975))  )
+summary(c(phiB1ALL))
+summary(c(phiI1ALL))
 
 ##Each row is the confidence intervals for the specific mosquito data
-dat_mosq2 = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI.csv",header=TRUE)
+dat_mosq1 = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI_Beale added.csv",header=TRUE)
+dat_mosq2 = subset(dat_mosq1,dat_mosq1$Study != "PMI")
 
 ##if using the mean data for each country 
 ##with mean for indoor and in bed proportion of people
 ##then use dat_mosq2[,3]##indoors
-##and dat_mosq2[,4]##in bed
+##and dat_mosq[,738]##in bed
 
 ##if using the average for all possibilities
 ##use mean(phiI1ALL[i,],na.rm=TRUE)
@@ -661,10 +546,6 @@ summary(PHIB,na.rm=TRUE)
 ## Supplementary figure 
 ##
 ##
-dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
-dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
-dat_inbed = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_sleeping_vs_time(1).csv",header=TRUE)
-
 veca = seq(1,nrow(dat_mosq),24)
 vecb = c(veca[2:61]-1,1464)
 vecc = c("red","purple","grey","aquamarine3","coral3","yellow","blue")
@@ -690,7 +571,7 @@ func = function(datam,val1,tab1,col1){
           c(dat_indoor[,14]),
           col="grey",border=NA)##Average
   
-  polygon(c(dat_inbed[,1]),c(dat_inbed[,5]),
+  polygon(c(dat_inbed[,1]),c(dat_inbed[,738]),
           col="grey55",border=NA)
   #lines(dat_gamb[veca_G[39]:vecb_G[39],2] ~ c(1:24),col="blue",lty=1,lwd=1)
   lines(datam[veca_F[val1]:vecb_F[val1],2] ~ c(1:24),col=col1,lty=1,lwd=1)
@@ -709,14 +590,14 @@ func(dat_fun,18,"F","cyan2")
 ###
 ###
 ### Is there a statistical trend in phiI and phiB over time?
-summary(lm(dat_mosq2[,14] ~ dat_mosq2[,4]))
-summary(lm(dat_mosq2[,15] ~ dat_mosq2[,4]))
+summary(lm(dat_mosq1[,14] ~ dat_mosq1[,4]))
+summary(lm(dat_mosq1[,15] ~ dat_mosq1[,4]))
 
-summary(lm(dat_mosq2[,16] ~ dat_mosq2[,4]))
-summary(lm(dat_mosq2[,17] ~ dat_mosq2[,4]))
+summary(lm(dat_mosq1[,16] ~ dat_mosq1[,4]))
+summary(lm(dat_mosq1[,17] ~ dat_mosq1[,4]))
 
-summary(lm(dat_mosq2[,2] ~ dat_mosq2[,4]))
-summary(lm(dat_mosq2[,3] ~ dat_mosq2[,4]))
+summary(lm(dat_mosq1[,2] ~ dat_mosq1[,4]))
+summary(lm(dat_mosq1[,3] ~ dat_mosq1[,4]))
 
 plot(dat_mosq2[,3] ~ dat_mosq2[,14],ylim=c(0,1),xlim=c(0,1))
 abline(lm(dat_mosq2[,3] ~ dat_mosq2[,14]+0))
@@ -735,22 +616,41 @@ levels(dat_mosq2$Species.grouped)[4] <- "A_gambiae_sl"
 levels(dat_mosq2$Species.grouped)[4:7] <- "An_other"
 summary(dat_mosq2$Species.grouped)
 
-MOD1 <- lmer(phiI ~ Year + (1|Species.grouped) + (1|Country),data=dat_mosq2)
-MOD2 <- lmer(phiB ~ Year + (1|Species.grouped) + (1|Country),data=dat_mosq2)
+dat_mosq1$source = ifelse(dat_mosq1$Study == "PMI","PMI", "published")
+par(mfrow=c(2,2))
+boxplot(dat_mosq1$phiI~dat_mosq1$source)
+boxplot(dat_mosq1$phiB~dat_mosq1$source)
+boxplot(dat_mosq1$phiI[dat_mosq1$Study == "PMI"]~dat_mosq1$Species.grouped[dat_mosq1$Study == "PMI"])
+boxplot(dat_mosq1$phiB[dat_mosq1$Study != "PMI"]~dat_mosq1$Species.grouped[dat_mosq1$Study != "PMI"])
 
-    #i.glm<-glm(Allmean_phiI~Species.grouped+Year+Country+setting, data=dat_mosq2,family=quasibinomial(link= "logit" ))
-    i.glm<-glm(Allmean_phiI~Year+Country, data=dat_mosq2) #,family=quasibinomial(link= "logit" )
+MOD1 <- lmer(phiI ~ Year + (1|Species.grouped) + (1|Country) + (1|source),data=dat_mosq1)
+MOD2 <- lmer(phiB ~ Year + (1|Species.grouped) + (1|Country) + (1|source),data=dat_mosq1)
+
+
+
+    
+#i.glm<-glm(Allmean_phiI~Species.grouped+Year+Country+setting, data=dat_mosq2,family=quasibinomial(link= "logit" ))
+  i.glm_full<-glm(phiI~Year+Country+source+Species.grouped, data=dat_mosq1) #,family=quasibinomial(link= "logit" )
+  i.glm_source<-glm(phiI~Year+Country+source, data=dat_mosq1) #,family=quasibinomial(link= "logit" )
+  i.glm_mosq<-glm(phiI~Year+Country+Species.grouped, data=dat_mosq1) #,family=quasibinomial(link= "logit" )
+  anova(i.glm_full,i.glm_mosq,test="Chisq")
+  anova(i.glm_full,i.glm_source,test="Chisq")
+  
+  i.glm<-glm(phiI~Year+Country, data=dat_mosq1) #,family=quasibinomial(link= "logit" )
+    anova(i.glm,i.glm_source,test="Chisq")
+    anova(i.glm,i.glm_mosq,test="Chisq")
+    
     summary.lm(i.glm)
     theta = i.glm$deviance / i.glm$df.residual ##not over-dispersed
     plot(resid(i.glm,type="deviance")~i.glm$fitted.values)
-    plot(resid(i.glm,type="deviance")~dat_mosq2$Country)
-    plot(resid(i.glm,type="deviance")~dat_mosq2$Year)
-    plot(resid(i.glm,type="deviance")~dat_mosq2$Species.grouped) 
+    plot(resid(i.glm,type="deviance")~dat_mosq1$Country)
+    plot(resid(i.glm,type="deviance")~dat_mosq1$Year)
+    plot(resid(i.glm,type="deviance")~dat_mosq1$Species.grouped) 
 exp(cbind(coef(i.glm), confint(i.glm)))  
 
 
-    mod1<-lmer(Allmean_phiI~Year+(1|Country), data=dat_mosq2)
-    chmod1<-lmer(Allmean_phiI~1+(1|Country), data=dat_mosq2)
+    mod1<-lmer(phiI~Year+(1|Country), data=dat_mosq1)
+    chmod1<-lmer(phiI~1+(1|Country), data=dat_mosq1)
     anova(mod1,chmod1)
     summary(mod1)
     confint(mod1)
@@ -783,19 +683,10 @@ sjp.glmer(mod1,
           facet.grid = FALSE)
 
 par(mfrow=c(1,2))
-datAnArab <- data.frame(preds = predict(mod1, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA),
-                        exp1 = dat_mosq2$Year)
-pv = predict(mod1, classify=list("Year"),
-             levels=list("Year"=list("Year" = 1992:2015)))
-#plot(predict(mod1, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA) ~
-#       dat_mosq2$Year,frame=FALSE,bty="n",pch="",ylim=c(0,1),xaxt="n",
-#     ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])),xlab="Time (Years)",
-#     main="Trends in years",cex.main=1.8,
-#     cex.lab=1.6,yaxt="n")
-#axis(1, at=1992:2015,labels=1992:2015,cex.axis=1.8)
-#axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)     
+datAnArab <- data.frame(preds = predict(mod1, data.frame(Year = dat_mosq1$Year), type="response", re.form = NA),
+                        exp1 = dat_mosq1$Year)
 
-plot(Allmean_phiI~Year,data=dat_mosq2,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,
+plot(phiI~Year,data=dat_mosq1,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,xlim=c(2000,2015),
      cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))
 axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
 
@@ -807,34 +698,56 @@ polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
         col=transp("grey",0.2),border=NA)             
 
 ##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
-cols=c("red","red","red","red","red","red","red","blue","purple","red","blue","aquamarine3","purple")
-pchs=c(6:18)
-ltys=c(1:7,1,1,8,2,1,2)
-for(i in 1:length(unique(dat_mosq2$Country))){
-  lines(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):
-          max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]), 
-        predict(i.glm, 
-                newdata=
-                  data.frame(Year = min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]),
-                             Country = rep(levels(unique(dat_mosq2$Country))[i],
-                                           length(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]])))),
-                type = "response"),lty=ltys[i],lwd=2,col=cols[i])
-  points(dat_mosq2$Allmean_phiI[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
-           dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
+cols=transp(c("red","red","aquamarine3","aquamarine3","blue",
+       "red","red","red","aquamarine3","blue",
+       "red","blue","red","blue","aquamarine3",
+       "aquamarine3","red","blue","aquamarine3","aquamarine3","aquamarine3"),0.5)
+pchs=rep(15,21)
+ltys=rep(1,21)
+for(i in 1:length(unique(dat_mosq1$Country))){
+#  lines(min(dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i]]):
+#          max(dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i]]), 
+#        predict(i.glm, 
+#                newdata=
+#                  data.frame(Year = min(dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i]]):max(dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i]]),
+#                             Country = rep(levels(unique(dat_mosq1$Country))[i],
+#                                           length(min(dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i]]):max(dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i]])))),
+#                type = "response"),lty=ltys[i],lwd=2,col=cols[i])
+  points(dat_mosq1$phiI[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"],col=cols[i],pch=15)
+  
+  points(dat_mosq1$phiI[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"],col=cols[i],pch=17)
+  
 }
-legend(1992,0.4,legend=c("West Africa","East Africa","Southern Africa","Central Africa"),
-       col=c("red","blue","purple","aquamarine3"),pch=20,cex=1.4)
-legend(1992,0.2,legend=c("Kenya","Tanzania","Guinea","Benin","Ghana","Zambia"),
-       col=c("blue","blue","red","red","red","aquamarine3"),
-       pch=c(13,16,12,6,11,17),ncol=2,
-       lty=c(1,2,1,1,6,1),cex=1.4)
+legend(2000,0.5,legend=c("West Africa","East Africa","Southern Africa","Central Africa"),
+       col=c("red","blue","purple","aquamarine3"),pch=20,cex=1.4,bty="n")
 
+legend(2000,0.15,legend=c("Dataset 1","Dataset2"),
+       col=c("grey"),pch=c(15,17),cex=1.4,bty="n")
+
+#legend(1992,0.2,legend=c(levels(unique(dat_mosq1$Country))),
+#       col=c("blue","blue","red","red","red","aquamarine3"),
+#       pch=c(13,16,12,6,11,17),ncol=2,
+#       lty=c(1,2,1,1,6,1),cex=1.4,bty="n")
+text(2015,1,"A",cex=2)
 #
 ##
 ##
 ## Now repeat for phiB
 #i.glm<-glm(Allmean_phiB~Species.grouped+Year+Country, data=dat_mosq2,family=quasibinomial(link= "logit" ))
-i.glmb<-glm(Allmean_phiB~Year+Country, data=dat_mosq2)#,family=quasibinomial(link= "logit" ))
+i.glmb_full<-glm(phiB~Year+Country+source+Species.grouped, data=dat_mosq1)#,family=quasibinomial(link= "logit" ))
+i.glmbmosquito<-glm(phiB~Year+Country+Species.grouped, data=dat_mosq1)#,family=quasibinomial(link= "logit" ))
+i.glmbsource<-glm(phiB~Year+Country+source, data=dat_mosq1)#,family=quasibinomial(link= "logit" ))
+anova(i.glmb_full,i.glmbsource,test="Chisq")
+anova(i.glmb_full,i.glmbmosquito,test="Chisq")
+
+i.glmb_min<-glm(phiB~Country, data=dat_mosq1)#,family=quasibinomial(link= "logit" ))
+i.glmb_year<-glm(phiB~Year+Country, data=dat_mosq1)#,family=quasibinomial(link= "logit" ))
+anova(i.glmb_min,i.glmb_year,test="Chisq")
+
+i.glmb<-glm(phiB~Year+Country, data=dat_mosq1)#,family=quasibinomial(link= "logit" ))
+
 summary.lm(i.glmb)
 theta = i.glmb$deviance / i.glmb$df.residual ##not over-dispersed
 #plot(resid(i.glmb,type="deviance")~i.glmb$fitted.values)
@@ -843,8 +756,8 @@ theta = i.glmb$deviance / i.glmb$df.residual ##not over-dispersed
 #plot(resid(i.glmb,type="deviance")~dat_mosq2$Species.grouped) 
 exp(cbind(coef(i.glmb), confint(i.glmb)))
 
-mod2<-lmer(Allmean_phiB~Year+(1|Country), data=dat_mosq2)
-chmod2<-lmer(Allmean_phiB~1+(1|Country), data=dat_mosq2)
+mod2<-lmer(phiB~Year+(1|Country), data=dat_mosq1)
+chmod2<-lmer(phiB~1+(1|Country), data=dat_mosq1)
 anova(mod2,chmod2)
 
 summary(mod2)
@@ -855,10 +768,10 @@ print(exp(tab),digits=3) #to get quick odds ratios for glmm - these show you how
 
 #sjp.glmer(mod2, y.offset = .2)
 ## sort all predictors
-#sjp.glmer(mod2,
-#          facet.grid = FALSE,
-#          sort = "sort.all",
-#          y.offset = .2)#
+sjp.glmer(mod2,
+          facet.grid = FALSE,
+        sort = "sort.all",
+          y.offset = .2)#
 #
 ## plot qq-plot of random effects: dots should be along the line
 #sjp.glmer(mod2, type = "re.qq")
@@ -871,19 +784,13 @@ print(exp(tab),digits=3) #to get quick odds ratios for glmm - these show you how
 #          facet.grid = FALSE)
 
 #par(mfrow=c(1,1))
-datAnArab <- data.frame(preds = predict(mod2, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA),
-                        exp1 = dat_mosq2$Year)
-pv = predict(mod2, classify=list("Year"),
-             levels=list("Year"=list("Year" = 1992:2015)))
-#plot(predict(mod2, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA) ~
-#       dat_mosq2$Year,frame=FALSE,bty="n",pch="",ylim=c(0,1),xaxt="n",
-#     ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])),xlab="Time (Years)",
-#     main="Trends in years",cex.main=1.8,
-#     cex.lab=1.6,yaxt="n")
-#axis(1, at=1992:2015,labels=1992:2015,cex.axis=1.8)
-#axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)     
+datAnArab <- data.frame(preds = predict(mod2, data.frame(Year = dat_mosq1$Year,
+                                                         Species.grouped = dat_mosq1$Species.grouped), type="response", re.form = NA),
+                        exp1 = dat_mosq1$Year,
+                        exp2 = rep("A_gambiae_sl"))
 
-plot(Allmean_phiB~Year,data=dat_mosq2,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,
+
+plot(phiB~Year,data=dat_mosq1,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,xlim=c(2000,2015),
      cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))
 axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
 
@@ -895,168 +802,35 @@ polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
         col=transp("grey",0.2),border=NA)             
 
 ##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
-cols=c("red","red","red","red","red","red","red","blue","purple","red","blue","aquamarine3","purple")
-pchs=c(6:18)
-ltys=c(1:7,1,1,8,2,1,2)
-for(i in 1:length(unique(dat_mosq2$Country))){
-  lines(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):
-          max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]), 
-        predict(i.glmb, 
-                newdata=
-                  data.frame(Year = min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]),
-                             Country = rep(levels(unique(dat_mosq2$Country))[i],
-                                           length(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]])))),
-                type = "response"),lty=ltys[i],lwd=2,col=cols[i])
-  points(dat_mosq2$Allmean_phiB[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
-           dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
+for(i in 1:length(unique(dat_mosq1$Country))){
+  points(dat_mosq1$phiB[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source != "PMI"],col=cols[i],pch=15)
+  
+  points(dat_mosq1$phiB[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"]~
+           dat_mosq1$Year[dat_mosq1$Country==levels(unique(dat_mosq1$Country))[i] & dat_mosq1$source == "PMI"],col=cols[i],pch=17)
+  
 }
 #legend(1992,0.4,legend=c("Kenya","Tanzania","Guinea","Benin","Ghana","Zambia"),
 #       col=c("blue","blue","red","red","red","aquamarine3"),
 #       pch=c(13,16,12,6,11,17),ncol=2,
 #       lty=c(1,2,1,1,6,1),cex=1.4)
 
-##########################
-###
-###
-### fIG 1 alternative
-par(mfrow=c(1,3))
-newmap <- getMap(resolution = "low")
-plot(newmap, xlim = c(-15, 50), ylim = c(-35, 40), asp = 1,col="grey95", border="grey65")
-points(36.88,-7.87,col="orange",cex=2,pch=17) ## Killeen et al 2006 ##**HUMAN BED BEHAVIOUR
-points(2.116,6.35,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
-points(2.09,6.26,col="orange",cex=2, pch=17) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
-points(39.23,-6.81,col="orange",cex=2,pch=17) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
 
-points(36.6,-8.1,col="aquamarine3",cex=2, pch=20)##Russell et al. 2011 ## HUMAN INDOOR BEHAVIOUR
-points(39.23,-6.81,col="aquamarine3",cex=2,pch=20) ## Geissbuhler et al. 1997 ##**HUMAN BED BEHAVIOUR ##**HUMAN INDOOR BEHAVIOUR 
-points(-1.33,12.6,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (1)  ##HUMAN INDOOR BEHAVIOUR
-points(-1.78,12.587,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (2)##HUMAN INDOOR BEHAVIOUR
-points(29.83,-15.43,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (3)##HUMAN INDOOR BEHAVIOUR
-points(36.6,-9.07,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (4)  ##HUMAN INDOOR BEHAVIOUR
-points(39.15,-7.9,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (5)  ##HUMAN INDOOR BEHAVIOUR
-points(34.78,-0.1,col="aquamarine3",cex=2, pch=20) ## Huho et al. 1996 (6)  ##HUMAN INDOOR BEHAVIOUR
-points(2.116,6.35,col="aquamarine3",cex=2, pch=20) ## Moiroux et al 2014 (in Moiroux et al 2012 too) ## HUMAN INDOOR BEHAVIOUR
-points(2.09,6.26,col="aquamarine3",cex=2, pch=20) ## Moiroux et al 2014 (in Moiroux et al 2012 too)  ## HUMAN INDOOR BEHAVIOUR
-
-points(34.9,-0.175,col="purple",cex=2, pch=22) ## Githeko et al. 1996
-points(32.48,-25.9,col="purple",cex=2, pch=22) ## Mendis et al 2006
-points(9.47,0.399,col="purple",cex=2, pch=22) ## Mourou et al 2012
-points(30.40,1.57,col="purple",cex=2, pch=22) ## Ojuka et al. 2015 (1)
-points(30.48,2.98,col="purple",cex=2, pch=22) ## Ojuka et al. 2015 (2)
-points(8.7,3.5,col="purple",cex=2, pch=22) ## Overgaard et al. 2012
-points(0.44,6.35,col="purple",cex=2, pch=22) ## Owusu et al 2016
-points(-15.3,13.6,col="purple",cex=2, pch=22) ## Quinones et al 1997
-points(33.0,1.0,col="purple",cex=2, pch=22) ##Kabbale et al. 2013
-points(34.38,-0.18,col="purple",cex=2, pch=22) ##Bayoh et al. 2014
-points(8.7,3.5,col="purple",cex=2, pch=22) ##Bradley et al. 2015
-points(34.92,-0.43,col="purple",cex=2, pch=22) ##Cooke et al. 2015
-points(-16.4,13.72,col="purple",cex=2, pch=22) ## Fontenille et al. 1997
-points(0.06,5.69,col="purple",cex=2, pch=22) ## Tchouassi et al 2012
-points(9.1,4.02,col="purple",cex=2, pch=22) ## Tanga et al 2011 (in Tanga et al 2010 too)
-points(-1.3,6.57,col="purple",cex=2, pch=22) ## Tuno et al 2010
-
-legend(-15,-5,legend=c("Mosquito biting behaviour",
-                       "Human indoor behaviour",
-                       "Human bed behaviour"),
-       col=c("purple","aquamarine3","orange"),
-       pch=c(22,20,17))
-
-datAnArab <- data.frame(preds = predict(mod1, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA),
-                        exp1 = dat_mosq2$Year)
-pv = predict(mod1, classify=list("Year"),
-             levels=list("Year"=list("Year" = 1992:2015)))
-#plot(predict(mod1, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA) ~
-#       dat_mosq2$Year,frame=FALSE,bty="n",pch="",ylim=c(0,1),xaxt="n",
-#     ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])),xlab="Time (Years)",
-#     main="Trends in years",cex.main=1.8,
-#     cex.lab=1.6,yaxt="n")
-#axis(1, at=1992:2015,labels=1992:2015,cex.axis=1.8)
-#axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)     
-
-plot(Allmean_phiI~Year,data=dat_mosq2,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,
-     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))
-axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
-
-##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
-lines(rev(sort(datAnArab$preds)) ~ sort(datAnArab$exp1),lty=1,lwd=1)
-polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
-        c(rev(sort(datAnArab$preds-6*se(datAnArab$preds))),
-          sort(datAnArab$preds+6*se(datAnArab$preds))),
-        col=transp("grey",0.2),border=NA)             
-
-##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
-cols=c("red","red","red","red","red","red","red","blue","purple","red","blue","aquamarine3","purple")
-pchs=c(6:18)
-ltys=c(1:7,1,1,8,2,1,2)
-for(i in 1:length(unique(dat_mosq2$Country))){
-  lines(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):
-          max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]), 
-        predict(i.glm, 
-                newdata=
-                  data.frame(Year = min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]),
-                             Country = rep(levels(unique(dat_mosq2$Country))[i],
-                                           length(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]])))),
-                type = "response"),lty=ltys[i],lwd=2,col=cols[i])
-  points(dat_mosq2$Allmean_phiI[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
-           dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
-}
-legend(1992,0.4,legend=c("West Africa","East Africa","Southern Africa","Central Africa"),
-       col=c("red","blue","purple","aquamarine3"),pch=20,cex=1.4)
-legend(1992,0.2,legend=c("Kenya","Tanzania","Guinea","Benin","Ghana","Zambia"),
-       col=c("blue","blue","red","red","red","aquamarine3"),
-       pch=c(13,16,12,6,11,17),ncol=2,
-       lty=c(1,2,1,1,6,1),cex=1.4)
-
-
-datAnArab <- data.frame(preds = predict(mod2, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA),
-                        exp1 = dat_mosq2$Year)
-pv = predict(mod2, classify=list("Year"),
-             levels=list("Year"=list("Year" = 1992:2015)))
-#plot(predict(mod2, data.frame(Year = dat_mosq2$Year), type="response", re.form = NA) ~
-#       dat_mosq2$Year,frame=FALSE,bty="n",pch="",ylim=c(0,1),xaxt="n",
-#     ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])),xlab="Time (Years)",
-#     main="Trends in years",cex.main=1.8,
-#     cex.lab=1.6,yaxt="n")
-#axis(1, at=1992:2015,labels=1992:2015,cex.axis=1.8)
-#axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)     
-
-plot(Allmean_phiB~Year,data=dat_mosq2,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,
-     cex.lab=1.6, ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))
-axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)  
-
-##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
-lines(rev(sort(datAnArab$preds)) ~ sort(datAnArab$exp1),lty=1,lwd=1)
-polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
-        c(rev(sort(datAnArab$preds-6*se(datAnArab$preds))),
-          sort(datAnArab$preds+6*se(datAnArab$preds))),
-        col=transp("grey",0.2),border=NA)             
-
-##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT
-cols=c("red","red","red","red","red","red","red","blue","purple","red","blue","aquamarine3","purple")
-pchs=c(6:18)
-ltys=c(1:7,1,1,8,2,1,2)
-for(i in 1:length(unique(dat_mosq2$Country))){
-  lines(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):
-          max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]), 
-        predict(i.glmb, 
-                newdata=
-                  data.frame(Year = min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]),
-                             Country = rep(levels(unique(dat_mosq2$Country))[i],
-                                           length(min(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]):max(dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]])))),
-                type = "response"),lty=ltys[i],lwd=2,col=cols[i])
-  points(dat_mosq2$Allmean_phiB[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]]~
-           dat_mosq2$Year[dat_mosq2$Country==levels(unique(dat_mosq2$Country))[i]],col=cols[i],pch=pchs[i])
-}
-
-##
-#write.csv(phiI1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
-#write.csv(phiB1ALL,"C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+write.csv(phiI1ALL,"H:\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\phiI2ALL.csv")
+write.csv(phiB1ALL,"H:\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\phiB2ALL.csv")
 ## Add in the phiI + phiB.CSV data so that the 9th column is the first distribution of phi values
 
-DAT_Box = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI1ALL.csv")
+######################################
+##
+## Is there a statistical different in spraying?
+DAT_Box2 = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB1ALL.csv")
+summary(DAT_Box2[,2:8])
+
+
+DAT_Box = read.csv("H:\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\phiI2ALL.csv")
 DAT_Box = DAT_Box[with(DAT_Box, order(DAT_Box$Year)), ]
 Tanzania = subset(DAT_Box,DAT_Box$Country=="Tanzania")
-phiI_tan = t(Tanzania[,9:1339])
+phiI_tan = t(Tanzania[,9:19])
 #par(mfrow=c(1,1))
 par(mar=c(6,5,5,5))
 boxplot(NA,NA,c(phiI_tan[,1],phiI_tan[,2]),NA,NA,NA,NA,
@@ -1073,7 +847,7 @@ axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.8)
 par(new=T)
 par(mar=c(6,5,5,4.5))
 Kenya = subset(DAT_Box,DAT_Box$Country=="Kenya")
-phiI_ken = t(Kenya[,9:1339])
+phiI_ken = t(Kenya[,9:19])
 Kenya[1:8,1:10]
 boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_ken[,3],phiI_ken[,4]),NA,
@@ -1082,7 +856,7 @@ boxplot(c(phiI_ken[,1],phiI_ken[,2]),NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,4))
 Ghana = subset(DAT_Box,DAT_Box$Country=="Ghana")
-phiI_gha = t(Ghana[,9:1339]);dim(phiI_gha)
+phiI_gha = t(Ghana[,9:19]);dim(phiI_gha)
 Ghana[1:6,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_gha[,1]),NA,
@@ -1092,7 +866,7 @@ boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,3.5))
 Uganda = subset(DAT_Box,DAT_Box$Country=="Uganda")
-phiI_uga = t(Ghana[,9:1339]);dim(phiI_uga)
+phiI_uga = t(Ghana[,9:19]);dim(phiI_uga)
 Uganda[1:6,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_uga[,1],phiI_uga[,2]),
@@ -1102,7 +876,7 @@ boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
 par(new=T)
 par(mar=c(6,5,5,3))
 Benin = subset(DAT_Box,DAT_Box$Country=="Benin")
-phiI_ben = t(Benin[,9:1339]);dim(phiI_ben)
+phiI_ben = t(Benin[,9:19]);dim(phiI_ben)
 Benin[1:8,1:10]
 boxplot(NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
         c(phiI_ben[,1],phiI_ben[,2]),

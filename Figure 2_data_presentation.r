@@ -191,7 +191,7 @@ lines(dat_inbed[1:24,735]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
 lines(dat_inbed[1:24,736]~dat_inbed[1:24,1],col="orange",lwd=2)##Tanzania
 lines(dat_inbed[1:24,739]~dat_inbed[1:24,1],col=transp("blue",0.5),lwd=2)##Mozambique_Beale average data
 
-lines(dat_inbed[,737]~dat_inbed[,1],lty=2,lwd=3,col="darkorange")##Average Tanzania
+lines(dat_inbed[1:24,738]~dat_inbed[1:24,1],lty=2,lwd=3,col="black")##Average Tanzania
 #lines(dat_inbed[,739]~dat_inbed[,1],lty=2,lwd=3,col="blue")##Average Mozambique
 #polygon(c(dat_inbed[,1],rev(dat_inbed[,1])),c(dat_inbed[,740],rev(dat_inbed[,741])),border=NA,col=transp("blue",0.3))
 text(24,1,"C",cex=2)
