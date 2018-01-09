@@ -86,7 +86,7 @@ text(95,40,"A",cex=2)
 
 
 
-coun = read.table("H:/Ellie/IRS and resistance/PMI/COUNTRY_PHI.txt",header=TRUE)
+coun = read.table("H:/Ellie/IRS and resistance/behaviour_paper/PMI/COUNTRY_PHI.txt",header=TRUE)
 head(coun)
 
 

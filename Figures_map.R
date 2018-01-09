@@ -626,6 +626,9 @@ boxplot(dat_mosq1$phiB[dat_mosq1$Study != "PMI"]~dat_mosq1$Species.grouped[dat_m
 MOD1 <- lmer(phiI ~ Year + (1|Species.grouped) + (1|Country) + (1|source),data=dat_mosq1)
 MOD2 <- lmer(phiB ~ Year + (1|Species.grouped) + (1|Country) + (1|source),data=dat_mosq1)
 
+tapply(dat_mosq1$phiI[dat_mosq1$source != "PMI"],dat_mosq1$Species.grouped[dat_mosq1$source != "PMI"],median)
+tapply(dat_mosq1$phiI,dat_mosq1$Species.grouped,summary)
+summary(dat_mosq1$phiI)
 
 
     
@@ -640,17 +643,17 @@ MOD2 <- lmer(phiB ~ Year + (1|Species.grouped) + (1|Country) + (1|source),data=d
     anova(i.glm,i.glm_source,test="Chisq")
     anova(i.glm,i.glm_mosq,test="Chisq")
     
-    summary.lm(i.glm)
-    theta = i.glm$deviance / i.glm$df.residual ##not over-dispersed
-    plot(resid(i.glm,type="deviance")~i.glm$fitted.values)
-    plot(resid(i.glm,type="deviance")~dat_mosq1$Country)
-    plot(resid(i.glm,type="deviance")~dat_mosq1$Year)
-    plot(resid(i.glm,type="deviance")~dat_mosq1$Species.grouped) 
-exp(cbind(coef(i.glm), confint(i.glm)))  
+    summary.lm(i.glm_mosq)
+    theta = i.glm$deviance / i.glm_mosq$df.residual ##not over-dispersed
+    plot(resid(i.glm_mosq,type="deviance")~i.glm_mosq$fitted.values)
+    plot(resid(i.glm_mosq,type="deviance")~dat_mosq1$Country)
+    plot(resid(i.glm_mosq,type="deviance")~dat_mosq1$Year)
+    plot(resid(i.glm_mosq,type="deviance")~dat_mosq1$Species.grouped) 
+exp(cbind(coef(i.glm_mosq), confint(i.glm_mosq)))  
 
-
-    mod1<-lmer(phiI~Year+(1|Country), data=dat_mosq1)
-    chmod1<-lmer(phiI~1+(1|Country), data=dat_mosq1)
+    
+  mod1<-lmer(phiI~Year+Species.grouped+(1|Country), data=dat_mosq1)
+    chmod1<-lmer(phiI~1+Species.grouped+(1|Country), data=dat_mosq1)
     anova(mod1,chmod1)
     summary(mod1)
     confint(mod1)

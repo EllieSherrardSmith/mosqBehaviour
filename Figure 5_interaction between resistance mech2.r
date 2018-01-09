@@ -242,28 +242,28 @@ phi_function2<-function(site,
                  Return_output = FALSE)
 }
 ##RUN ON CLUSTER...
-inp_phi = read.csv("F:\\behavioural_resistance_llin50_and_irs80_actellic.csv",header=TRUE)
-for(i in 1:105){
-  phi_function2(site=inp_phi[i,1], 
-                
-                ITN=inp_phi[i,2], IRS=inp_phi[i,3],
-                
-                phi_I=inp_phi[i,4],phi_B=inp_phi[i,5],
-                irs_decay_mort1_1=inp_phi[i,6], irs_decay_mort2_1=inp_phi[i,7], 
-                irs_decay_succ1_1=inp_phi[i,8], irs_decay_succ2_1=inp_phi[i,9], 
-                irs_decay_det1_1=inp_phi[i,10], irs_decay_det2_1=inp_phi[i,11],
-                itn_repel_fun_1=inp_phi[i,12], itn_repel_gamb_ss_1=inp_phi[i,13], itn_repel_arab_1=inp_phi[i,14], 
-                itn_kill_fun_1=inp_phi[i,15], itn_kill_gamb_ss_1=inp_phi[i,16], itn_kill_arab_1=inp_phi[i,17],
-                
-               itn_half_life = inp_phi[i,18],
-                run_name="behav_phys_resistance6")
-  
-}
+#inp_phi = read.csv("F:\\behavioural_resistance_llin50_and_irs80_actellic.csv",header=TRUE)
+#for(i in 1:105){
+#  phi_function2(site=inp_phi[i,1], 
+#                
+#                ITN=inp_phi[i,2], IRS=inp_phi[i,3],
+#                
+#                phi_I=inp_phi[i,4],phi_B=inp_phi[i,5],
+#                irs_decay_mort1_1=inp_phi[i,6], irs_decay_mort2_1=inp_phi[i,7], 
+#                irs_decay_succ1_1=inp_phi[i,8], irs_decay_succ2_1=inp_phi[i,9], 
+#                irs_decay_det1_1=inp_phi[i,10], irs_decay_det2_1=inp_phi[i,11],
+#                itn_repel_fun_1=inp_phi[i,12], itn_repel_gamb_ss_1=inp_phi[i,13], itn_repel_arab_1=inp_phi[i,14], 
+#                itn_kill_fun_1=inp_phi[i,15], itn_kill_gamb_ss_1=inp_phi[i,16], itn_kill_arab_1=inp_phi[i,17],
+#                
+#               itn_half_life = inp_phi[i,18],
+#                run_name="behav_phys_resistance6")
+ # 
+#}
 sites = seq(1,105,21)
 data1_no_res = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance/draw_0/behav_phys_resistance",sites[1],"0.txt",sep="_"),header=TRUE)
 head(data1_no_res)
 
-data0p_res = data0s_res = data1_res = data2_res = data3_res = data4_res = array(dim=c(nrow(data1_no_res),22,5))
+data0p_res = data0s_res = data1_res = data2_res = data3_res = data4_res = data5_res = data6_res = array(dim=c(nrow(data1_no_res),22,5))
 sites_init = sites-1
 res_val = 1:21
 for(j in 1:5){
@@ -340,7 +340,8 @@ Eff1seas_LLIN_IRSact = data.frame(eff = c(Efficacy_seas_LLIN50IRS80act[,2:3],Eff
 
 resistance = c(0.01,seq(0.05,1,by=0.05))
 
-prevs_peren_nets = prevs_peren_nets_irs = prevs_seas_nets = prevs_seas_nets_irs = array(dim=c(21,5))
+prevs_peren_nets = prevs_peren_nets_irs = prevs_seas_nets = prevs_seas_nets_irs = 
+  prevs_peren_nets_irsact = prevs_seas_nets_irsact = array(dim=c(21,5))
 for(j in 1:5){
   for(i in 2:22){
     prevs_peren_nets[i-1,j] = data1_res[,i,j][data1_res[,1,j] == 3] ##This is prevalence for each scenario
@@ -366,7 +367,7 @@ data1seas_LLIN_IRS = data.frame(prevs = c(prevs_seas_nets_irs[,2:3],prevs_seas_n
                                 resistance = rep(seq(0,1,by=0.05),5),
                                 behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
 
-data1peren_LLIN_IRSact = data.frame(prevs = c(prevs_peren_nets_irsact[,2:3],prevs_peren_nets_irsact[,1],prevs_peren_nets_irsct[,4:5]),
+data1peren_LLIN_IRSact = data.frame(prevs = c(prevs_peren_nets_irsact[,2:3],prevs_peren_nets_irsact[,1],prevs_peren_nets_irsact[,4:5]),
                                  resistance = rep(seq(0,1,by=0.05),5),
                                  behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
 data1seas_LLIN_IRSact = data.frame(prevs = c(prevs_seas_nets_irsact[,2:3],prevs_seas_nets_irsact[,1],prevs_seas_nets_irsact[,4:5]),
@@ -583,17 +584,10 @@ text(x = -20,y = 4.85,"Perennial setting",cex = 1)
 text(x = -9,y = 2.8,"LLIN 50% + IRS 80% cover",cex = 1)
 text(x = -32,y = 2.8,"LLIN 50% cover",cex = 1)
 
-
-################################
-##
-## Figure 6
-plot.new()
-
-##Top left plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
-par(new = "TRUE",  
-    plt = c(0.1,0.45,0.7,0.95))#,
-# major tick size and direction, < 0 means outside
-
+###############################
+###################
+########
+#
 ##Perennial setting: LLIN at 50% cover No resistance
 
 plot(data1_no_res$prev_2_10_smooth ~  data1_no_res$year,pch="",xlim=c(-0.2,5),ylim=c(0,0.4),
@@ -614,24 +608,27 @@ lines(data5_res[,2,1] ~  data5_res[,1,1],lty=2,col="darkred",lwd=2)#median
 polygon(c(data6_res[,1,1],rev(data6_res[,1,1])),c(data6_res[,2,2],rev(data6_res[,2,5])),border=NA,col=transp("orange",0.4))
 polygon(c(data6_res[,1,1],rev(data6_res[,1,1])),c(data6_res[,2,3],rev(data6_res[,2,4])),border=NA,col=transp("orange",0.4))
 lines(data6_res[,2,1] ~  data6_res[,1,1],lty=2,col="orange",lwd=2)#median
-
 abline(v=0,lty=2)
 segments(x0=3,x1=3,y0=0,y1=0.2,lty=2)
 text(0.2,0.01,"a")
 text(3.2,0.01,"b")
-text(5,0.4,"A",cex=1.2)
 
-legend(1.4,0.38,title = "Perennial setting",legend = c("LLIN 50%","LLIN 50% + IRS 80%"),
-       lty=c(1,2),cex=1,bty="n",col=c("blue","darkred"),pch=15)
+########
+####################
+#############################
+################################
+##
+## Figure 6
+plot.new()
 
-
-##Top right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
+##Top left plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
 par(new = "TRUE",  
-    plt = c(0.55,0.9,0.7,0.95)  )                 # major tick size and direction, < 0 means outside
+    plt = c(0.1,0.45,0.6,0.9))#,
+# major tick size and direction, < 0 means outside
 
-##Efficacy plot
 plot(Efficacy_peren_LLIN50[,1] ~ resistance,ylim=c(0,1),lty=1,pch="",line=2.3,
      yaxt="n",ylab="Efficacy of indoor vector intervention (%)",frame=FALSE,
+     main = "Perennial setting",cex.main=1.2,
      xaxt="n",xlab="Mosquito survival at bioassay (%)",cex.lab=1,cex.axis=1)
 axis(1,at=seq(0,1,by=0.2),labels=seq(0,100,by=20),cex.lab=1,cex.axis=1)
 axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1,cex.axis=1)
@@ -645,13 +642,38 @@ for(i in 1:2){
   polygon(c(resistance,rev(resistance)),
           c(Efficacy_peren_LLIN50IRS80act[,veca[i]],rev(Efficacy_peren_LLIN50IRS80act[,vecb[i]])),
           border=NA,col=transp("darkred",0.4))
+  
+}
+lines(Efficacy_peren_LLIN50[,1] ~ resistance,lty=1,lwd=2,col="blue")
+lines(Efficacy_peren_LLIN50IRS80act[,1] ~ resistance,lty=2,lwd=2,col="darkred")
+
+text(1,1,"A",cex=1.2)
+
+
+##Top right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
+par(new = "TRUE",  
+    plt = c(0.55,0.9,0.6,0.9)  )                 # major tick size and direction, < 0 means outside
+
+##Efficacy plot
+plot(Efficacy_peren_LLIN50[,1] ~ resistance,ylim=c(0,1),lty=1,pch="",line=2.3,
+     yaxt="n",ylab="Efficacy of indoor vector intervention (%)",frame=FALSE,
+     main = "Highly seasonal setting",
+     xaxt="n",xlab="Mosquito survival at bioassay (%)",cex.lab=1,cex.axis=1)
+axis(1,at=seq(0,1,by=0.2),labels=seq(0,100,by=20),cex.lab=1,cex.axis=1)
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1,cex.axis=1)
+
+veca = 2:3
+vecb = 5:4
+for(i in 1:2){
+  polygon(c(resistance,rev(resistance)),
+          c(Efficacy_seas_LLIN50[,veca[i]],rev(Efficacy_seas_LLIN50[,vecb[i]])),
+          border=NA,col=transp("blue",0.4))
   polygon(c(resistance,rev(resistance)),
           c(Efficacy_seas_LLIN50IRS80act[,veca[i]],rev(Efficacy_seas_LLIN50IRS80act[,vecb[i]])),
           border=NA,col=transp("orange",0.4))
   
 }
-lines(Efficacy_peren_LLIN50[,1] ~ resistance,lty=1,lwd=2,col="blue")
-lines(Efficacy_peren_LLIN50IRS80act[,1] ~ resistance,lty=2,lwd=2,col="darkred")
+lines(Efficacy_seas_LLIN50[,1] ~ resistance,lty=1,lwd=2,col="blue")
 lines(Efficacy_seas_LLIN50IRS80act[,1] ~ resistance,lty=2,lwd=2,col="orange")
 
 
@@ -659,64 +681,25 @@ text(1,1,"B",cex=1.2)
 
 ##mid left plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
 par(new = "TRUE",  
-    plt = c(0.1,0.45,0.38,0.6)  )                 # major tick size and direction, < 0 means outside
+    plt = c(0.1,0.45,0.15,0.5)  )                 # major tick size and direction, < 0 means outside
 
-surface.matrix1pc = 100*surface.matrix1
-surface.matrix2pc = 100*surface.matrix2
-surface.matrix3pc = 100*surface.matrix3
-surface.matrix4pc = 100*surface.matrix4
-surface.matrix5pc = 100*surface.matrix5
-surface.matrix6pc = 100*surface.matrix6
-matrix_funs(surface.matrix5pc,min(surface.matrix4pc),max(surface.matrix3pc),
-            upps=30,uni = 5,levs = 6,colschoice = blue2green,cols_conts="gold3")
-text(0.95,0.95,"C",cex=1.2)
+matrix_funs(surface.mat5,min(surface.mat5),max(surface.mat6),
+            upps=1,uni = 0.1,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
+text(0.95,0.95,"C",cex=1.2,col="darkblue")
 
 ##mid right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
 par(new = "TRUE",  
-    plt = c(0.55,0.9,0.38,0.6)  )                 # major tick size and direction, < 0 means outside
+    plt = c(0.55,0.9,0.15,0.5)  )                 # major tick size and direction, < 0 means outside
 
-matrix_funs(surface.matrix6pc,min(surface.matrix4pc),max(surface.matrix3pc),
-            upps=30,uni = 5,levs = 6,colschoice = blue2green,cols_conts="gold3")
-text(0.95,0.95,"D",cex=1.2)
-
-##mid left plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
-par(new = "TRUE",  
-    plt = c(0.1,0.45,0.1,0.33)  )                 # major tick size and direction, < 0 means outside
-
-matrix_funs(surface.mat5,min(surface.mat3),max(surface.mat4),
+matrix_funs(surface.mat6,min(surface.mat5),max(surface.mat6),
             upps=1,uni = 0.1,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
-text(0.95,0.95,"E",cex=1.2,col="darkblue")
-
-##mid right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
-par(new = "TRUE",  
-    plt = c(0.55,0.9,0.1,0.33)  )                 # major tick size and direction, < 0 means outside
-
-matrix_funs(surface.mat6,min(surface.mat3),max(surface.mat4),
-            upps=1,uni = 0.1,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
-text(0.95,0.95,"F",cex=1.2,col="darkblue")
+text(0.95,0.95,"D",cex=1.2,col="darkblue")
 
 ######################################################################
 #Add a legend:
-par(new = "TRUE",
-    plt = c(0.91,0.93,0.4,0.55),   # define plot region for legend
-    las = 1,
-    cex.axis = 1)
-#
-filled.legend(
-  xcoords,
-  ycoords,
-  surface.matrix1,
-  color = blue2green,
-  plot.title = "Prevalence in 2 - 10 years",
-  xlab = "",
-  ylab = "",
-  xlim = c(0,100),
-  ylim = c(0.5,1),
-  zlim = c(0,0.3))
-
 #Add a legend:
 par(new = "TRUE",
-    plt = c(0.91,0.93,0.12,0.28),   # define plot region for legend
+    plt = c(0.91,0.93,0.20,0.45),   # define plot region for legend
     las = 1,
     cex.axis = 1)
 #
@@ -730,20 +713,14 @@ filled.legend(
   ylab = "",
   xlim = c(0,100),
   ylim = c(0.5,1),
-  zlim = c(0,0.9))
+  zlim = c(min(surface.mat5),max(surface.mat6)))
 
 #Add some figure labels
 par(xpd=NA,cex = 1.1)
-text(x = -44,y = 1.2,expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),srt = 90,cex = 1)
-text(x = -20,y = -0.4,"Mosquito survival at bioassay (%)",cex = 1)
+text(x = -44,y = 0.7,expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),srt = 90,cex = 1)
+text(x = -20,y = 0.35,"Mosquito survival at bioassay (%)",cex = 1)
 
-text(x = -20,y = 4.85,"Long-lasting non-pyrethroid IRS",cex = 1)
-
-text(x = -9,y = 2.8,"Perennial LLIN 50% + long-lasting IRS 80%",cex = 1)
-text(x = -32,y = 2.8,"Highly seasonal LLIN 50% + long-lasting IRS 80%",cex = 1)
-
-
-
+text(x = -20,y = 1.5,"Long-lasting non-pyrethroid IRS",cex = 1)
 
 
 ###########################
