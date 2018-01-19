@@ -4,6 +4,8 @@
 ##
 ####################################
 
+library(adegenet)
+
 ##############
 ##
 ##DATA AND PROCESSING
@@ -15,10 +17,11 @@ dat_mosq2 = subset(dat_mosq1,dat_mosq1$Study != "PMI")
 dat_mosq1$source = ifelse(dat_mosq1$Study == "PMI","PMI", "published")
 
 ##See Beale bed data
-dat_mosq = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
+dat_mosq = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiI_phiB_rawdata.csv",header=TRUE)
 dat_inbed = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\Human_sleeping_vs_time_Beale_data_added.csv",header=TRUE)
-dat_indoor = read.csv("C:\\Users\\esherrar\\Documents\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
+dat_indoor = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\Human_indoor_vs_time.csv",header=TRUE)
 
+dat_1phi = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\dataset1_phi_countries.csv",header=TRUE)
 vec_sets = seq(0,1464,24) ##This is the start of each set of data for 24 hours
 vec2 = c(2:61,1) ##This is the start of each set of data for 24 hours
 
@@ -74,6 +77,9 @@ as.numeric(quantile(c(phiI1ALL),c(0.025,0.05,0.1,0.25,0.35,0.5,0.65,0.75,0.9,0.9
 PHII = c(phiI1ALL) 
 PHIB = c(phiB1ALL)
 
+unique(c(levels(dat_1phi$Site),levels(coun$Site)))
+unique(c(levels(dat_1phi$Country),levels(coun$Country)))
+
 options("devEval/args/path"=file.path("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Evolution_version 1"))
 devEval("tiff", name="test1", width=1200, height=800, {
   
@@ -108,6 +114,38 @@ devEval("tiff", name="test1", width=1200, height=800, {
   summary(PHIB,na.rm=TRUE)
   text(1,200,"A",cex=1.4)
   
+  par(new = "TRUE",  
+      mar = c(8,8,3,5),
+      plt = c(0.14,0.32,0.78,0.95))#,
+  # major tick size and direction, < 0 means outside
+  
+  boxplot(dat_1phi$phiI ~ dat_1phi$Country, ylim=c(0,1.1), frame=FALSE,
+          cex.lab=0.8,cex.axis=1.4,yaxt="n",xaxt="n",
+          col=transp("darkred",0.3),ylab="",
+          border="darkred",outline=FALSE)
+  axis(2,las=2,at=seq(0,1,0.2),label=seq(0,1,0.2),cex.lab=0.8,cex.axis=0.8)
+  axis(1,las=2,at=1.3:13.3,labels=unique(levels(dat_1phi$Country)),cex.lab=0.8,cex.axis=0.8)
+  numI = c(as.numeric(c(summary(dat_1phi$Country))))
+  num=1.3:13.3
+  for(i in 1:13){
+    text(num[i],0.02,numI[i],cex=0.8)
+  }
+  #text(11.5,1.1,"C",cex=0.8)
+  
+  par(new = "TRUE",  
+      mar = c(8,8,3,5),
+      plt = c(0.145,0.325,0.78,0.95))#,
+  # major tick size and direction, < 0 means outside
+  boxplot(dat_1phi$phiB ~ dat_1phi$Country, ylim=c(0,1), frame=FALSE,
+          cex.lab=0.8,cex.axis=0.8,yaxt="n",xaxt="n",
+          col=transp("darkblue",0.3),ylab="",
+          border="blue",outline=FALSE)
+  #legend(7,0.45,bty="n",
+  #       legend = c("Indoor biting",
+  #                  "In bed biting"),
+  #       col=transp(c("darkred","darkblue"),0.4),pch=15,cex=0.8)
+  
+  
   ##Bottom left plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
   par(new = "TRUE",  
       mar = c(8,8,6,5),
@@ -140,24 +178,30 @@ devEval("tiff", name="test1", width=1200, height=800, {
   ##INSERTED plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
   par(new = "TRUE",  
       mar = c(8,8,3,5),
-      plt = c(0.14,0.32,0.25,0.42))#,
+      plt = c(0.14,0.32,0.28,0.45))#,
   # major tick size and direction, < 0 means outside
   
   boxplot(coun$phi_I ~ coun$Country, ylim=c(0,1.1), frame=FALSE,
           cex.lab=0.8,cex.axis=1.4,yaxt="n",xaxt="n",
-          col=transp("darkred",0.3),ylab="")
+          col=transp("darkred",0.3),ylab="",
+          border="darkred",outline=FALSE)
   axis(2,las=2,at=seq(0,1,0.2),label=seq(0,1,0.2),cex.lab=0.8,cex.axis=0.8)
-  axis(1,las=2,at=1:11,labels=unique(levels(coun$Country)),cex.lab=0.8,cex.axis=0.8)
+  axis(1,las=2,at=1.3:11.3,labels=unique(levels(coun$Country)),cex.lab=0.8,cex.axis=0.8)
   numI = c(as.numeric(c(summary(coun$Country))))
-  num=1:11
+  num=1.3:11.3
   for(i in 1:11){
     text(num[i],0.02,numI[i],cex=0.8)
   }
   #text(11.5,1.1,"C",cex=0.8)
-  par(new=TRUE)
+  
+  par(new = "TRUE",  
+      mar = c(8,8,3,5),
+      plt = c(0.145,0.325,0.28,0.45))#,
+  # major tick size and direction, < 0 means outside
   boxplot(coun$phi_B ~ coun$Country, ylim=c(0,1), frame=FALSE,
           cex.lab=0.8,cex.axis=0.8,yaxt="n",xaxt="n",
-          col=transp("darkblue",0.3),ylab="")
+          col=transp("darkblue",0.3),ylab="",
+          border="blue",outline=FALSE)
   legend(7,0.45,bty="n",
          legend = c("Indoor biting",
                     "In bed biting"),
@@ -171,7 +215,7 @@ devEval("tiff", name="test1", width=1200, height=800, {
   
   ##**RUN THROUGH MODELS IN figure_map.r first
   plot(phiI~Year,data=dat_mosq1,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.8,xlim=c(2000,2015),
-       cex.lab=1.4, ylab=expression(paste("Proportion of mosquitoes biting indoors  ", phi[I])))
+       cex.lab=1.4, ylab="Proportion of mosquitoes biting indoors")
   axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.4)  
   
   ##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
@@ -208,7 +252,7 @@ devEval("tiff", name="test1", width=1200, height=800, {
   legend(2000,0.5,legend=c("West Africa","East Africa","Southern Africa","Central Africa"),
          col=c("red","blue","purple","aquamarine3"),pch=20,cex=1.2,bty="n")
   
-  legend(2000,0.15,legend=c("Review data","PMI data"),
+  legend(2008,0.25,legend=c("Review data","PMI data"),
          col=c("grey"),pch=c(15,17),cex=1.2,bty="n")
   
   #legend(1992,0.2,legend=c(levels(unique(dat_mosq1$Country))),
@@ -224,14 +268,14 @@ devEval("tiff", name="test1", width=1200, height=800, {
       plt = c(0.55,0.9,0.1,0.45))#,
   
   plot(phiB~Year,data=dat_mosq1,pch="",bty="n",ylim=c(0,1),yaxt="n",cex.main=1.4,xlim=c(2000,2015),
-       cex.lab=1.4, ylab=expression(paste("Proportion of mosquitoes biting in bed  ", phi[B])))
+       cex.lab=1.4, ylab="Proportion of mosquitoes biting in bed")
   axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,1,0.2),cex.axis=1.4)  
   
   ##PREDICTIONS FROM THE GLMM WITH COUNTRY AS A RANDOM EFFECT
-  lines(rev(sort(datAnArab$preds)) ~ sort(datAnArab$exp1),lty=1,lwd=1)
-  polygon(c(sort(datAnArab$exp1),rev(sort(datAnArab$exp1))),
-          c(rev(sort(datAnArab$preds-6*se(datAnArab$preds))),
-            sort(datAnArab$preds+6*se(datAnArab$preds))),
+  lines(rev(sort(datAnArab2$preds)) ~ sort(datAnArab2$exp1),lty=1,lwd=1)
+  polygon(c(sort(datAnArab2$exp1),rev(sort(datAnArab2$exp1))),
+          c(rev(sort(datAnArab2$preds-6*se(datAnArab2$preds))),
+            sort(datAnArab2$preds+6*se(datAnArab2$preds))),
           col=transp("grey",0.2),border=NA)             
   
   ##PREDICTIONS WITH COUNTRY AS A FIXED EFFECT

@@ -590,11 +590,7 @@ func(dat_fun,18,"F","cyan2")
 ###
 ###
 ### Is there a statistical trend in phiI and phiB over time?
-summary(lm(dat_mosq1[,14] ~ dat_mosq1[,4]))
-summary(lm(dat_mosq1[,15] ~ dat_mosq1[,4]))
-
-summary(lm(dat_mosq1[,16] ~ dat_mosq1[,4]))
-summary(lm(dat_mosq1[,17] ~ dat_mosq1[,4]))
+dat_mosq1$source = ifelse(dat_mosq1$Study == "PMI","PMI", "published")
 
 summary(lm(dat_mosq1[,2] ~ dat_mosq1[,4]))
 summary(lm(dat_mosq1[,3] ~ dat_mosq1[,4]))
@@ -616,7 +612,6 @@ levels(dat_mosq2$Species.grouped)[4] <- "A_gambiae_sl"
 levels(dat_mosq2$Species.grouped)[4:7] <- "An_other"
 summary(dat_mosq2$Species.grouped)
 
-dat_mosq1$source = ifelse(dat_mosq1$Study == "PMI","PMI", "published")
 par(mfrow=c(2,2))
 boxplot(dat_mosq1$phiI~dat_mosq1$source)
 boxplot(dat_mosq1$phiB~dat_mosq1$source)
@@ -630,7 +625,7 @@ tapply(dat_mosq1$phiI[dat_mosq1$source != "PMI"],dat_mosq1$Species.grouped[dat_m
 tapply(dat_mosq1$phiI,dat_mosq1$Species.grouped,summary)
 summary(dat_mosq1$phiI)
 
-
+dat_mosq1b = subset(dat_mosq1,dat_mosq1$source != "PMI")
     
 #i.glm<-glm(Allmean_phiI~Species.grouped+Year+Country+setting, data=dat_mosq2,family=quasibinomial(link= "logit" ))
   i.glm_full<-glm(phiI~Year+Country+source+Species.grouped, data=dat_mosq1) #,family=quasibinomial(link= "logit" )
@@ -650,8 +645,11 @@ summary(dat_mosq1$phiI)
     plot(resid(i.glm_mosq,type="deviance")~dat_mosq1$Year)
     plot(resid(i.glm_mosq,type="deviance")~dat_mosq1$Species.grouped) 
 exp(cbind(coef(i.glm_mosq), confint(i.glm_mosq)))  
+tapply(dat_mosq1b$phiB,dat_mosq1b$Country,length)
+tapply(dat_mosq1b$phiB,dat_mosq1b$Species.grouped,length)
+mean(dat_mosq1b$phiI[dat_mosq1b$Country == "Benin"])
+mean(dat_mosq1b$phiI[dat_mosq1b$Species.grouped == "A_arabiensis"])
 
-    
   mod1<-lmer(phiI~Year+Species.grouped+(1|Country), data=dat_mosq1)
     chmod1<-lmer(phiI~1+Species.grouped+(1|Country), data=dat_mosq1)
     anova(mod1,chmod1)

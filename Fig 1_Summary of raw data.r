@@ -161,13 +161,13 @@ devEval("tiff", name="test1", width=850, height=950, {
   
   
   
-  legend(-45,-5,legend=c("Mosquito biting behaviour",
-                         "Human indoor behaviour",
-                         "Human bed behaviour",
-                         "PMI mosquito data"),
-         col=c("purple","aquamarine3","orange",transp("blue")),
-         pch=c(22,20,17,15),cex=1.2,bty="n")
-  text(84,38,"A",cex=2)
+#  legend(-55,-5,legend=c("Mosquito biting behaviour",
+#                         "Human indoor behaviour",
+#                         "Human bed behaviour",
+#                         "PMI mosquito data"),
+#         col=c("purple","aquamarine3","orange",transp("blue")),
+#         pch=c(22,20,17,15),cex=1.2,bty="n")
+  text(70,38,"A",cex=2)
   
   
   
@@ -221,14 +221,14 @@ devEval("tiff", name="test1", width=850, height=950, {
   #lines(dat_inbed[,739]~dat_inbed[,1],lty=2,lwd=3,col="blue")##Average Mozambique
   #polygon(c(dat_inbed[,1],rev(dat_inbed[,1])),c(dat_inbed[,740],rev(dat_inbed[,741])),border=NA,col=transp("blue",0.3))
   text(24,1,"C",cex=2)
-  legend(16.2,0.9,legend=c("Tanzania",
-                           "Burina Faso",
-                           "Zambia",
-                           "Kenya",
-                           "Benin",
-                           "Mozambique"),
-         lty=1,lwd=2,cex=1.4,bty = "n",
-         col=c("orange","purple","blue","aquamarine3","darkred",transp("blue",0.5)))
+#  legend(16.2,0.9,legend=c("Tanzania",
+#                           "Burkina Faso",
+#                           "Zambia",
+#                           "Kenya",
+#                           "Benin",
+#                           "Mozambique"),
+#         lty=1,lwd=2,cex=1.4,bty = "n",
+#         col=c("orange","purple","blue","aquamarine3","darkred",transp("blue",0.5)))
   
   
   ###row 3 col 2
