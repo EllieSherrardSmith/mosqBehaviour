@@ -10,7 +10,9 @@ library(adegenet)
 ##
 ##DATA AND PROCESSING
 coun = read.table("H:/Ellie/IRS and resistance/behaviour_paper/PMI/COUNTRY_PHI2.txt",header=TRUE)
-names(coun)
+#coun = read.table("H:/Ellie/IRS and resistance/behaviour_paper/PMI/COUNTRY_PHI2_Permethrin.txt",header=TRUE)
+dim(coun)
+summary(lm(coun$phi_I ~ coun$permethrin))
 
 dat_mosq1 = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Janetta\\phiB+phiI_Beale added.csv",header=TRUE)
 dat_mosq2 = subset(dat_mosq1,dat_mosq1$Study != "PMI")
