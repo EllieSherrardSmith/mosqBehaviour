@@ -241,3 +241,29 @@ devEval("tiff", name="test1", width=850, height=950, {
          col=transp(c("blue","black")))
   
 })
+
+
+##########################################
+## At what hour are 50% of the population:
+
+##Indoors at night
+y1 = 0.402854545 ##8pm
+y2 = 0.707718182 ##9pm (these are the two hours sandwiching 50% of the people)
+gradient_indoor = dat_indoor[6,14] - dat_indoor[5,14]
+intercept_indoor = 0.402854545 - gradient_indoor
+(0.5 - intercept_indoor)/gradient_indoor ##7pm + this much time i.e. 60 mins * this... 20:19pm
+
+##In bed at night
+y1 = 0.4160733 ##9pm
+y2 = 0.6486785 ##10pm (these are the two hours sandwiching 50% of the people)
+gradient_indoor = dat_inbed[7,738] - dat_inbed[6,738]
+intercept_indoor = 0.4160733 - gradient_indoor
+(0.5 - intercept_indoor)/gradient_indoor ##7pm + this much time i.e. 60 mins * this... 20:19pm
+
+
+##Outdoors in the morning
+y1 = 0.809327273 ##5am
+y2 = 0.203127273 ##6am
+gradient_indoor = dat_indoor[15,14] - dat_indoor[14,14] 
+intercept_indoor = 0.809327273 - gradient_indoor
+(0.5 - intercept_indoor)/gradient_indoor ##7pm + this much time i.e. 60 mins * this... 05:30pm
