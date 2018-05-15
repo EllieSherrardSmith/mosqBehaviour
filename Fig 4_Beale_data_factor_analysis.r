@@ -1,7 +1,600 @@
 ##Differences in cohorts
 library(adegenet)
 dat = read.csv("H:\\Ellie\\IRS and resistance\\behaviour_paper\\Data from Andrew Beale\\mergedata.csv",header=TRUE)
-summary(dat)
+head(dat)
+
+which(dat[1,12:35] == 1)[1]
+for(i in 1:nrow(dat)){
+  dat$time_went_to_bed[i] = sum(c(ifelse(dat[i,12] == "0", 60,ifelse(dat[i,12] == "1",0,60*dat[i,12])),
+                                  ifelse(dat[i,13] == "0", 60,ifelse(dat[i,13] == "1",0,60*dat[i,13])),
+                                  ifelse(dat[i,14] == "0", 60,ifelse(dat[i,14] == "1",0,60*dat[i,14])),
+                                  ifelse(dat[i,15] == "0", 60,ifelse(dat[i,15] == "1",0,60*dat[i,15])),
+                                  ifelse(dat[i,16] == "0", 60,ifelse(dat[i,16] == "1",0,60*dat[i,16])),
+                                  ifelse(dat[i,17] == "0", 60,ifelse(dat[i,17] == "1",0,60*dat[i,17])),
+                                  ifelse(dat[i,18] == "0", 60,ifelse(dat[i,18] == "1",0,60*dat[i,18])),
+                                  ifelse(dat[i,19] == "0", 60,ifelse(dat[i,19] == "1",0,60*dat[i,19])),
+                                  ifelse(dat[i,20] == "0", 60,ifelse(dat[i,20] == "1",0,60*dat[i,20])),
+                                  ifelse(dat[i,21] == "0", 60,ifelse(dat[i,21] == "1",0,60*dat[i,21])) )  )
+  dat$time_to_rise[i] = 1440 - sum(c(ifelse(dat[i,22] == "0", 60,ifelse(dat[i,22] == "1",0,60 - 60*dat[i,22])),
+                                     ifelse(dat[i,23] == "0", 60,ifelse(dat[i,23] == "1",0,60 - 60*dat[i,23])),
+                                     ifelse(dat[i,24] == "0", 60,ifelse(dat[i,24] == "1",0,60 - 60*dat[i,24])),
+                                     ifelse(dat[i,25] == "0", 60,ifelse(dat[i,25] == "1",0,60 - 60*dat[i,25])),
+                                     ifelse(dat[i,26] == "0", 60,ifelse(dat[i,26] == "1",0,60 - 60*dat[i,26])),
+                                     ifelse(dat[i,27] == "0", 60,ifelse(dat[i,27] == "1",0,60 - 60*dat[i,27])),
+                                     ifelse(dat[i,28] == "0", 60,ifelse(dat[i,28] == "1",0,60 - 60*dat[i,28])),
+                                     ifelse(dat[i,29] == "0", 60,ifelse(dat[i,29] == "1",0,60 - 60*dat[i,29])),
+                                     ifelse(dat[i,30] == "0", 60,ifelse(dat[i,30] == "1",0,60 - 60*dat[i,30])),
+                                     ifelse(dat[i,31] == "0", 60,ifelse(dat[i,31] == "1",0,60 - 60*dat[i,31])),
+                                     ifelse(dat[i,32] == "0", 60,ifelse(dat[i,32] == "1",0,60 - 60*dat[i,32])),
+                                     ifelse(dat[i,33] == "0", 60,ifelse(dat[i,33] == "1",0,60 - 60*dat[i,33])),
+                                     ifelse(dat[i,34] == "0", 60,ifelse(dat[i,34] == "1",0,60 - 60*dat[i,34])),
+                                     ifelse(dat[i,35] == "0", 60,ifelse(dat[i,35] == "1",0,60 - 60*dat[i,35])) )  )
+  }
+dat$time_went_to_bed[480] = 189 ##check if reorder...this is the one that wakes up super early so need to adjust form 191 to 189
+dat$time_to_rise[480] = 542 ##check if reorder...this is the one that wakes up super early so need to adjust form 191 to 189
+hist(dat$time_went_to_bed)
+hist(dat$time_to_rise)
+
+dat$week_evening2=ifelse(dat$week_evening == "Monday",1,
+                         ifelse(dat$week_evening == "Tuesday",2,
+                                ifelse(dat$week_evening == "Wednesday",3,
+                                       ifelse(dat$week_evening == "Thursday",4,
+                                              ifelse(dat$week_evening == "Friday",5,
+                                                     ifelse(dat$week_evening == "Saturday",6,7))))))
+
+shapiro.test(dat$time_went_to_bed)
+qqnorm(dat$time_went_to_bed);qqline(dat$time_went_to_bed, col = 2)
+shapiro.test(dat$time_to_rise)
+qqnorm(dat$time_to_rise);qqline(dat$time_to_rise, col = 2)
+
+shapiro.test(sqrt(dat$time_went_to_bed))
+qqnorm(sqrt(dat$time_went_to_bed));qqline(sqrt(dat$time_went_to_bed), col = 2)
+shapiro.test(sqrt(dat$time_went_to_bed))
+qqnorm(sqrt(dat$time_to_rise));qqline(sqrt(dat$time_to_rise), col = 2)
+
+dat$age_grouped = ifelse(dat$age < 21,"a_<21",
+                         ifelse(dat$age >20 & dat$age <30, "b_21-30",
+                                ifelse(dat$age >=30 & dat$age <40, "c_31-40","d_>40")))
+
+boxplot(dat$time_went_to_bed ~ dat$age_grouped,ylab="Time to bed (minutes since 16:00)")
+boxplot(dat$time_went_to_bed ~ dat$location)
+
+par(mfrow=c(4,4))
+par(mar=c(5,5,2,2))
+boxplot(dat$time_went_to_bed[dat$location == "1"] ~ dat$sex[dat$location == "1"],ylab="Time to bed (minutes since 16:00)",xlab="Sex",col="lightblue",cex.lab=1.3)##Milange
+boxplot(dat$time_went_to_bed[dat$location == "2"] ~ dat$sex[dat$location == "2"],ylab="Time to bed (minutes since 16:00)",xlab="Sex",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1"] ~ dat$sex[dat$location == "1"],ylab="Time to rise (minutes since 16:00)",xlab="Sex",col="lightblue",cex.lab=1.3)##Milange
+boxplot(dat$time_to_rise[dat$location == "2"] ~ dat$sex[dat$location == "2"],ylab="Time to rise (minutes since 16:00)",xlab="Sex",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1"] ~ dat$age_grouped[dat$location == "1"],ylab="Time to bed (minutes since 16:00)",xlab="Age group in years",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2"] ~ dat$age_grouped[dat$location == "2"],ylab="Time to bed (minutes since 16:00)",xlab="Age group in years",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1"] ~ dat$age_grouped[dat$location == "1"],ylab="Time to rise (minutes since 16:00)",xlab="Age group in years",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2"] ~ dat$age_grouped[dat$location == "2"],ylab="Time to rise (minutes since 16:00)",xlab="Age group in years",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1"] ~ dat$week_evening2[dat$location == "1"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2"] ~ dat$week_evening2[dat$location == "2"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1"] ~ dat$week_evening2[dat$location == "1"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2"] ~ dat$week_evening2[dat$location == "2"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1"] ~ dat$mosquitonet[dat$location == "1"],ylab="Time to bed (minutes since 16:00)",xlab="Net use",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2"] ~ dat$mosquitonet[dat$location == "2"],ylab="Time to bed (minutes since 16:00)",xlab="Net use",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1"] ~ dat$mosquitonet[dat$location == "1"],ylab="Time to rise (minutes since 16:00)",xlab="Net use",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2"] ~ dat$mosquitonet[dat$location == "2"],ylab="Time to rise (minutes since 16:00)",xlab="Net use",col="aquamarine2",cex.lab=1.3)
+
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "1"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "1"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "1"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "1"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "1"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "1"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "1"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "1"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "2"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "2"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "2"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "2"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "2"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "2"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "2"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "2"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "1" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "1" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "1" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "1" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "1" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "1" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "1" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "1" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "2" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "2" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "2" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "2" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "2" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "2" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "2" & dat$age_grouped == "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "2" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "1" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "1" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "1" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "1" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "1" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "1" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "1" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "1" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "2" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "2" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "2" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "2" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "2" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "1" & dat$sex == "2" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "2" & dat$age_grouped != "b21-30"] ~ dat$week_evening2[dat$location == "2" & dat$sex == "2" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Weekdays (Mon - Sun)",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "1" & dat$age_grouped == "b21-30"] ~ dat$mosquitonet[dat$location == "1"& dat$sex == "1" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Net use",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "1" & dat$age_grouped == "b21-30"] ~ dat$mosquitonet[dat$location == "2"& dat$sex == "1" & dat$age_grouped == "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Net use",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "2" & dat$age_grouped == "b21-30"] ~ dat$mosquitonet[dat$location == "1"& dat$sex == "2" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Net use",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "2" & dat$age_grouped == "b21-30"] ~ dat$mosquitonet[dat$location == "2"& dat$sex == "2" & dat$age_grouped == "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Net use",col="aquamarine2",cex.lab=1.3)
+
+boxplot(dat$time_went_to_bed[dat$location == "1" & dat$sex == "1" & dat$age_grouped != "b21-30"] ~ dat$mosquitonet[dat$location == "1"& dat$sex == "1" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Net use",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_went_to_bed[dat$location == "2" & dat$sex == "1" & dat$age_grouped != "b21-30"] ~ dat$mosquitonet[dat$location == "2"& dat$sex == "1" & dat$age_grouped != "b21-30"],ylab="Time to bed (minutes since 16:00)",xlab="Net use",col="aquamarine2",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "1" & dat$sex == "2" & dat$age_grouped != "b21-30"] ~ dat$mosquitonet[dat$location == "1"& dat$sex == "2" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Net use",col="lightblue",cex.lab=1.3)
+boxplot(dat$time_to_rise[dat$location == "2" & dat$sex == "2" & dat$age_grouped != "b21-30"] ~ dat$mosquitonet[dat$location == "2"& dat$sex == "2" & dat$age_grouped != "b21-30"],ylab="Time to rise (minutes since 16:00)",xlab="Net use",col="aquamarine2",cex.lab=1.3)
+
+dat_milange = subset(dat,dat$location == "1")
+dat_tengua = subset(dat,dat$location == "2")
+
+a = glm(time_went_to_bed ~ age_grouped*sex*location+mosquitonet,data=dat)
+summary.lm(a)
+
+a = glm(time_went_to_bed ~ age_grouped+sex+mosquitonet,data=dat_tengua)
+summary.lm(a)
+
+tapply(dat_tengua$sex[dat_tengua$age_grouped == "a<21"],dat_tengua$mosquitonet[dat_tengua$age_grouped == "a<21"],length)
+tapply(dat_tengua$sex[dat_tengua$age_grouped == "b21-30"],dat_tengua$mosquitonet[dat_tengua$age_grouped == "b21-30"],length)
+tapply(dat_tengua$sex[dat_tengua$age_grouped == "31-40"],dat_tengua$mosquitonet[dat_tengua$age_grouped == "31-40"],length)
+tapply(dat_tengua$sex[dat_tengua$age_grouped == ">40"],dat_tengua$mosquitonet[dat_tengua$age_grouped == ">40"],length)
+
+a = glm(time_went_to_bed ~ age_grouped*mosquitonet,data=dat_milange)
+summary.lm(a)
+
+tapply(dat_milange$sex[dat_milange$age_grouped == "a<21"],dat_milange$mosquitonet[dat_milange$age_grouped == "a<21"],length)
+tapply(dat_milange$sex[dat_milange$age_grouped == "b21-30"],dat_milange$mosquitonet[dat_milange$age_grouped == "b21-30"],length)
+tapply(dat_milange$sex[dat_milange$age_grouped == "31-40"],dat_milange$mosquitonet[dat_milange$age_grouped == "31-40"],length)
+
+##Key observations
+#1 there is a clear difference in the time to bed and to rise between locations
+par(mfrow=c(2,2))
+par(mar=c(5,5,2,2))
+
+summary.lm(glm(dat$time_went_to_bed ~ dat$location))
+
+boxplot(dat$time_went_to_bed ~ dat$codelocation,ylab="Time to bed (minutes since 16:00)",xlab="Location",col=c("lightblue","aquamarine2"),cex.lab=1.3)
+text(1.5,600,"***",cex=2)
+
+summary.lm(glm(dat$time_to_rise ~ dat$location))
+
+boxplot(dat$time_to_rise ~ dat$codelocation,ylab="Time to rise (minutes since 16:00)",xlab="Location",col=c("lightblue","aquamarine2"),cex.lab=1.3)
+text(1.5,1000,"***",cex=2)
+
+#2 within villages
+#2a individual effects of age, sex, net use and weekday (with individual as a random effect)
+library(lme4)
+
+a1 = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+a1a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a1,a1a)
+a2 = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+a2a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a2,a2a)
+a3 = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+a3a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a3,a3a)
+a4 = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+a4a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a4,a4a)
+
+b1 = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+b1a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b1,b1a)
+b2 = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+b2a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b2,b2a)
+b3 = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+b3a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b3,b3a)
+b4 = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+b4a = lmer(time_went_to_bed ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b4,b4a)
+
+
+#2b dual effects of age, sex, net use and weekday (with individual as a random effect)
+aa1 = lmer(time_went_to_bed ~ age_grouped + sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa1a = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+aa1b = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa1c = lmer(time_went_to_bed ~ age_grouped * sex + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa1,aa1c)
+anova(aa1,aa1a)
+anova(aa1,aa1b)
+
+aa2 = lmer(time_went_to_bed ~ age_grouped + mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa2a = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+aa2b = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa2c = lmer(time_went_to_bed ~ age_grouped * mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa2,aa2c)
+anova(aa2,aa2a)
+anova(aa2,aa2b)
+
+aa3 = lmer(time_went_to_bed ~ sex + mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa3a = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa3b = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa3c = lmer(time_went_to_bed ~ sex * mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa3,aa3c)
+anova(aa3,aa3a)
+anova(aa3,aa3b)
+
+aa4 = lmer(time_went_to_bed ~ sex + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa4a = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa4b = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa4c = lmer(time_went_to_bed ~ sex * week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa4,aa4c)
+anova(aa4,aa4a)
+anova(aa4,aa4b)
+
+aa5 = lmer(time_went_to_bed ~ age_grouped + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa5a = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+aa5b = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa5c = lmer(time_went_to_bed ~ age_grouped * week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa5,aa5c)
+anova(aa5,aa5a)
+anova(aa5,aa5b)
+
+aa6 = lmer(time_went_to_bed ~ mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa6a = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa6b = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa6c = lmer(time_went_to_bed ~ mosquitonet * week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa6,aa6c)
+anova(aa6,aa6a)
+anova(aa6,aa6b)
+
+
+bb1 = lmer(time_went_to_bed ~ age_grouped + sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb1a = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb1b = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb1c = lmer(time_went_to_bed ~ age_grouped * sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb1,bb1c)
+anova(bb1,bb1a)
+anova(bb1,bb1b)
+
+bb2 = lmer(time_went_to_bed ~ age_grouped + mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb2a = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb2b = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb2c = lmer(time_went_to_bed ~ age_grouped * mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb2,bb2c)
+anova(bb2,bb2a)
+anova(bb2,bb2b)
+
+bb3 = lmer(time_went_to_bed ~ sex + mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb3a = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb3b = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb3c = lmer(time_went_to_bed ~ sex * mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb3,bb3c)
+anova(bb3,bb3a)
+anova(bb3,bb3b)
+
+bb4 = lmer(time_went_to_bed ~ sex + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb4a = lmer(time_went_to_bed ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb4b = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb4c = lmer(time_went_to_bed ~ sex * week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb4,bb4c)
+anova(bb4,bb4a)
+anova(bb4,bb4b)
+
+bb5 = lmer(time_went_to_bed ~ age_grouped + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb5a = lmer(time_went_to_bed ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb5b = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb5c = lmer(time_went_to_bed ~ age_grouped * week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb5,bb5c)
+anova(bb5,bb5a)
+anova(bb5,bb5b)
+
+bb6 = lmer(time_went_to_bed ~ mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb6a = lmer(time_went_to_bed ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb6b = lmer(time_went_to_bed ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb6c = lmer(time_went_to_bed ~ mosquitonet * week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb6,bb6c)
+anova(bb6,bb6a)
+anova(bb6,bb6b)
+
+#3 Interactive effects of age, sex, net use and weekday (with individual as a random effect)
+aaa1 = lmer(time_went_to_bed ~ age_grouped + sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1a = lmer(time_went_to_bed ~ age_grouped + sex + mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1b = lmer(time_went_to_bed ~ age_grouped + sex + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1c = lmer(time_went_to_bed ~ age_grouped + mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1d = lmer(time_went_to_bed ~ sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aaa1,aaa1a)
+anova(aaa1,aaa1b)
+anova(aaa1,aaa1c)
+anova(aaa1,aaa1d)
+
+bbb1 = lmer(time_went_to_bed ~ age_grouped + sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1a = lmer(time_went_to_bed ~ age_grouped + sex + mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1b = lmer(time_went_to_bed ~ age_grouped + sex + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1c = lmer(time_went_to_bed ~ age_grouped + mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1d = lmer(time_went_to_bed ~ sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bbb1,bbb1a)
+anova(bbb1,bbb1b)
+anova(bbb1,bbb1c)
+anova(bbb1,bbb1d)
+
+#boxplot(dat_tengua$time_went_to_bed ~ dat_tengua$sex,ylab="Time to bed (minutes since 16:00)",xlab="Sex",col="aquamarine2",cex.lab=1.3)
+#text(1.5,500,"*",cex=2)
+boxplot(dat_tengua$time_went_to_bed[dat_tengua$sex == "1"] ~ 
+          dat_tengua$age_grouped[dat_tengua$sex == "1"],
+        ylab="Time to bed (minutes since 16:00)",xaxt="n",yaxt="n",
+        xlab="Age group",col="aquamarine2",cex.lab=1.3,ylim=c(0,500))
+axis(1,at=c(1,2,3,4),labels=c("Under 21","21 - 30","31 - 40","Over 40"),cex.axis=1.3)
+axis(2,las=2,at=seq(0,500,100),labels=seq(0,500,100),cex.axis=1.3)
+text(0.8,0,"Males",cex=1.4)
+
+boxplot(dat_tengua$time_went_to_bed[dat_tengua$sex == "2"] ~ 
+          dat_tengua$age_grouped[dat_tengua$sex == "2"],
+        ylab="Time to bed (minutes since 16:00)",xaxt="n",yaxt="n",
+        xlab="Age group",col="aquamarine2",cex.lab=1.3,ylim=c(0,500))
+axis(1,at=c(1,2,3,4),labels=c("Under 21","21 - 30","31 - 40","Over 40"),cex.axis=1.3)
+axis(2,las=2,at=seq(0,500,100),labels=seq(0,500,100),cex.axis=1.3)
+text(1,0,"Females",cex=1.4)
+
+
+#2 within villages
+#2a individual effects of age, sex, net use and weekday (with individual as a random effect)
+library(lme4)
+
+a1 = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+a1a = lmer(time_to_rise ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a1,a1a)
+a2 = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+a2a = lmer(time_to_rise ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a2,a2a)
+a3 = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+a3a = lmer(time_to_rise ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a3,a3a)
+a4 = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+a4a = lmer(time_to_rise ~ (1|code_hours),data=dat_milange,REML=TRUE)
+anova(a4,a4a)
+
+b1 = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+b1a = lmer(time_to_rise ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b1,b1a)
+b2 = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+b2a = lmer(time_to_rise ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b2,b2a)
+b3 = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+b3a = lmer(time_to_rise ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b3,b3a)
+b4 = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+b4a = lmer(time_to_rise ~ (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(b4,b4a)
+
+
+#2b dual effects of age, sex, net use and weekday (with individual as a random effect)
+aa1 = lmer(time_to_rise ~ age_grouped + sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa1a = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+aa1b = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa1c = lmer(time_to_rise ~ age_grouped * sex + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa1,aa1c)
+anova(aa1,aa1a)
+anova(aa1,aa1b)
+
+aa2 = lmer(time_to_rise ~ age_grouped + mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa2a = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+aa2b = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa2c = lmer(time_to_rise ~ age_grouped * mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa2,aa2c)
+anova(aa2,aa2a)
+anova(aa2,aa2b)
+
+aa3 = lmer(time_to_rise ~ sex + mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa3a = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa3b = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa3c = lmer(time_to_rise ~ sex * mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa3,aa3c)
+anova(aa3,aa3a)
+anova(aa3,aa3b)
+
+aa4 = lmer(time_to_rise ~ sex + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa4a = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_milange,REML=TRUE)
+aa4b = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa4c = lmer(time_to_rise ~ sex * week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa4,aa4c)
+anova(aa4,aa4a)
+anova(aa4,aa4b)
+
+aa5 = lmer(time_to_rise ~ age_grouped + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa5a = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_milange,REML=TRUE)
+aa5b = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa5c = lmer(time_to_rise ~ age_grouped * week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa5,aa5c)
+anova(aa5,aa5a)
+anova(aa5,aa5b)
+
+aa6 = lmer(time_to_rise ~ mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa6a = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aa6b = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aa6c = lmer(time_to_rise ~ mosquitonet * week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aa6,aa6c)
+anova(aa6,aa6a)
+anova(aa6,aa6b)
+
+
+bb1 = lmer(time_to_rise ~ age_grouped + sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb1a = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb1b = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb1c = lmer(time_to_rise ~ age_grouped * sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb1,bb1c)
+anova(bb1,bb1a)
+anova(bb1,bb1b)
+
+bb2 = lmer(time_to_rise ~ age_grouped + mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb2a = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb2b = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb2c = lmer(time_to_rise ~ age_grouped * mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb2,bb2c)
+anova(bb2,bb2a)
+anova(bb2,bb2b)
+
+bb3 = lmer(time_to_rise ~ sex + mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb3a = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb3b = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb3c = lmer(time_to_rise ~ sex * mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb3,bb3c)
+anova(bb3,bb3a)
+anova(bb3,bb3b)
+
+bb4 = lmer(time_to_rise ~ sex + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb4a = lmer(time_to_rise ~ sex + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb4b = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb4c = lmer(time_to_rise ~ sex * week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb4,bb4c)
+anova(bb4,bb4a)
+anova(bb4,bb4b)
+
+bb5 = lmer(time_to_rise ~ age_grouped + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb5a = lmer(time_to_rise ~ age_grouped + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb5b = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb5c = lmer(time_to_rise ~ age_grouped * week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb5,bb5c)
+anova(bb5,bb5a)
+anova(bb5,bb5b)
+
+bb6 = lmer(time_to_rise ~ mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb6a = lmer(time_to_rise ~ mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb6b = lmer(time_to_rise ~ week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bb6c = lmer(time_to_rise ~ mosquitonet * week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bb6,bb6c)
+anova(bb6,bb6a)
+anova(bb6,bb6b)
+
+#3 Interactive effects of age, sex, net use and weekday (with individual as a random effect)
+aaa1 = lmer(time_to_rise ~ age_grouped + sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1a = lmer(time_to_rise ~ age_grouped + sex + mosquitonet + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1b = lmer(time_to_rise ~ age_grouped + sex + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1c = lmer(time_to_rise ~ age_grouped + mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+aaa1d = lmer(time_to_rise ~ sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_milange,REML=TRUE)
+anova(aaa1,aaa1a)
+anova(aaa1,aaa1b)
+anova(aaa1,aaa1c)
+anova(aaa1,aaa1d)
+
+bbb1 = lmer(time_to_rise ~ age_grouped + sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1a = lmer(time_to_rise ~ age_grouped + sex + mosquitonet + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1b = lmer(time_to_rise ~ age_grouped + sex + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1c = lmer(time_to_rise ~ age_grouped + mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+bbb1d = lmer(time_to_rise ~ sex + mosquitonet + week_evening2 + (1|code_hours),data=dat_tengua,REML=TRUE)
+anova(bbb1,bbb1a)
+anova(bbb1,bbb1b)
+anova(bbb1,bbb1c)
+anova(bbb1,bbb1d)
+
+##########
+##
+## Figure for glmms on bed time data
+par(mfrow=c(2,2))
+par(mar=c(5,5,2,2))
+
+summary.lm(glm(dat$time_went_to_bed ~ dat$location))
+
+boxplot(dat$time_went_to_bed ~ dat$codelocation,yaxt="n",ylab="Time to bed (minutes since 16:00 hrs)",xlab="Location",col=c("lightblue","aquamarine2"),cex.lab=1.3)
+text(1.5,600,"***",cex=2)
+text(2.5,600,"A",cex=1.6)
+summary.lm(glm(dat$time_to_rise ~ dat$location))
+axis(2,las=2,at=seq(0,500,100),labels=seq(0,500,100),cex.axis=1.3)
+
+boxplot(dat$time_to_rise ~ dat$codelocation,yaxt="n",ylab="Time to rise (minutes since 16:00 hrs)",xlab="Location",col=c("lightblue","aquamarine2"),cex.lab=1.3)
+text(1.5,1000,"***",cex=2)
+text(2.5,1000,"B",cex=1.6)
+axis(2,las=2,at=seq(600,1000,100),labels=seq(600,1000,100),cex.axis=1.3)
+
+boxplot(dat_milange$time_to_rise[dat_milange$mosquitonet == "0" & dat_milange$age_grouped == "a_<21"],  
+        dat_milange$time_to_rise[dat_milange$mosquitonet == "1" & dat_milange$age_grouped == "a_<21"], 
+        
+        dat_milange$time_to_rise[dat_milange$mosquitonet == "0" & dat_milange$age_grouped == "b_21-30"], 
+        dat_milange$time_to_rise[dat_milange$mosquitonet == "1" & dat_milange$age_grouped == "b_21-30"], 
+        
+        dat_milange$time_to_rise[dat_milange$mosquitonet == "0" & dat_milange$age_grouped == "c_31-40"], 
+        dat_milange$time_to_rise[dat_milange$mosquitonet == "1" & dat_milange$age_grouped == "c_31-40"], 
+        
+        ylab="Time to rise (minutes since 16:00 hrs)",xaxt="n",yaxt="n",
+        xlab="Use of nets",col=rep(c("lightblue",transp("blue",0.6)),3),cex.lab=1.3,ylim=c(600,1000))
+
+axis(1,at=c(1.5,3.5,5.5),labels=c("Under 21","21 to 30","31 to 40"),cex.axis=1.3)
+axis(2,las=2,at=seq(600,1000,100),labels=seq(600,1000,100),cex.axis=1.3)
+
+text(3.5,600,"Milange",cex=1.2)
+legend(0.5,1000,legend=c("No net","Net"),col=c("lightblue",transp("blue",0.6)),cex=1.3,pch=15)
+text(6.5,1000,"C",cex=1.6)
+#boxplot(dat_tengua$time_to_rise ~ dat_tengua$sex,ylab="Time to bed (minutes since 16:00)",xlab="Sex",col="aquamarine2",cex.lab=1.3)
+#text(1.5,500,"*",cex=2)
+boxplot(dat_tengua$time_went_to_bed[dat_tengua$sex == "1" & dat_tengua$mosquitonet == "0"],  
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "1" & dat_tengua$mosquitonet == "1"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "2" & dat_tengua$mosquitonet == "0"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "2" & dat_tengua$mosquitonet == "1"], 
+        ylab="Time to bed (minutes since 16:00 hrs)",xaxt="n",yaxt="n",
+        xlab="Sex",col=rep(c("aquamarine","aquamarine3"),2),cex.lab=1.3,ylim=c(0,500))
+
+axis(1,at=c(1.5,3.5),labels=c("Male","Female"),cex.axis=1.3)
+axis(2,las=2,at=seq(0,500,100),labels=seq(0,500,100),cex.axis=1.3)
+
+text(2.5,0,"Tengua",cex=1.2)
+legend(0.5,500,legend=c("No net","Net"),col=c("aquamarine","aquamarine3"),cex=1.3,pch=15)
+text(4.5,500,"D",cex=1.6)
+
+par(mfrow=c(1,2))
+boxplot(dat_tengua$time_went_to_bed[dat_tengua$sex == "1" & dat_tengua$age_grouped == "a_<21"],  
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "2" & dat_tengua$age_grouped == "a_<21"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "1" & dat_tengua$age_grouped == "b_21-30"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "2" & dat_tengua$age_grouped == "b_21-30"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "1" & dat_tengua$age_grouped == "c_31-40"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "2" & dat_tengua$age_grouped == "c_31-40"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "1" & dat_tengua$age_grouped == "d_>40"], 
+        dat_tengua$time_went_to_bed[dat_tengua$sex == "2" & dat_tengua$age_grouped == "d_>40"], 
+        ylab="Time to bed (minutes since 16:00)",xaxt="n",yaxt="n",
+        xlab="Age group",col=rep(c("aquamarine","aquamarine3"),4),cex.lab=1.3,ylim=c(0,500))
+
+axis(1,at=c(1.5,3.5,5.5,7.5),labels=c("Under 21","21 - 30","31 - 40","Over 40"),cex.axis=1.3)
+axis(2,las=2,at=seq(0,500,100),labels=seq(0,500,100),cex.axis=1.3)
+
+text(4.5,0,"Tengua",cex=1.2)
+legend(0.5,500,legend=c("Male","Female"),col=c("aquamarine","aquamarine3"),cex=1.3,pch=15)
+text(8.5,500,"A",cex=1.6)
+
+
+boxplot(dat_milange$time_to_rise[dat_milange$week_evening2 == "1" & dat_milange$age_grouped == "a_<21"],  
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "2" & dat_milange$age_grouped == "a_<21"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "3" & dat_milange$age_grouped == "a_<21"],  
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "4" & dat_milange$age_grouped == "a_<21"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "5" & dat_milange$age_grouped == "a_<21"],  
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "6" & dat_milange$age_grouped == "a_<21"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "7" & dat_milange$age_grouped == "a_<21"], 
+        
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "1" & dat_milange$age_grouped == "b_21-30"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "2" & dat_milange$age_grouped == "b_21-30"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "3" & dat_milange$age_grouped == "b_21-30"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "4" & dat_milange$age_grouped == "b_21-30"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "5" & dat_milange$age_grouped == "b_21-30"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "6" & dat_milange$age_grouped == "b_21-30"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "7" & dat_milange$age_grouped == "b_21-30"], 
+        
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "1" & dat_milange$age_grouped == "c_31-40"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "2" & dat_milange$age_grouped == "c_31-40"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "3" & dat_milange$age_grouped == "c_31-40"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "4" & dat_milange$age_grouped == "c_31-40"],         
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "5" & dat_milange$age_grouped == "c_31-40"],         
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "6" & dat_milange$age_grouped == "c_31-40"], 
+        dat_milange$time_to_rise[dat_milange$week_evening2 == "7" & dat_milange$age_grouped == "c_31-40"], 
+        
+        ylab="Time to bed (minutes since 16:00)",xaxt="n",yaxt="n",
+        xlab="Days of the week (Morning)",col=rep(c("grey","lightblue","blue"),each=7),cex.lab=1.3,ylim=c(600,1000))
+
+axis(1,at=1:21,labels=c("Tuesday","","","","","","Monday","","","","","","Sunday","","","","","","Saturday","",""),srt=0.45, cex.axis=1.3)
+axis(2,las=2,at=seq(600,1000,100),labels=seq(600,1000,100),cex.axis=1.3)
+
+text(11,600,"Milange",cex=1.2)
+legend(1,710,legend=c("Under 21","21 to 30","31 to 40"),col=c("grey","lightblue","blue"),cex=1.3,pch=15)
+text(21.5,1000,"B",cex=1.6)
+
+
 
 time =1:24
 distribs = expand.grid(distrib1 = t(dat[1,12:35]))

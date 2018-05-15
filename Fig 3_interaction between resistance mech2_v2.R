@@ -324,133 +324,129 @@ for(i in 53:105){
 
 
 sites = seq(1,105,21)
-data1_no_res = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance/draw_0/behav_phys_resistance",sites[1],"0.txt",sep="_"),header=TRUE)
+data1_no_res = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites[1],"0.txt",sep="_"),header=TRUE)
 head(data1_no_res)
 
-data0p_res = data0s_res = data1_res = data2_res = data3_res = data4_res = data5_res = data6_res = array(dim=c(nrow(data1_no_res),22,5))
+data0p_res = data0s_res = data1_res = data2_res = data3_res = data4_res = data5_res = data0p_resHIGHTRANS = array(dim=c(nrow(data1_no_res),22,5))
 sites_init = sites-1
 res_val = 1:21
 for(j in 1:5){
   for(i in 1:21){
     data0p_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
     data0p_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
-
+    #this is perennial no interventions
     data0s_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None2/draw_0/behav_phys_resistance_None2",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
     data0s_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None2/draw_0/behav_phys_resistance_None2",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    #this is seasonal no interventions
 
-    data1_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance/draw_0/behav_phys_resistance",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data1_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance/draw_0/behav_phys_resistance",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
-    
+    data1_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance1/draw_0/behav_phys_resistance1",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data1_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance1/draw_0/behav_phys_resistance1",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    #this is perennial 50% ITN interventions
     data2_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance2/draw_0/behav_phys_resistance2",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
     data2_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance2/draw_0/behav_phys_resistance2",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
-    
+    #this is perennial 80% ITN interventions
     data3_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance3/draw_0/behav_phys_resistance3",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
     data3_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance3/draw_0/behav_phys_resistance3",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
-    
+    #this is perennial 80% ITN + 80% IRS interventions
     data4_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance4/draw_0/behav_phys_resistance4",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
     data4_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance4/draw_0/behav_phys_resistance4",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    #this is SEASONal 50% ITN interventions
     
-    data5_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance5b/draw_0/behav_phys_resistance5b",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data5_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance5b/draw_0/behav_phys_resistance5b",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
-    
-    data6_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance6b/draw_0/behav_phys_resistance6b",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data6_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance6b/draw_0/behav_phys_resistance6b",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data5_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance5/draw_0/behav_phys_resistance5",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data5_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance5/draw_0/behav_phys_resistance5",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    #this is perennial 80% ITN interventions 80% PREVALENCE
+    data0p_resHIGHTRANS[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None3/draw_0/behav_phys_resistance_None3",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data0p_resHIGHTRANS[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None3/draw_0/behav_phys_resistance_None3",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    #this is perennial no interventions 80% PREVALENCE
     
   } 
 }
 
 ##Now work out the efficacy with pyrethroid resistance increase
-Efficacy_peren_LLIN50 = Efficacy_peren_LLIN50IRS80 = 
-  Efficacy_seas_LLIN50 = Efficacy_seas_LLIN50IRS80 = 
-  Efficacy_peren_LLIN50IRS80act = Efficacy_seas_LLIN50IRS80act = array(dim=c(21,5))
+Efficacy_peren_LLIN50 = Efficacy_peren_LLIN80 = 
+  Efficacy_seas_LLIN50 = Efficacy_peren_LLIN80IRS80 = 
+  Efficacy_peren_LLIN80high = array(dim=c(21,5))
 for(j in 1:5){
   for(i in 1:21){
     Efficacy_peren_LLIN50[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
-                                    data1_res[,i+1,j][data0p_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
-    Efficacy_peren_LLIN50IRS80[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
-                                    data2_res[,i+1,j][data0p_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
-    Efficacy_seas_LLIN50[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
-                                    data3_res[,i+1,j][data0p_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
-    Efficacy_seas_LLIN50IRS80[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
-                                    data4_res[,i+1,j][data0p_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
-    Efficacy_peren_LLIN50IRS80act[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
-                                   data5_res[,i+1,j][data0p_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
-    Efficacy_seas_LLIN50IRS80act[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
-                                        data6_res[,i+1,j][data0p_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
+                                    data1_res[,i+1,j][data1_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
+    Efficacy_peren_LLIN80[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
+                                    data2_res[,i+1,j][data2_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
+    Efficacy_peren_LLIN80IRS80[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
+                                    data3_res[,i+1,j][data3_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
     
+    
+    Efficacy_seas_LLIN50[i,j] = (data0s_res[,i+1,j][data0s_res[,1,j] == 3] - 
+                                    data4_res[,i+1,j][data4_res[,1,j] == 3]) / data0s_res[,i+1,j][data0s_res[,1,j] == 3]
+    
+    Efficacy_peren_LLIN80high[i,j] = (data0p_resHIGHTRANS[,i+1,j][data0p_resHIGHTRANS[,1,j] == 3] - 
+                                    data5_res[,i+1,j][data5_res[,1,j] == 3]) / data0p_resHIGHTRANS[,i+1,j][data0p_resHIGHTRANS[,1,j] == 3]
+ 
     
         }
 }
 
-Eff1peren_LLIN = data.frame(eff = c(Efficacy_peren_LLIN50[,2:3],Efficacy_peren_LLIN50[,1],Efficacy_peren_LLIN50[,4:5]),
+Eff1peren_LLIN50 = data.frame(eff = c(Efficacy_peren_LLIN50[,2:3],Efficacy_peren_LLIN50[,1],Efficacy_peren_LLIN50[,4:5]),
                              resistance = rep(seq(0,1,by=0.05),5),
                              behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-Eff1peren_LLIN_IRS = data.frame(eff = c(Efficacy_peren_LLIN50IRS80[,2:3],Efficacy_peren_LLIN50IRS80[,1],Efficacy_peren_LLIN50IRS80[,4:5]),
-                                 resistance = rep(seq(0,1,by=0.05),5),
-                                 behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
 
-Eff1seas_LLIN = data.frame(eff = c(Efficacy_seas_LLIN50[,2:3],Efficacy_seas_LLIN50[,1],Efficacy_seas_LLIN50[,4:5]),
-                            resistance = rep(seq(0,1,by=0.05),5),
-                            behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-Eff1seas_LLIN_IRS = data.frame(eff = c(Efficacy_seas_LLIN50IRS80[,2:3],Efficacy_seas_LLIN50IRS80[,1],Efficacy_seas_LLIN50IRS80[,4:5]),
-                                resistance = rep(seq(0,1,by=0.05),5),
-                                behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-Eff1peren_LLIN_IRSact = data.frame(eff = c(Efficacy_peren_LLIN50IRS80act[,2:3],Efficacy_peren_LLIN50IRS80act[,1],Efficacy_peren_LLIN50IRS80act[,4:5]),
-                               resistance = rep(seq(0,1,by=0.05),5),
-                               behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-Eff1seas_LLIN_IRSact = data.frame(eff = c(Efficacy_seas_LLIN50IRS80act[,2:3],Efficacy_seas_LLIN50IRS80act[,1],Efficacy_seas_LLIN50IRS80act[,4:5]),
+Eff1peren_LLIN80 = data.frame(eff = c(Efficacy_peren_LLIN80[,2:3],Efficacy_peren_LLIN80[,1],Efficacy_peren_LLIN80[,4:5]),
+                              resistance = rep(seq(0,1,by=0.05),5),
+                              behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+
+Eff1peren_LLIN80_IRS80 = data.frame(eff = c(Efficacy_peren_LLIN80IRS80[,2:3],Efficacy_peren_LLIN80IRS80[,1],Efficacy_peren_LLIN80IRS80[,4:5]),
+                                    resistance = rep(seq(0,1,by=0.05),5),
+                                    behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+
+Eff1seas_LLIN50 = data.frame(eff = c(Efficacy_seas_LLIN50[,2:3],Efficacy_seas_LLIN50[,1],Efficacy_seas_LLIN50[,4:5]),
+                             resistance = rep(seq(0,1,by=0.05),5),
+                             behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+
+Eff1peren_LLIN80high = data.frame(eff = c(Efficacy_peren_LLIN80high[,2:3],Efficacy_peren_LLIN80high[,1],Efficacy_peren_LLIN80high[,4:5]),
                                resistance = rep(seq(0,1,by=0.05),5),
                                behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
 
 resistance = c(0.01,seq(0.05,1,by=0.05))
 
-prevs_peren_nets = prevs_peren_nets_irs = prevs_seas_nets = prevs_seas_nets_irs = 
-  prevs_peren_nets_irsact = prevs_seas_nets_irsact = array(dim=c(21,5))
+prevs_peren_nets50 = prevs_peren_nets80 = prevs_peren_nets80_irs80 = 
+  prevs_seas_nets50 = prevs_peren_nets80high = array(dim=c(21,5))
 for(j in 1:5){
   for(i in 2:22){
-    prevs_peren_nets[i-1,j] = data1_res[,i,j][data1_res[,1,j] == 3] ##This is prevalence for each scenario
-    prevs_peren_nets_irs[i-1,j] = data2_res[,i,j][data1_res[,1,j] == 3] ##This is prevalence for each scenario
-    prevs_seas_nets[i-1,j] = data3_res[,i,j][data1_res[,1,j] == 3] ##This is prevalence for each scenario
-    prevs_seas_nets_irs[i-1,j] = data4_res[,i,j][data1_res[,1,j] == 3] ##This is prevalence for each scenario
-    prevs_peren_nets_irsact[i-1,j] = data5_res[,i,j][data5_res[,1,j] == 3] ##This is prevalence for each scenario
-    prevs_seas_nets_irsact[i-1,j] = data6_res[,i,j][data6_res[,1,j] == 3] ##This is prevalence for each scenario
-    
+    prevs_peren_nets50[i-1,j] = data1_res[,i,j][data1_res[,1,j] == 3] ##This is prevalence for each scenario
+    prevs_peren_nets80[i-1,j] = data2_res[,i,j][data2_res[,1,j] == 3] ##This is prevalence for each scenario
+    prevs_peren_nets80_irs80[i-1,j] = data3_res[,i,j][data3_res[,1,j] == 3] ##This is prevalence for each scenario
+    prevs_seas_nets50[i-1,j] = data4_res[,i,j][data4_res[,1,j] == 3] ##This is prevalence for each scenario
+    prevs_peren_nets80high[i-1,j] = data5_res[,i,j][data5_res[,1,j] == 3] ##This is prevalence for each scenario
+ 
       }}
 
-data1peren_LLIN = data.frame(prevs = c(prevs_peren_nets[,2:3],prevs_peren_nets[,1],prevs_peren_nets[,4:5]),
+data1peren_LLIN50 = data.frame(prevs = c(prevs_peren_nets50[,2:3],prevs_peren_nets50[,1],prevs_peren_nets50[,4:5]),
                              resistance = rep(seq(0,1,by=0.05),5),
                              behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-data1peren_LLIN_IRS = data.frame(prevs = c(prevs_peren_nets_irs[,2:3],prevs_peren_nets_irs[,1],prevs_peren_nets_irs[,4:5]),
+data1peren_LLIN80 = data.frame(prevs = c(prevs_peren_nets80[,2:3],prevs_peren_nets80[,1],prevs_peren_nets80[,4:5]),
+                               resistance = rep(seq(0,1,by=0.05),5),
+                               behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+data1peren_LLIN80_IRS80 = data.frame(prevs = c(prevs_peren_nets80_irs80[,2:3],prevs_peren_nets80_irs80[,1],prevs_peren_nets80_irs80[,4:5]),
                                  resistance = rep(seq(0,1,by=0.05),5),
                                  behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+data1seas_LLIN50 = data.frame(prevs = c(prevs_seas_nets50[,2:3],prevs_seas_nets50[,1],prevs_seas_nets50[,4:5]),
+                              resistance = rep(seq(0,1,by=0.05),5),
+                              behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+data1peren_LLIN80high = data.frame(prevs = c(prevs_peren_nets80high[,2:3],prevs_peren_nets80high[,1],prevs_peren_nets80high[,4:5]),
+                               resistance = rep(seq(0,1,by=0.05),5),
+                               behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
 
-data1seas_LLIN = data.frame(prevs = c(prevs_seas_nets[,2:3],prevs_seas_nets[,1],prevs_seas_nets[,4:5]),
-                            resistance = rep(seq(0,1,by=0.05),5),
-                            behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-data1seas_LLIN_IRS = data.frame(prevs = c(prevs_seas_nets_irs[,2:3],prevs_seas_nets_irs[,1],prevs_seas_nets_irs[,4:5]),
-                                resistance = rep(seq(0,1,by=0.05),5),
-                                behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+zf1 = Eff1peren_LLIN50$eff * 100
+zf2 = Eff1peren_LLIN80$eff * 100
+zf3 = Eff1peren_LLIN80_IRS80$eff * 100
+zf4 = Eff1seas_LLIN50$eff * 100
+zf5 = Eff1peren_LLIN80high$eff * 100
 
-data1peren_LLIN_IRSact = data.frame(prevs = c(prevs_peren_nets_irsact[,2:3],prevs_peren_nets_irsact[,1],prevs_peren_nets_irsact[,4:5]),
-                                 resistance = rep(seq(0,1,by=0.05),5),
-                                 behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-data1seas_LLIN_IRSact = data.frame(prevs = c(prevs_seas_nets_irsact[,2:3],prevs_seas_nets_irsact[,1],prevs_seas_nets_irsact[,4:5]),
-                                resistance = rep(seq(0,1,by=0.05),5),
-                                behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
-
-zf1 = Eff1peren_LLIN$eff * 100
-zf2 = Eff1peren_LLIN_IRS$eff * 100
-zf3 = Eff1seas_LLIN$eff * 100
-zf4 = Eff1seas_LLIN_IRS$eff * 100
-zf5 = Eff1peren_LLIN_IRSact$eff * 100
-zf6 = Eff1seas_LLIN_IRSact$eff * 100
-
-z1 = data1peren_LLIN$prevs
-z2 = data1peren_LLIN_IRS$prevs
-z3 = data1seas_LLIN$prevs
-z4 = data1seas_LLIN_IRS$prevs
-z5 = data1peren_LLIN_IRSact$prevs
-z6 = data1seas_LLIN_IRSact$prevs
+z1 = data1peren_LLIN50$prevs
+z2 = data1peren_LLIN80$prevs
+z3 = data1peren_LLIN80_IRS80$prevs
+z4 = data1seas_LLIN50$prevs
+z5 = data1peren_LLIN80high$prevs
 
 x = rep(seq(0,1,by=0.05),5)
 y = rep(c(0.5964,0.814,0.8909,0.94,0.9832),each=21)
@@ -463,14 +459,12 @@ surface.matrix2 = matrix(z2,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.matrix3 = matrix(z3,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.matrix4 = matrix(z4,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.matrix5 = matrix(z5,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
-surface.matrix6 = matrix(z6,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 
 surface.mat1 = matrix(zf1,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat2 = matrix(zf2,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat3 = matrix(zf3,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat4 = matrix(zf4,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat5 = matrix(zf5,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
-surface.mat6 = matrix(zf6,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 
 
 matrix_funs = function(surface.matrix,minimum_val,maximum_val,upps,uni,levs,colschoice,cols_conts){
@@ -504,7 +498,7 @@ matrix_funs = function(surface.matrix,minimum_val,maximum_val,upps,uni,levs,cols
 ##
 ## Figure 5
 plot.new()
-
+par(mar=c(4,5.5,2,2))
 ##Top left plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
 par(new = "TRUE",  
     plt = c(0.06,0.31,0.7,0.95))#,
@@ -512,35 +506,59 @@ par(new = "TRUE",
 
 ##Perennial setting: LLIN at 50% cover No resistance
 
-plot(data1_no_res$prev_2_10_smooth ~  data1_no_res$year,pch="",xlim=c(-0.2,5),ylim=c(0,0.4),
-     main="",frame=FALSE,
-     ylab="",yaxt="n",xlab="",cex.lab=1,cex.axis=1)
-mtext(side=1,line=2.3,"Time in years")
-mtext(side=2,las=0,line=2.3,"Prevalence in 2 - 10 years (%)")
-axis(2,las=2,at=seq(0,0.4,0.1),labels=seq(0,40,10),cex.lab=1.6,cex.axis=1)
-lines(data1_no_res$prev_2_10_smooth ~  data1_no_res$year,lty=1,col="blue",xlim=c(-0.2,5))
-#
-polygon(c(data1_res[,1,1],rev(data1_res[,1,1])),c(data1_res[,2,2],rev(data1_res[,2,5])),border=NA,col=transp("blue",0.4))
-polygon(c(data1_res[,1,1],rev(data1_res[,1,1])),c(data1_res[,2,3],rev(data1_res[,2,4])),border=NA,col=transp("blue",0.4))
-lines(data1_res[,2,1] ~  data1_res[,1,1],lty=1,col="blue",lwd=2)#median
+coun = read.table("H:/Ellie/IRS and resistance/behaviour_paper/PMI/COUNTRY_PHI.txt",header=TRUE)
+head(coun)
+coun$x=(1 - coun$deltamethrin)
+plot(coun[,6] ~ coun$x, bty="n", cex.lab = 1, cex.axis = 1,line=2.3,
+     ylab=expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),
+     xlab="Mosquito survival at bioassay (%)",pch="",
+     ylim=c(0,1),xlim=c(0,1),yaxt="n",xaxt="n")
+axis(2,las=2,at=seq(0,1,0.2),label=seq(0,1,0.2),cex.lab=1,cex.axis=1)
+axis(1,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1,cex.axis=1)
 
-polygon(c(data5_res[,1,1],rev(data5_res[,1,1])),c(data5_res[,2,2],rev(data5_res[,2,5])),border=NA,col=transp("darkred",0.4))
-polygon(c(data5_res[,1,1],rev(data5_res[,1,1])),c(data5_res[,2,3],rev(data5_res[,2,4])),border=NA,col=transp("darkred",0.4))
-lines(data5_res[,2,1] ~  data5_res[,1,1],lty=2,col="darkred",lwd=2)#median
-
-abline(v=0,lty=2)
-segments(x0=3,x1=3,y0=0,y1=0.2,lty=2)
-text(0.2,0.01,"a")
-text(2.8,0.01,"b")
-text(5,0.4,"A",cex=1.2)
-
-legend(1.5,0.38,title = "Perennial setting",legend = c("LLIN 50%","LLIN 50% + IRS 80%"),
-       lty=c(1,2),cex=1,bty="n",col=c("blue","darkred"),pch=15)
-
+vec_pch = 1:11
+for(i in 1:11){
+  points(coun[,6][coun$Country == levels(coun$Country)[i]] ~ 
+           coun$x[coun$Country == levels(coun$Country)[i]],pch=vec_pch[i])
+}
+legend(0.15,0.3,
+       legend=c(names(summary(coun$Country))),ncol=3,
+       pch=vec_pch,cex=0.6)
+text(0.95,1,"A",cex=1.2)
 
 ##Top right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
 par(new = "TRUE",  
     plt = c(0.38,0.6,0.7,0.95)  )                 # major tick size and direction, < 0 means outside
+
+
+behavioural_resistance = unique(read.csv("F:\\behavioural_resistance_llin50.csv",header=TRUE)$phi_I)
+plot(Efficacy_peren_LLIN50[1,] ~ behavioural_resistance,col="blue",lwd=2,
+     ylab="Efficacy of indoor intervention (%)",yaxt="n",xaxt="n",bty="n",
+     xlab=expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),line=2.3,
+     pch="",ylim=c(0,1),xlim=c(0,1),cex.lab=1)
+axis(1,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1)
+axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1)
+for(i in 1){lines(sort(Efficacy_peren_LLIN50[i,]) ~ sort(behavioural_resistance),col="blue",lwd=2)}##0% phys reistance
+for(i in 11){lines(sort(Efficacy_peren_LLIN50[i,]) ~ sort(behavioural_resistance),lty=2,col="blue",lwd=2)}##50%
+for(i in 21){lines(sort(Efficacy_peren_LLIN50[i,]) ~ sort(behavioural_resistance),lty=3,col="blue",lwd=2)}##100%
+
+for(i in 1){lines(sort(Efficacy_peren_LLIN80IRS80[i,]) ~ sort(behavioural_resistance),col="darkred",lwd=2)}##0% phys reistance
+for(i in 11){lines(sort(Efficacy_peren_LLIN80IRS80[i,]) ~ sort(behavioural_resistance),lty=2,col="darkred",lwd=2)}##50%
+for(i in 21){lines(sort(Efficacy_peren_LLIN80IRS80[i,]) ~ sort(behavioural_resistance),lty=3,col="darkred",lwd=2)}##100%
+
+text(0.95,1,"B",cex=1.2)
+
+legend(0.04,0.9,title = "Survival at bioassay",
+       legend = c("0%","50%","100%"),
+       lty=c(1,2,3),lwd=2,cex=1,bty="n",col="blue")
+legend(0.04,0.46,title = "",
+       legend = c("50% nets","80% nets + spray"),
+       lty=c(1,2,3),lwd=2,cex=1,bty="n",col=c("blue","darkred"))
+
+
+##Top right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
+par(new = "TRUE",  
+    plt = c(0.68,0.93,0.7,0.95)  )                 # major tick size and direction, < 0 means outside
 
 ##Efficacy plot
 plot(Efficacy_peren_LLIN50[,1] ~ resistance,ylim=c(0,1),lty=1,pch="",line=2.3,
@@ -556,41 +574,15 @@ for(i in 1:2){
           c(Efficacy_peren_LLIN50[,veca[i]],rev(Efficacy_peren_LLIN50[,vecb[i]])),
           border=NA,col=transp("blue",0.4))
   polygon(c(resistance,rev(resistance)),
-          c(Efficacy_peren_LLIN50IRS80act[,veca[i]],rev(Efficacy_peren_LLIN50IRS80act[,vecb[i]])),
+          c(Efficacy_peren_LLIN80IRS80[,veca[i]],rev(Efficacy_peren_LLIN80IRS80[,vecb[i]])),
           border=NA,col=transp("darkred",0.4))
   
 }
 lines(Efficacy_peren_LLIN50[,1] ~ resistance,lty=1,lwd=2,col="blue")
-lines(Efficacy_peren_LLIN50IRS80act[,1] ~ resistance,lty=2,lwd=2,col="darkred")
+lines(Efficacy_peren_LLIN80IRS80[,1] ~ resistance,lty=2,lwd=2,col="darkred")
 
 
-text(1,1,"B",cex=1.2)
-
-##Top right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
-par(new = "TRUE",  
-    plt = c(0.68,0.93,0.7,0.95)  )                 # major tick size and direction, < 0 means outside
-
-
-behavioural_resistance = unique(read.csv("F:\\behavioural_resistance_llin50.csv",header=TRUE)$phi_I)
-plot(Efficacy_peren_LLIN50[1,] ~ behavioural_resistance,col="blue",lwd=2,
-     ylab="Efficacy of indoor intervention (%)",yaxt="n",xaxt="n",bty="n",
-     xlab="Proportion of mosquito bites indoors",line=2.3,
-     pch="",ylim=c(0,1),xlim=c(0,1),cex.lab=1)
-axis(1,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1)
-axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1)
-for(i in 1){lines(sort(Efficacy_peren_LLIN50[i,]) ~ sort(behavioural_resistance),col="blue",lwd=2)}##0% phys reistance
-for(i in 11){lines(sort(Efficacy_peren_LLIN50[i,]) ~ sort(behavioural_resistance),lty=2,col="blue",lwd=2)}##50%
-for(i in 21){lines(sort(Efficacy_peren_LLIN50[i,]) ~ sort(behavioural_resistance),lty=3,col="blue",lwd=2)}##100%
-
-for(i in 1){lines(sort(Efficacy_peren_LLIN50IRS80act[i,]) ~ sort(behavioural_resistance),col="darkred",lwd=2)}##0% phys reistance
-for(i in 11){lines(sort(Efficacy_peren_LLIN50IRS80act[i,]) ~ sort(behavioural_resistance),lty=2,col="darkred",lwd=2)}##50%
-for(i in 21){lines(sort(Efficacy_peren_LLIN50IRS80act[i,]) ~ sort(behavioural_resistance),lty=3,col="darkred",lwd=2)}##100%
-
-text(0.95,0.95,"C",cex=1.2)
-
-legend(0.04,0.9,title = "Survival at bioassay",
-       legend = c("0%","50%","100%"),
-       lty=c(1,2,3),lwd=2,cex=1,bty="n",col="blue")
+text(1,1,"C",cex=1.2)
 
 
 
@@ -601,9 +593,8 @@ par(new = "TRUE",
 surface.matrix1pc = 100*surface.matrix1
 surface.matrix2pc = 100*surface.matrix2
 surface.matrix3pc = 100*surface.matrix3
-surface.matrix4pc = 100*surface.matrix4
 
-matrix_funs(surface.mat1,min(surface.mat1),max(surface.mat6),
+matrix_funs(surface.mat1,min(surface.mat1),max(surface.mat3),
             upps=100,uni = 10,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
 text(0.95,0.95,"D",cex=1.2,col="darkblue")
 
@@ -611,7 +602,7 @@ text(0.95,0.95,"D",cex=1.2,col="darkblue")
 par(new = "TRUE",  
     plt = c(0.36,0.61,0.15,0.5)  )                 # major tick size and direction, < 0 means outside
 
-matrix_funs(surface.mat5,min(surface.mat1),max(surface.mat6),
+matrix_funs(surface.mat2,min(surface.mat1),max(surface.mat3),
             upps=100,uni = 10,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
 text(0.95,0.95,"E",cex=1.2,col="darkblue")
 
@@ -619,7 +610,7 @@ text(0.95,0.95,"E",cex=1.2,col="darkblue")
 par(new = "TRUE",  
     plt = c(0.66,0.91,0.15,0.5)  )                 # major tick size and direction, < 0 means outside
 
-matrix_funs(surface.mat6,min(surface.mat1),max(surface.mat6),
+matrix_funs(surface.mat3,min(surface.mat1),max(surface.mat3),
             upps=100,uni = 10,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
 text(0.95,0.95,"F",cex=1.2,col="darkblue")
 ######################################################################
@@ -639,21 +630,70 @@ filled.legend(
   ylab = "",
   xlim = c(0,100),
   ylim = c(0.5,1),
-  zlim = c(0,100))
+  zlim = c(min(surface.mat1),max(surface.mat3)))
 
 #Add some figure labels
 par(xpd=NA,cex = 1.1)
-text(x = -46,y = 40,expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),srt = 90,cex = 1)
-text(x = -22,y = -40,"Mosquito survival at bioassay (%)",cex = 1)
+text(x = -46,y = 46,expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),srt = 90,cex = 1)
+text(x = -22,y = -26,"Mosquito survival at bioassay (%)",cex = 1)
 
-text(x = -37,y = 130,"Perennial setting",cex = 1)
-text(x = -22,y = 130,"Perennial setting",cex = 1)
-text(x = -7,y = 130,"Seasonal setting",cex = 1)
+text(x = -37,y = 110,"50% LLIN cover",cex = 1)
+text(x = -22,y = 110,"80% LLIN cover",cex = 1)
+text(x = -7,y = 110,"80% LLIN + 80% IRS cover",cex = 1)
 
-text(x = -15,y = 120,"LLIN 50% cover + Long-lasting IRS 80% cover",cex = 1)
-text(x = -37,y = 120,"LLIN 50% cover",cex = 1)
+text(x = -22,y = 120,"Moderate transmission (30% prevalence)",cex = 1)
+
+text(x = -22,y = 130,"The relative efficacy against prevalence in 2 - 10-year olds at year 3 after the introduction of vector control",cex = 1)
+
 
 ###############################
+##
+## Supplement showing the impact in a seasonal setting and at high transmission
+
+##mid right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
+par(new = "TRUE",  
+    plt = c(0.1,0.45,0.15,0.85)  )                 # major tick size and direction, < 0 means outside
+
+matrix_funs(surface.mat4,min(surface.mat5),max(surface.mat4),
+            upps=100,uni = 10,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
+text(0.95,0.95,"A",cex=1.2,col="darkblue")
+
+##mid right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
+par(new = "TRUE",  
+    plt = c(0.55,0.90,0.15,0.85)  )                 # major tick size and direction, < 0 means outside
+
+matrix_funs(surface.mat5,min(surface.mat5),max(surface.mat4),
+            upps=100,uni = 10,levs = 11,colschoice = heat.colors,cols_conts="darkblue")
+text(0.95,0.95,"B",cex=1.2,col="darkblue")
+
+#Add a legend:
+par(new = "TRUE",
+    plt = c(0.93,0.95,0.18,0.82),   # define plot region for legend
+    las = 1,
+    cex.axis = 1)
+#
+filled.legend(
+  xcoords,
+  ycoords,
+  surface.mat4,
+  color = heat.colors,
+  plot.title = "Efficacy (%)",
+  xlab = "",
+  ylab = "",
+  xlim = c(0,100),
+  ylim = c(0.5,1),
+  zlim = c(min(surface.mat5),max(surface.mat4)))
+
+#Add some figure labels
+par(xpd=NA,cex = 1.1)
+text(x = -44,y = 30,expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),srt = 90,cex = 1)
+text(x = -20.5,y = -8,"Mosquito survival at bioassay (%)",cex = 1)
+
+text(x = -33,y = 63,"50% LLIN cover seasonal setting (moderate transmission)",cex = 1)
+text(x = -10,y = 63,"80% LLIN cover perennial setting (high transmission)",cex = 1)
+
+text(x = -22,y = 67,"The relative efficacy against prevalence in 2 - 10-year olds at year 3 after the introduction of vector control",cex = 1)
+
 ###################
 ########
 #
