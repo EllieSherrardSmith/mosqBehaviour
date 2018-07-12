@@ -3,7 +3,7 @@
 ## Figure 5          ##
 ##                   ##
 #######################
-######################
+#######################
 
 library(gplots)
 library(colorRamps)
@@ -242,7 +242,7 @@ phi_function<-function(site,
                  Return_output = FALSE)
 }
 
-inp_phi = read.csv("F:\\behavioural_resistance_llin50_and_irs80_actellic.csv",header=TRUE)
+inp_phi = read.csv("P:\\behavioural_resistance_llin50_and_irs80_actellic.csv",header=TRUE)
 for(i in 1:105){
   phi_function(site=inp_phi[i,1], 
                 
@@ -277,7 +277,7 @@ phi_function2<-function(site,
   draw<-0
   
   # Load the site_file file
-  site_file<-read.table(paste0('F:/Ellies_cool_model_folder2/model_files/sites/behaviour_sites/seasonal/Site_Highly_Seasonal_', site, '.txt'))
+  site_file<-read.table(paste0('P:/Ellies_cool_model_folder2/model_files/sites/behaviour_sites/seasonal/Site_Highly_Seasonal_', site, '.txt'))
   pop_size<- 80000 #Sim_pop_size(site_file[site_file[,1]=='prev',2])
   
   Int_set_up<-paste('num_people', pop_size, 'output_type 0 itn 1 itn_coverage', ITN, 'irs 1 irs_coverage', IRS,
@@ -295,16 +295,16 @@ phi_function2<-function(site,
   
   ## Run the simulation
   Model_launcher(OutputName = paste(Run_name, site, draw, sep='_'),
-                 OutputRoot = paste0("F:/Ellies_output_folder/", Run_name, '/draw_', draw),
+                 OutputRoot = paste0("P:/Ellies_output_folder/", Run_name, '/draw_', draw),
                  Options=Options,
-                 Exe = "F:/Ellies_cool_model_folder2/bin/Indiv_MalariaLaunchR_2.0.exe",
-                 Root="F:/Ellies_cool_model_folder2/model_files",
+                 Exe = "P:/Ellies_cool_model_folder2/bin/Indiv_MalariaLaunchR_2.0.exe",
+                 Root="P:/Ellies_cool_model_folder2/model_files",
                  Site=paste0('behaviour_sites/seasonal/Site_Highly_Seasonal_', site, '.txt'),
                  Parameter_draw = draw,
                  Return_output = FALSE)
 }
 ##RUN ON CLUSTER...
-inp_phi = read.csv("F:\\behavioural_resistance_llin50_and_irs80_actellic.csv",header=TRUE)
+inp_phi = read.csv("P:\\behavioural_resistance_llin50_and_irs80_actellic.csv",header=TRUE)
 for(i in 53:105){
   phi_function2(site=inp_phi[i,1], 
                 
@@ -324,40 +324,44 @@ for(i in 53:105){
 
 
 sites = seq(1,105,21)
-data1_no_res = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites[1],"0.txt",sep="_"),header=TRUE)
+data1_no_res = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites[1],"0.txt",sep="_"),header=TRUE)
 head(data1_no_res)
 
-data0p_res = data0s_res = data1_res = data2_res = data3_res = data4_res = data5_res = data0p_resHIGHTRANS = array(dim=c(nrow(data1_no_res),22,5))
+data0p_res = data0s_res = data1_res = data2_res = data3_res = data4_res = data5_res = data6_res = data0p_resHIGHTRANS = array(dim=c(nrow(data1_no_res),22,5))
 sites_init = sites-1
 res_val = 1:21
 for(j in 1:5){
   for(i in 1:21){
-    data0p_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data0p_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data0p_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data0p_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance_None1/draw_0/behav_phys_resistance_None1",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is perennial no interventions
-    data0s_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None2/draw_0/behav_phys_resistance_None2",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data0s_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None2/draw_0/behav_phys_resistance_None2",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data0s_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance_None2/draw_0/behav_phys_resistance_None2",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data0s_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance_None2/draw_0/behav_phys_resistance_None2",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is seasonal no interventions
 
-    data1_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance1/draw_0/behav_phys_resistance1",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data1_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance1/draw_0/behav_phys_resistance1",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data1_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance1/draw_0/behav_phys_resistance1",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data1_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance1/draw_0/behav_phys_resistance1",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is perennial 50% ITN interventions
-    data2_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance2/draw_0/behav_phys_resistance2",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data2_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance2/draw_0/behav_phys_resistance2",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data2_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance2/draw_0/behav_phys_resistance2",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data2_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance2/draw_0/behav_phys_resistance2",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is perennial 80% ITN interventions
-    data3_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance3/draw_0/behav_phys_resistance3",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data3_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance3/draw_0/behav_phys_resistance3",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data3_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance3/draw_0/behav_phys_resistance3",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data3_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance3/draw_0/behav_phys_resistance3",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is perennial 80% ITN + 80% IRS interventions
-    data4_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance4/draw_0/behav_phys_resistance4",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data4_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance4/draw_0/behav_phys_resistance4",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data4_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance4/draw_0/behav_phys_resistance4",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data4_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance4/draw_0/behav_phys_resistance4",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is SEASONal 50% ITN interventions
     
-    data5_res[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance5/draw_0/behav_phys_resistance5",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data5_res[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance5/draw_0/behav_phys_resistance5",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data5_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance5/draw_0/behav_phys_resistance5",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data5_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance5/draw_0/behav_phys_resistance5",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is perennial 80% ITN interventions 80% PREVALENCE
-    data0p_resHIGHTRANS[,1,j] =  read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None3/draw_0/behav_phys_resistance_None3",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
-    data0p_resHIGHTRANS[,i+1,j] = read.table(paste("F:/Ellies_output_folder/behav_phys_resistance_None3/draw_0/behav_phys_resistance_None3",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    data0p_resHIGHTRANS[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance_None3/draw_0/behav_phys_resistance_None3",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data0p_resHIGHTRANS[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance_None3/draw_0/behav_phys_resistance_None3",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
     #this is perennial no interventions 80% PREVALENCE
+    
+    data6_res[,1,j] =  read.table(paste("P:/Ellies_output_folder/behav_phys_resistance6/draw_0/behav_phys_resistance6",sites_init[j]+res_val[1],"0.txt",sep="_"),header=TRUE)[,1]
+    data6_res[,i+1,j] = read.table(paste("P:/Ellies_output_folder/behav_phys_resistance6/draw_0/behav_phys_resistance6",sites_init[j]+res_val[i],"0.txt",sep="_"),header=TRUE)[,3]
+    #this is perennial 80% ITN + 80% IRS actellic interventions
     
   } 
 }
@@ -365,7 +369,7 @@ for(j in 1:5){
 ##Now work out the efficacy with pyrethroid resistance increase
 Efficacy_peren_LLIN50 = Efficacy_peren_LLIN80 = 
   Efficacy_seas_LLIN50 = Efficacy_peren_LLIN80IRS80 = 
-  Efficacy_peren_LLIN80high = array(dim=c(21,5))
+  Efficacy_peren_LLIN80high = Efficacy_peren_LLIN80IRS80act = array(dim=c(21,5))
 for(j in 1:5){
   for(i in 1:21){
     Efficacy_peren_LLIN50[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
@@ -382,6 +386,8 @@ for(j in 1:5){
     Efficacy_peren_LLIN80high[i,j] = (data0p_resHIGHTRANS[,i+1,j][data0p_resHIGHTRANS[,1,j] == 3] - 
                                     data5_res[,i+1,j][data5_res[,1,j] == 3]) / data0p_resHIGHTRANS[,i+1,j][data0p_resHIGHTRANS[,1,j] == 3]
  
+    Efficacy_peren_LLIN80IRS80act[i,j] = (data0p_res[,i+1,j][data0p_res[,1,j] == 3] - 
+                                         data6_res[,i+1,j][data6_res[,1,j] == 3]) / data0p_res[,i+1,j][data0p_res[,1,j] == 3]
     
         }
 }
@@ -406,10 +412,14 @@ Eff1peren_LLIN80high = data.frame(eff = c(Efficacy_peren_LLIN80high[,2:3],Effica
                                resistance = rep(seq(0,1,by=0.05),5),
                                behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
 
+Eff1peren_LLIN80_IRS80act = data.frame(eff = c(Efficacy_peren_LLIN80IRS80act[,2:3],Efficacy_peren_LLIN80IRS80act[,1],Efficacy_peren_LLIN80IRS80act[,4:5]),
+                                    resistance = rep(seq(0,1,by=0.05),5),
+                                    behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+
 resistance = c(0.01,seq(0.05,1,by=0.05))
 
 prevs_peren_nets50 = prevs_peren_nets80 = prevs_peren_nets80_irs80 = 
-  prevs_seas_nets50 = prevs_peren_nets80high = array(dim=c(21,5))
+  prevs_seas_nets50 = prevs_peren_nets80high = prevs_peren_nets80_irs80act = array(dim=c(21,5))
 for(j in 1:5){
   for(i in 2:22){
     prevs_peren_nets50[i-1,j] = data1_res[,i,j][data1_res[,1,j] == 3] ##This is prevalence for each scenario
@@ -417,7 +427,8 @@ for(j in 1:5){
     prevs_peren_nets80_irs80[i-1,j] = data3_res[,i,j][data3_res[,1,j] == 3] ##This is prevalence for each scenario
     prevs_seas_nets50[i-1,j] = data4_res[,i,j][data4_res[,1,j] == 3] ##This is prevalence for each scenario
     prevs_peren_nets80high[i-1,j] = data5_res[,i,j][data5_res[,1,j] == 3] ##This is prevalence for each scenario
- 
+    prevs_peren_nets80_irs80act[i-1,j] = data6_res[,i,j][data6_res[,1,j] == 3] ##This is prevalence for each scenario
+    
       }}
 
 data1peren_LLIN50 = data.frame(prevs = c(prevs_peren_nets50[,2:3],prevs_peren_nets50[,1],prevs_peren_nets50[,4:5]),
@@ -435,18 +446,23 @@ data1seas_LLIN50 = data.frame(prevs = c(prevs_seas_nets50[,2:3],prevs_seas_nets5
 data1peren_LLIN80high = data.frame(prevs = c(prevs_peren_nets80high[,2:3],prevs_peren_nets80high[,1],prevs_peren_nets80high[,4:5]),
                                resistance = rep(seq(0,1,by=0.05),5),
                                behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
+data1peren_LLIN80_IRS80act = data.frame(prevs = c(prevs_peren_nets80_irs80act[,2:3],prevs_peren_nets80_irs80act[,1],prevs_peren_nets80_irs80act[,4:5]),
+                                     resistance = rep(seq(0,1,by=0.05),5),
+                                     behaviour = rep(c(0.05,0.25,0.5,0.75,0.95),each=21))
 
 zf1 = Eff1peren_LLIN50$eff * 100
 zf2 = Eff1peren_LLIN80$eff * 100
 zf3 = Eff1peren_LLIN80_IRS80$eff * 100
 zf4 = Eff1seas_LLIN50$eff * 100
 zf5 = Eff1peren_LLIN80high$eff * 100
+zf6 = Eff1peren_LLIN80_IRS80act$eff * 100
 
 z1 = data1peren_LLIN50$prevs
 z2 = data1peren_LLIN80$prevs
 z3 = data1peren_LLIN80_IRS80$prevs
 z4 = data1seas_LLIN50$prevs
 z5 = data1peren_LLIN80high$prevs
+z6 = data1peren_LLIN80_IRS80act$prevs
 
 x = rep(seq(0,1,by=0.05),5)
 y = rep(c(0.5964,0.814,0.8909,0.94,0.9832),each=21)
@@ -459,12 +475,14 @@ surface.matrix2 = matrix(z2,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.matrix3 = matrix(z3,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.matrix4 = matrix(z4,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.matrix5 = matrix(z5,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
+surface.matrix6 = matrix(z6,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 
 surface.mat1 = matrix(zf1,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat2 = matrix(zf2,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat3 = matrix(zf3,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat4 = matrix(zf4,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 surface.mat5 = matrix(zf5,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
+surface.mat6 = matrix(zf5,ncol=length(ycoords),nrow=length(xcoords),byrow=F)
 
 
 matrix_funs = function(surface.matrix,minimum_val,maximum_val,upps,uni,levs,colschoice,cols_conts){
@@ -531,7 +549,7 @@ par(new = "TRUE",
     plt = c(0.38,0.6,0.7,0.95)  )                 # major tick size and direction, < 0 means outside
 
 
-behavioural_resistance = unique(read.csv("F:\\behavioural_resistance_llin50.csv",header=TRUE)$phi_I)
+behavioural_resistance = unique(read.csv("P:\\behavioural_resistance_llin50.csv",header=TRUE)$phi_I)
 plot(Efficacy_peren_LLIN50[1,] ~ behavioural_resistance,col="blue",lwd=2,
      ylab="Efficacy of indoor intervention (%)",yaxt="n",xaxt="n",bty="n",
      xlab=expression(paste("Proportion of mosquito bites taken indoors, ", phi[I])),line=2.3,
@@ -546,14 +564,18 @@ for(i in 1){lines(sort(Efficacy_peren_LLIN80IRS80[i,]) ~ sort(behavioural_resist
 for(i in 11){lines(sort(Efficacy_peren_LLIN80IRS80[i,]) ~ sort(behavioural_resistance),lty=2,col="darkred",lwd=2)}##50%
 for(i in 21){lines(sort(Efficacy_peren_LLIN80IRS80[i,]) ~ sort(behavioural_resistance),lty=3,col="darkred",lwd=2)}##100%
 
+for(i in 1){lines(sort(Efficacy_peren_LLIN80IRS80act[i,]) ~ sort(behavioural_resistance),col="aquamarine3",lwd=2)}##0% phys reistance
+for(i in 11){lines(sort(Efficacy_peren_LLIN80IRS80act[i,]) ~ sort(behavioural_resistance),lty=2,col="aquamarine3",lwd=2)}##50%
+for(i in 21){lines(sort(Efficacy_peren_LLIN80IRS80act[i,]) ~ sort(behavioural_resistance),lty=3,col="aquamarine3",lwd=2)}##100%
+
 text(0.95,1,"B",cex=1.2)
 
-legend(0.04,0.9,title = "Survival at bioassay",
+legend(0.01,0.9,title = "Survival at bioassay",
        legend = c("0%","50%","100%"),
        lty=c(1,2,3),lwd=2,cex=1,bty="n",col="blue")
-legend(0.04,0.46,title = "",
-       legend = c("50% nets","80% nets + spray"),
-       lty=c(1,2,3),lwd=2,cex=1,bty="n",col=c("blue","darkred"))
+#legend(0.01,0.46,title = "",
+#       legend = c("50% nets","80% nets + pyrethroid IRS","80% nets + long-lasting IRS"),
+#       lty=c(1,1,1),lwd=2,cex=1,bty="n",col=c("blue","darkred","aquamarine3"))
 
 
 ##Top right plot: Explanation figure, Pervalence estimate given different phiI and phiB estimates
@@ -569,18 +591,26 @@ axis(2,las=2,at=seq(0,1,0.2),labels=seq(0,100,20),cex.lab=1,cex.axis=1)
 
 veca = 2:3
 vecb = 5:4
-for(i in 1:2){
-  polygon(c(resistance,rev(resistance)),
-          c(Efficacy_peren_LLIN50[,veca[i]],rev(Efficacy_peren_LLIN50[,vecb[i]])),
-          border=NA,col=transp("blue",0.4))
-  polygon(c(resistance,rev(resistance)),
-          c(Efficacy_peren_LLIN80IRS80[,veca[i]],rev(Efficacy_peren_LLIN80IRS80[,vecb[i]])),
-          border=NA,col=transp("darkred",0.4))
+#for(i in 1:2){
+#  polygon(c(resistance,rev(resistance)),
+#          c(Efficacy_peren_LLIN50[,veca[i]],rev(Efficacy_peren_LLIN50[,vecb[i]])),
+#          border=NA,col=transp("blue",0.4))
+#  polygon(c(resistance,rev(resistance)),
+#          c(Efficacy_peren_LLIN80IRS80[,veca[i]],rev(Efficacy_peren_LLIN80IRS80[,vecb[i]])),
+#          border=NA,col=transp("darkred",0.4))
+#  polygon(c(resistance,rev(resistance)),
+#          c(Efficacy_peren_LLIN80IRS80act[,veca[i]],rev(Efficacy_peren_LLIN80IRS80act[,vecb[i]])),
+#          border=NA,col=transp("aquamarine2",0.4))
   
-}
+  
+#}
 lines(Efficacy_peren_LLIN50[,1] ~ resistance,lty=1,lwd=2,col="blue")
-lines(Efficacy_peren_LLIN80IRS80[,1] ~ resistance,lty=2,lwd=2,col="darkred")
+lines(Efficacy_peren_LLIN80IRS80[,1] ~ resistance,lty=1,lwd=2,col="darkred")
+lines(Efficacy_peren_LLIN80IRS80act[,1] ~ resistance,lty=1,lwd=2,col="aquamarine3")
 
+legend(0.0,0.4,title = "",
+       legend = c("50% nets","80% nets + pyrethroid spray","80% nets + non-pyrethroid spray"),
+       lty=c(1,1,1),lwd=2,cex=1,bty="n",col=c("blue","darkred","aquamarine3"))
 
 text(1,1,"C",cex=1.2)
 
